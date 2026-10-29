@@ -1,0 +1,13 @@
+# O que não precisa ir para o contexto de build.
+node_modules
+.next
+out
+.vercel
+.git
+.gitignore
+.DS_Store
+
+# Processo de trabalho: não está no repositório, mas um build local a
+# partir da pasta da máquina pegaria estas pastas sem isto.
+docs
+.superpowers
