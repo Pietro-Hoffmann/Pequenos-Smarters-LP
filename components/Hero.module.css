@@ -1,0 +1,92 @@
+/* Sem fundo próprio: o céu do <Cenario /> aparece por baixo.
+   O overflow: hidden é obrigatório — a pipa passa da borda de propósito e é
+   ele que impede a página de ganhar rolagem para o lado. */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: calc(var(--altura-nav) + 40px) 0 88px;
+  text-align: center;
+}
+
+.conteudo { position: relative; z-index: 2; }
+
+.selo {
+  display: inline-block;
+  background: var(--cartao);
+  color: var(--azul-escuro);
+  font-family: var(--fonte-titulo), system-ui, sans-serif;
+  border: 3px solid var(--contorno);
+  box-shadow: 0 4px 0 var(--contorno);
+  border-radius: 999px;
+  padding: 5px 18px;
+  font-size: 15px;
+  margin-bottom: 22px;
+}
+
+/* display:block + margin auto, e não só o text-align do hero: como <img> é
+   elemento de linha, ela dividia a linha com o selo e saía do centro.
+
+   20% MENOR que antes (560px → 448px). A logo continua grande — a marca é
+   nova e precisa do espaço — mas em 1366×660, que é o laptop mais comum, os
+   dois botões ficavam em top: 664px, ou seja, fora da tela. Os 57px de
+   altura que a logo devolve trazem o CTA para dentro da dobra. */
+.logo {
+  display: block;
+  width: min(448px, 76%);
+  height: auto;
+  margin-inline: auto;
+}
+
+/* 4px, não 8: em 1366×660 a logo 20% menor sozinha deixava o botão em
+   top: 607px e bottom: 664px — ainda 4px cortados. O que faltava veio de
+   apertar o respiro entre as peças do herói, sem mexer em uma vírgula do
+   texto. */
+.hero h1 { margin-top: 4px; }
+
+/* O bloco passa de duas linhas, então ele fica alinhado à esquerda e
+   cortado na medida de leitura (--medida, uns 62 caracteres). Centralizado
+   e com 680px ele dava 85–90 caracteres por linha: o olho perdia a volta
+   porque a margem esquerda mudava a cada linha. O que continua centralizado
+   é o que tem uma ou duas linhas — a logo e o H1.
+
+   A margem de baixo é a dos 20px que eram do segundo parágrafo (o .modelo,
+   que não existe mais): o respiro até os botões continua igual ao de antes,
+   o que saiu foi só o texto repetido. */
+.subtitulo {
+  max-width: var(--medida);
+  margin: 0 auto 20px;
+  /* --texto da 5.82:1 ate no tom mais fundo do ceu; o --azul-escuro dava 3.66:1 */
+  color: var(--texto);
+  text-align: left;
+}
+
+.botoes { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+/* A pipa saindo pela borda. Ela corta por UM lado só (a direita), que é a
+   regra: peça cortada por dois lados vira sobra, não cena. */
+/* A pipa foi para a ESQUERDA. Ela estava no canto superior direito, que é
+   onde o sol mora no cenário — e tampava o sol. A esquerda ficou livre
+   quando o Pipo duplicado saiu do herói, então a pipa ocupa esse vazio e
+   a composição volta a ter peso dos dois lados.
+   Corta por UM lado só (a esquerda), que é a regra da casa. */
+.pipa {
+  position: absolute;
+  left: -14px;
+  top: 150px;
+  width: 110px;
+  height: auto;
+  z-index: 1;
+  transform-origin: 50% 0;
+}
+
+@media (max-width: 980px) {
+  .pipa { width: 80px; left: -18px; top: 130px; }
+}
+
+/* Abaixo de 768px o enfeite que sobrepõe conteúdo sai de cena: no celular
+   não sobra largura e ele deixa de ser "mundo flutuante" para virar sobra
+   encavalada em cima do texto. Ficam o céu, as letras e as nuvens. */
+@media (max-width: 768px) {
+  .pipa { display: none; }
+  .hero { padding-bottom: 56px; }
+}

@@ -1,0 +1,68 @@
+/* Sem faixa escura de ponta a ponta: o escuro agora é só o telão. */
+.secao { overflow: hidden; }
+
+/* O telão: moldura grossa, cantos arredondados e o mesmo degrau de sombra
+   sólida dos botões. Ele flutua sobre o céu em vez de cortá-lo.
+   Este é o estado COM vídeo: escuro, como qualquer player. */
+.telao {
+  width: min(900px, 100%);
+  margin: 24px auto 0;
+  background: #11212d;
+  border: 5px solid var(--contorno);
+  border-radius: 28px;
+  box-shadow: 8px 10px 0 var(--contorno);
+  padding: 14px;
+}
+
+/* O estado SEM vídeo: claro, como as outras placas da página. Só o fundo e
+   as cores de dentro mudam; a moldura, o degrau e o raio continuam os
+   mesmos, então é visivelmente o mesmo objeto. */
+.telaoVazio { background: var(--cartao); }
+
+.telaoVazio .espera { border-color: rgba(18, 59, 94, 0.45); }
+/* a arte aparece um pouco mais: sobre branco ela não apaga como sobre o
+   azul-marinho */
+.telaoVazio .espera img { opacity: 0.4; }
+.telaoVazio .play { color: rgba(18, 59, 94, 0.5); }
+/* --texto sobre branco dá 10,98:1 */
+.telaoVazio .espera p { color: var(--texto); }
+
+.player {
+  display: block;
+  width: 100%;
+  border-radius: 16px;
+  background: #000;
+}
+
+.espera {
+  position: relative;
+  min-height: 300px;
+  border-radius: 16px;
+  border: 2px dashed rgba(255, 255, 255, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.espera img { width: 200px; height: auto; opacity: 0.3; }
+
+.play {
+  position: absolute;
+  top: 46%;
+  transform: translateY(-50%);
+  font-size: 44px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.espera p {
+  margin: 0;
+  font-family: var(--fonte-titulo), system-ui, sans-serif;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+@media (max-width: 520px) {
+  .telao { padding: 10px; border-width: 4px; border-radius: 22px; box-shadow: 6px 7px 0 var(--contorno); }
+  .espera { min-height: 230px; }
+}

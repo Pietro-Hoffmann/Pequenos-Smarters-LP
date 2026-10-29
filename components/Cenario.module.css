@@ -1,0 +1,144 @@
+/* O cenário cobre a tela inteira e fica preso nela (position: fixed), então
+   ele nunca estica a página nem cria barra de rolagem horizontal. O
+   overflow: hidden é o que segura tudo que passa da borda. */
+.cenario {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* O céu: claro em cima, mais fundo embaixo. Nenhuma seção pinta por cima.
+   As três pontas vêm do clima da página (data-tema no <html>, definido no
+   globals.css). É por isso que o céu inteiro derrete de um clima para o outro
+   sem este arquivo precisar saber quais são os climas. */
+.ceu {
+  position: absolute;
+  inset: 0;
+  /* As PARADAS também vêm do clima (--paginaB-em / --paginaC-em), não só as
+     cores. Quase todo clima usa o padrão 52%/100%: o degradê ocupa a tela
+     inteira. O clima do fim da página encurta isso, porque lá o rodapé
+     cobre a faixa de baixo — ver globals.css, [data-tema='volta']. */
+  background: linear-gradient(
+    180deg,
+    var(--paginaA, var(--ceu-topo)) 0%,
+    var(--paginaB, var(--ceu-meio)) var(--paginaB-em, 52%),
+    var(--paginaC, var(--ceu-base)) var(--paginaC-em, 100%)
+  );
+}
+
+/* O SUPORTE DO SOL
+   Quem desce ao longo do dia é este suporte, não o sol: o sol está girando
+   (animação), e animação manda mais que transform no CSS — se a descida
+   estivesse nele, ela simplesmente não aconteceria.
+   --sol-y e --sol-escala vêm do clima da página (globals.css). Só mexem
+   transform e opacity, e só quando o clima muda: nada disso roda por quadro.
+   O movimento é VERTICAL e o cenário é fixo com overflow: hidden, então
+   descer o sol não empurra a página para o lado em largura nenhuma. */
+/* O sol fica PARADO no lugar dele. Ele descia junto com o arco do dia, e o
+   Pietro pediu para não descer: no meio da página ele acabava cruzando
+   conteúdo, e o movimento não acrescentava nada que o céu já não contasse.
+   O que ainda muda com a hora é só o halo quente atrás dele (--sol-halo),
+   que é opacidade pura e não desloca nada. */
+.orbita {
+  position: absolute;
+  top: 76px;
+  right: -46px;
+  width: 190px;
+  /* 190 × (324/260): a altura real da arte. */
+  height: 237px;
+  transform-origin: 50% 50%;
+}
+
+/* O brilho quente atrás do sol. Apagado de manhã, aceso no fim da tarde.
+   É um degradê parado: o que muda é só a opacidade. */
+.halo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  /* um círculo de verdade: a largura manda e a altura segue (porcentagem de
+     altura aqui mediria contra outra base e sairia um ovo). */
+  width: 270%;
+  aspect-ratio: 1;
+  height: auto;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 198, 52, 0.75) 0%,
+    rgba(240, 124, 30, 0.38) 40%,
+    rgba(240, 124, 30, 0) 70%
+  );
+  opacity: var(--sol-halo, 0);
+  transition: opacity 0.7s ease;
+}
+
+.sol {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  opacity: 0.85;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+/* Cada nuvem tem a opacidade dela (--op, escrita no Cenario.js) e o dia
+   inteiro tem um fator (--nuvem-fator, escrito pelo clima): no trecho
+   dourado as três afinam juntas e o céu quente aparece através delas. */
+.nuvem {
+  position: absolute;
+  left: 0;
+  height: auto;
+  opacity: calc(var(--op, 1) * var(--nuvem-fator, 1));
+  transition: opacity 0.7s ease;
+  will-change: transform;
+}
+
+.ilha {
+  position: absolute;
+  height: auto;
+}
+
+.letra {
+  position: absolute;
+  height: auto;
+}
+
+.brilho {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
+}
+
+/* NO CELULAR O SOL NÃO ENTRA.
+   Medido em 390px: o sol cobria o parágrafo da seção do jogo, encostava no
+   Pipo na seção dos personagens e espiava por trás dos cartões na seção das
+   escolas — três colisões, sempre a mesma peça. No desktop ele funciona
+   porque sobra largura; no celular ele não é "mundo flutuante", é adesivo
+   sobreposto por engano. Abaixo de 768px ficam o céu, as letras e as nuvens:
+   nenhuma delas passa por cima de conteúdo.
+   Ele é escondido por display: none no SUPORTE, que é quem carrega o halo e
+   o sol: assim nada do conjunto fica rodando atrás de uma tela pequena. */
+@media (max-width: 768px) {
+  .orbita { display: none; }
+  /* no celular o texto ocupa a largura toda, então as letras passam por trás
+     dele; mais fracas para não disputar com a leitura */
+  .letra { width: 30px !important; opacity: 0.12 !important; }
+  .ilha { width: 76px !important; }
+}
+
+/* Quem pediu menos movimento: o sol não desliza nem o brilho acende aos
+   poucos — eles aparecem já no lugar do clima novo. A regra geral do
+   globals.css (transition-duration quase zero) já alcançaria isto, mas estas
+   duas transições são grandes demais para depender de "quase". */
+@media (prefers-reduced-motion: reduce) {
+  .orbita,
+  .halo,
+  .nuvem {
+    transition: none !important;
+  }
+}

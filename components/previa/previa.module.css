@@ -1,0 +1,238 @@
+/* components/previa/previa.module.css
+   A FOLHA DE RELATÓRIO. Todos os blocos das prévias moram aqui: eles são
+   pequenos e dividem a mesma linguagem (branco, fio fino, caixa alta
+   miúda em cinza). Cada tarefa acrescenta as classes do seu bloco. */
+
+.bloco { margin-top: 14px; }
+.bloco:first-child { margin-top: 0; }
+
+.blocoTitulo {
+  display: block;
+  font-family: var(--fonte-titulo), system-ui, sans-serif;
+  font-size: 14px;
+  color: var(--contorno);
+  margin-bottom: 6px;
+}
+
+/* ---- Areas: área | medida | tendência ou alunos | situação ---- */
+.cabecalho,
+.linha {
+  display: grid;
+  grid-template-columns: 1.1fr 1.5fr 1.2fr auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.cabecalho {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5b6b7a;            /* 5,2:1 sobre branco */
+  padding: 0 4px 6px;
+  border-bottom: 2px solid #e1e8ef;
+}
+
+.linhas { list-style: none; margin: 0; padding: 0; }
+
+.linha {
+  padding: 9px 4px;
+  border-bottom: 1px solid #e1e8ef;
+  font-size: 14px;
+}
+.linha:last-child { border-bottom: 0; }
+
+.area { font-weight: 700; color: var(--contorno); }
+
+.medida { display: inline-flex; align-items: center; gap: 8px; }
+.barra { flex: 1; min-width: 60px; height: 10px; border-radius: 999px; background: #e1e8ef; overflow: hidden; }
+.barraCheia { display: block; height: 100%; border-radius: 999px; background: var(--verde-botao); }
+.numero { font-weight: 700; color: var(--contorno); min-width: 36px; text-align: right; font-variant-numeric: tabular-nums; }
+
+.tendencia { display: inline-flex; align-items: center; gap: 5px; color: #3d4f60; }
+.tendencia > span:first-child { font-weight: 800; font-size: 16px; }
+.tendenciaTexto { font-size: 13px; }
+
+.alunos { font-size: 13px; color: #3d4f60; white-space: nowrap; }
+.alunos strong { font-size: 15px; color: var(--contorno); }
+
+/* a situação é um chip de TEXTO; a cor acompanha o data-status da linha.
+   Contrastes (texto sobre fundo do chip): verde 7,9:1 · amarelo 7,4:1 ·
+   laranja 7,1:1 — todos acima de 4,5:1. */
+.status {
+  justify-self: end;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+  background: #e2f5dd;
+  color: #1d5e12;
+  border: 1px solid #9ed694;
+}
+.linha[data-status='evolucao'] .status { background: #fff3cc; color: #6b4a00; border-color: #f0cf6a; }
+.linha[data-status='atencao'] .status { background: #ffe3d1; color: #8a3400; border-color: #f3a66e; }
+.linha[data-status='evolucao'] .barraCheia { background: var(--amarelo); }
+.linha[data-status='atencao'] .barraCheia { background: var(--laranja-botao); }
+.linha[data-status='atencao'] .tendencia,
+.linha[data-status='atencao'] .alunos,
+.linha[data-status='atencao'] .alunos strong { color: #8a3400; }
+
+@media (max-width: 480px) {
+  .cabecalho { display: none; }
+  .linha {
+    grid-template-columns: 1fr auto;
+    grid-template-areas: 'area status' 'medida medida' 'extra extra';
+    row-gap: 6px;
+  }
+  .area { grid-area: area; }
+  .status { grid-area: status; }
+  .medida { grid-area: medida; }
+  .tendencia, .alunos { grid-area: extra; }
+  .status, .alunos { white-space: normal; }
+}
+
+/* ---- Anel ---- */
+.anelLinha { display: flex; align-items: center; gap: 16px; }
+.anel { position: relative; width: 96px; height: 96px; flex: none; }
+.anel svg { display: block; width: 96px; height: 96px; }
+.anelNumero {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font-family: var(--fonte-titulo), system-ui, sans-serif;
+  font-size: 22px; color: var(--contorno);
+}
+.anelTexto { font-size: 15px; line-height: 1.4; color: #3d4f60; }
+
+/* ---- Cifras ---- */
+.cifras {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;
+}
+.cifras li {
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  padding: 10px 6px; background: #f3f7fb; border-radius: 12px;
+}
+.cifraValor { font-family: var(--fonte-titulo), system-ui, sans-serif; font-size: 24px; line-height: 1; color: var(--contorno); }
+.cifraRotulo { font-size: 12px; line-height: 1.3; color: #5b6b7a; margin-top: 4px; }
+
+/* ---- Tempo ---- */
+.tempo { display: flex; align-items: baseline; gap: 8px; }
+.tempoValor { font-family: var(--fonte-titulo), system-ui, sans-serif; font-size: 26px; line-height: 1; color: var(--laranja-botao); }
+.tempoRotulo { font-size: 14px; color: #3d4f60; }
+.tempoTexto { display: block; margin-top: 4px; font-size: 13px; color: #5b6b7a; }
+
+/* ---- Destaque ---- */
+.destaque {
+  display: grid; gap: 3px;
+  padding: 10px 14px;
+  background: #fff6ee;
+  border-left: 5px solid var(--laranja-botao);
+  border-radius: 10px;
+  font-size: 14px; line-height: 1.4; color: #3d4f60;
+}
+.destaqueTitulo { color: #8a3400; font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; }
+
+/* ---- Jornada ---- */
+.jornada {
+  list-style: none; margin: 0; padding: 4px 0 0;
+  display: flex; gap: 8px; overflow-x: auto;
+}
+.ilha { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 56px; }
+.ilhaMoldura {
+  display: grid; place-items: center;
+  width: 48px; height: 48px; border-radius: 12px;
+  background: #f3f7fb; border: 2px solid #cfd8e3;
+}
+.ilhaMoldura img { width: 40px; height: 40px; object-fit: contain; }
+.ilhaNome { font-size: 11px; color: #3d4f60; text-align: center; }
+.ilha[data-estado='ok'] .ilhaMoldura { border-color: var(--verde-botao); }
+.ilha[data-estado='atual'] .ilhaMoldura { border-color: var(--laranja-botao); box-shadow: 0 0 0 2px #ffe3d1; }
+.ilha[data-estado='bloq'] .ilhaMoldura img { filter: grayscale(1); opacity: 0.45; }
+.ilha[data-estado='bloq'] .ilhaNome { color: #8a96a3; }
+
+/* ---- Reforco ---- */
+.reforco { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.reforco li {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+  padding: 6px 10px; background: #f3f7fb; border-radius: 10px; font-size: 14px;
+}
+.reforcoNome { color: var(--contorno); }
+.reforcoOnde { font-size: 13px; color: #5b6b7a; text-align: right; }
+
+/* ---- A folha inteira ---- */
+.previa {
+  min-width: 0;
+  background: #fff;
+  border: 3px solid var(--contorno);
+  border-radius: 16px;
+  padding: 14px 16px 10px;
+}
+.previaTitulo {
+  display: block;
+  font-family: var(--fonte-titulo), system-ui, sans-serif;
+  font-size: 15px;
+  color: var(--contorno);
+  margin-bottom: 10px;
+}
+.exemplo { display: block; margin-top: 10px; font-size: 12px; color: #5b6b7a; text-align: right; }
+
+/* ---------------------------------------------------------------------------
+   O DASHBOARDZINHO (telas >= 1100 px)
+   A prévia vira uma grade de duas colunas: a tabela por área ocupa a
+   esquerda (três linhas de altura); os blocos curtos (anel, destaque,
+   tempo, reforço) empilham à direita; cifras e jornada atravessam as duas
+   colunas. Medido para a seção inteira caber em 1867x905 sem rolar.
+--------------------------------------------------------------------------- */
+@media (min-width: 1100px) {
+  .previa {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-auto-flow: row dense;
+    align-content: start;
+    gap: 6px 14px;
+    padding: 10px 12px 6px;
+  }
+  /* a linha "prévia ilustrativa" cola no pé, mesmo quando o painel foi
+     esticado para a altura do vizinho */
+  .previa .exemplo { align-self: end; margin-top: auto; }
+  .previaTitulo, .exemplo { grid-column: 1 / -1; margin: 0; }
+  .exemplo { margin-top: -2px; }
+  .celula { min-width: 0; }
+  .celula > .bloco { margin-top: 0; }
+  /* a tabela por área, as cifras e a jornada atravessam as duas colunas;
+     anel, tempo e reforço ficam à esquerda; o destaque à direita, com
+     altura de duas linhas para ficar ao lado de anel + tempo */
+  .celula[data-tipo='areas'],
+  .celula[data-tipo='cifras'],
+  .celula[data-tipo='jornada'] { grid-column: 1 / -1; }
+  .celula[data-tipo='anel'],
+  .celula[data-tipo='tempo'],
+  .celula[data-tipo='reforco'] { grid-column: 1; }
+  .celula[data-tipo='destaque'] { grid-column: 2; grid-row: span 2; }
+
+  /* tudo um pouco mais justo */
+  .blocoTitulo { font-size: 13px; margin-bottom: 4px; }
+  .linha { padding: 2px 4px; font-size: 13px; gap: 10px; }
+  .cabecalho, .linha { grid-template-columns: 1fr 1.6fr 1.3fr auto; }
+  .cabecalho { font-size: 10px; padding-bottom: 4px; }
+  .status { font-size: 11px; padding: 2px 8px; }
+  .numero { min-width: 32px; }
+  .anel, .anel svg { width: 56px; height: 56px; }
+  .anelNumero { font-size: 15px; }
+  .anelTexto { font-size: 13px; }
+  .cifras li { padding: 5px 4px; }
+  .cifraValor { font-size: 18px; }
+  .cifraRotulo { font-size: 11px; }
+  .tempoValor { font-size: 20px; }
+  .tempoRotulo, .tempoTexto { font-size: 12px; }
+  .tempoTexto { margin-top: 0; }
+  .destaque { padding: 8px 12px; font-size: 13px; }
+  .destaqueTitulo { font-size: 12px; }
+  .reforco { gap: 3px; }
+  .reforco li { padding: 3px 8px; font-size: 12px; }
+  .reforcoOnde { font-size: 11px; }
+  .jornada { gap: 6px; }
+  .ilha { min-width: 48px; gap: 2px; }
+  .ilhaMoldura { width: 36px; height: 36px; border-radius: 9px; }
+  .ilhaMoldura img { width: 28px; height: 28px; }
+  .ilhaNome { font-size: 10px; }
+}

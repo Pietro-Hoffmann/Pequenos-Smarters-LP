@@ -1,0 +1,12 @@
+node_modules
+.next
+out
+.vercel
+.DS_Store
+
+# Processo de trabalho, não o produto.
+# Ficam fora do repositório porque ele é PÚBLICO e estes arquivos guardam
+# conversa interna, crítica de design e estratégia comercial (preço,
+# licenciamento, o que mostrar a investidor). Eles continuam na máquina.
+/docs/
+/.superpowers/

@@ -1,0 +1,19 @@
+/* Sem faixa branca: o céu passa por trás. */
+.faixa { padding: 16px 0 48px; }
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+/* Alinhado à esquerda: o texto de cada plaquinha dá três ou quatro linhas na
+   largura da coluna, e bloco de mais de duas linhas centralizado é
+   justamente o que faz o olho perder a volta. O ícone e o título acompanham
+   o texto, senão o cartão ficaria com duas margens esquerdas diferentes. */
+.item { text-align: left; padding: 22px 20px; }
+.item img { display: block; width: 64px; height: 64px; object-fit: contain; }
+.item h3 { margin: 12px 0 6px; color: var(--azul-escuro); }
+.item p { margin: 0; font-size: 17px; }
+
+@media (max-width: 880px) { .grade { grid-template-columns: 1fr; } }

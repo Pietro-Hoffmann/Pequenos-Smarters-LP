@@ -1,0 +1,41 @@
+.rodape {
+  background: var(--azul-escuro);
+  color: #fff;
+  padding: 40px 0;
+  border-top: 4px solid var(--contorno);
+}
+
+.conteudo { text-align: center; }
+.conteudo img { width: 160px; height: auto; margin-bottom: 12px; }
+.conteudo p { margin: 4px 0; font-size: 16px; color: rgba(255, 255, 255, 0.9); }
+
+/* .85 leva a linha a 4.74:1 sobre o azul escuro; com .7 ficava em 3.75:1 */
+.ano { opacity: 0.85; margin-top: 12px !important; }
+
+/* OS CANAIS DE CONTATO DO RODAPÉ.
+   Só existem quando o painel de controle tem e-mail ou WhatsApp; vazio, a
+   linha inteira não é desenhada. Sublinhado sempre: num rodapé azul escuro
+   cor sozinha não basta para dizer "isto é clicável". */
+.canais {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 10px !important;
+}
+
+.canais a {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* A letra miúda honesta: menor que o resto, mas ainda legível.
+   #d8e6ef sobre o azul escuro fica acima de 7:1. */
+.dados {
+  max-width: var(--medida);
+  margin: 12px auto 0 !important;
+  font-size: 15px !important;
+  line-height: 1.5;
+  color: #d8e6ef !important;
+}

@@ -1,0 +1,736 @@
+:root {
+  --ceu: #63C0E8;
+  --azul-botao: #2E90E0;
+  --azul-escuro: #0E5AA7;
+  --laranja-botao: #F07C1E;
+  --verde-botao: #57C24A;
+  --amarelo: #FFC634;
+  --cartao: #FFFFFF;
+  --texto: #2C3E50;
+  --carta-azul: #1877F2;
+  --carta-laranja: #FF6600;
+
+  /* O céu contínuo da página: claro em cima, um pouco mais fundo embaixo.
+     O tom mais escuro (--ceu-base) ainda dá 5.82:1 com --texto. */
+  --ceu-topo: #D6F0FC;
+  --ceu-meio: #A8DEF6;
+  --ceu-base: #74C7EC;
+
+  /* Contorno escuro dos objetos do jogo (placas, molduras, títulos). */
+  --contorno: #123B5E;
+
+  --raio: 24px;
+  --largura: 1120px;
+  --altura-nav: 72px;
+
+  /* A MEDIDA DO PARÁGRAFO
+     38rem = 608px, que com a Nunito de 18px dá uns 62 caracteres por linha —
+     a faixa em que o olho acha a volta sozinho. Antes os parágrafos tinham
+     680px e 85–90 caracteres, que é onde a leitura começa a cansar.
+
+     Em rem, e não em em, de propósito: em `em` a medida seguiria o tamanho
+     de letra de cada bloco, e dois parágrafos vizinhos de 18px e 17px
+     ficariam com larguras diferentes — lado a lado e centralizados, eles
+     teriam margens esquerdas diferentes, que é exatamente o desalinhamento
+     que este trabalho veio consertar. Em rem, todo bloco longo da página
+     tem a MESMA largura e a mesma margem esquerda. */
+  --medida: 38rem;
+}
+
+/* ---------------------------------------------------------------------------
+   O CLIMA DO CÉU DA PÁGINA
+   O céu do fundo (o <Cenario />) veste o clima do que está na tela. Quem
+   decide é o atributo data-tema lá no <html>: ele já nasce em "ceu" no HTML,
+   e o JavaScript só o troca. Se o JavaScript não rodar, fica o céu de sempre.
+
+   Estas três pontas precisam ser registradas como COR, senão o navegador não
+   consegue derreter um céu no outro e a troca vira um corte seco. Onde
+   @property não existir, a troca é instantânea e nada quebra.
+   (É a mesma receita do palco do carrossel, um andar acima: aqui elas são
+   herdadas, para o degradê do cenário acompanhar sozinho.)
+
+   Os climas são de dois tipos, e eles não se misturam:
+     • os OITO momentos do arco do dia (ceu, manha, tarde, tarde-alta,
+       pre-dourado, dourado, dourado-fim). O arco sai do azul do jogo e
+       esquenta na reta final: do bloco de download até o rodapé o céu
+       fica dourado, e quem fecha a página é o azul-escuro do rodapé. Quem diz qual seção veste qual momento é o mapa do
+       lib/tema.js.
+     • os SEIS climas das ilhas (natureza, deserto, fogo, gelo, lagos, vento),
+       que valem só enquanto o carrossel está em cena.
+
+   REGRA DE OURO de todos eles: são um TOQUE de cor no céu, nunca a versão
+   forte do clima (essa fica dentro do palco do carrossel). O texto da página
+   é --texto (#2C3E50) e precisa de 4,5:1 contra o PONTO MAIS ESCURO do
+   degradê — por isso até o dourado do clímax é um dourado claro, e não um
+   laranja de cartaz. O pior caso dos catorze é 5,37:1 (a tarde alta); a
+   medida de cada um está anotada ao lado dele.
+
+   Cada clima também mexe no SOL e nas NUVENS do cenário, por duas variáveis.
+   O sol NÃO se desloca: ele fica parado no canto e só o brilho muda.
+     --sol-halo   o brilho quente atrás dele, que acende no dourado
+     --nuvem-fator  quanto resta da opacidade de cada nuvem: elas afinam no
+                    trecho dourado, e o céu quente atravessa elas — é isso
+                    que as deixa douradas sem precisar de filtro de cor
+   Só transform e opacity, como no resto da página. Nenhuma delas anima: elas
+   só mudam de valor quando o clima muda, e o cenário as derrete em 0,7s.
+--------------------------------------------------------------------------- */
+@property --paginaA {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #d6f0fc;
+}
+
+@property --paginaB {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #a8def6;
+}
+
+@property --paginaC {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #74c7ec;
+}
+
+/* A travessia de um clima para o outro. 0,7s: tempo de perceber que o céu
+   mudou sem a página parecer lenta. */
+html {
+  transition:
+    --paginaA 0.7s ease,
+    --paginaB 0.7s ease,
+    --paginaC 0.7s ease;
+}
+
+/* CÉU — o de sempre. Mesmas cores de --ceu-topo/--ceu-meio/--ceu-base.
+   Contraste com --texto: 9,27:1 / 7,55:1 / 5,82:1. */
+:root,
+:root[data-tema='ceu'] {
+  --paginaA: #d6f0fc;
+  --paginaB: #a8def6;
+  --paginaC: #74c7ec;
+  --sol-halo: 0;
+  --nuvem-fator: 1;
+}
+
+/* Os seis climas das ilhas entram no meio do arco, porque a seção deles fica
+   entre a manhã alta e o começo da tarde: o sol para na mesma altura nos seis,
+   então trocar de ilha nunca mexe o sol de lugar — só a cor do céu. */
+:root[data-tema='natureza'],
+:root[data-tema='deserto'],
+:root[data-tema='fogo'],
+:root[data-tema='gelo'],
+:root[data-tema='lagos'],
+:root[data-tema='vento'] {
+  --sol-halo: 0.1;
+  --nuvem-fator: 0.96;
+}
+
+/* NATUREZA — verde claro. 9,78:1 / 8,43:1 / 6,23:1. */
+:root[data-tema='natureza'] {
+  --paginaA: #e7f7d8;
+  --paginaB: #c8ecb4;
+  --paginaC: #90d47e;
+}
+
+/* DESERTO — areia clara. 9,70:1 / 8,16:1 / 5,88:1. */
+:root[data-tema='deserto'] {
+  --paginaA: #fbf0d6;
+  --paginaB: #f3dca6;
+  --paginaC: #e2b85c;
+}
+
+/* FOGO — pêssego quente, NUNCA o vermelho do palco: em vermelho fundo a
+   página inteira ficaria ilegível. 9,48:1 / 7,75:1 / 6,03:1. */
+:root[data-tema='fogo'] {
+  --paginaA: #ffebd8;
+  --paginaB: #ffd0a6;
+  --paginaC: #ffae6e;
+}
+
+/* GELO — azul quase branco. 10,40:1 / 9,36:1 / 7,76:1. */
+:root[data-tema='gelo'] {
+  --paginaA: #f2faff;
+  --paginaB: #dcf0fb;
+  --paginaC: #b6dff3;
+}
+
+/* LAGOS — turquesa suave. 9,95:1 / 8,40:1 / 6,37:1. */
+:root[data-tema='lagos'] {
+  --paginaA: #dff9f6;
+  --paginaB: #b3ece7;
+  --paginaC: #6fd6ce;
+}
+
+/* VENTO — cinza esverdeado claro. 9,93:1 / 8,43:1 / 6,21:1. */
+:root[data-tema='vento'] {
+  --paginaA: #eff5f0;
+  --paginaB: #d6e5dd;
+  --paginaC: #aec9bc;
+}
+
+/* ---------------------------------------------------------------------------
+   O ARCO DO DIA — UM CICLO, NÃO UMA DESCIDA
+   A ordem aqui é a mesma do ARCO_DO_DIA no lib/tema.js, e a página caminha
+   por ela de cima para baixo, sem nunca pular para trás.
+
+   O arco era um entardecer inteiro (azul → creme → âmbar → laranja → lilás)
+   e isso tinha um custo medido: as três seções que VENDEM (pais, escolas e
+   download) aconteciam todas sobre o bege de menor saturação da página, e o
+   lilás do fim não existe em lugar nenhum do jogo. Agora a amplitude é curta
+   e o ciclo FECHA:
+
+     • do topo até o vídeo, o céu é o azul do próprio jogo;
+     • pais e escolas continuam azuis, com o dourado só insinuado no
+       horizonte da seção de escolas — ela é a rampa de entrada;
+     • o único ponto quente é o bloco de download, e ele é curto e saturado:
+       o clímax da página é o único lugar da página inteira que esquenta;
+     • contato e autoras já têm o azul voltando, e o rodapé fecha no azul.
+
+   O lilás saiu de vez. Nenhum momento do arco inventa cor que o jogo não
+   tem: os azuis vêm do --ceu e os quentes do --amarelo e do --laranja-botao.
+   Nenhum deles é forte: é fundo de texto, não cartaz.
+--------------------------------------------------------------------------- */
+
+/* MANHÃ ALTA — o mesmo azul do jogo, só mais alto e mais limpo.
+   9,66:1 / 8,36:1 / 6,72:1. */
+:root[data-tema='manha'] {
+  --paginaA: #def4fd;
+  --paginaB: #bbe8f6;
+  --paginaC: #8ad5ef;
+  --sol-halo: 0.06;
+  --nuvem-fator: 1;
+}
+
+/* TARDE — o vídeo. Ainda o azul do jogo: a prova do produto acontece sobre a
+   cor da marca, não sobre bege. 9,36:1 / 7,84:1 / 5,92:1. */
+:root[data-tema='tarde'] {
+  --paginaA: #d8f1fb;
+  --paginaB: #aee2f5;
+  --paginaC: #76c9ea;
+  --sol-halo: 0.12;
+  --nuvem-fator: 0.96;
+}
+
+/* TARDE ALTA — personagens e pais. O azul um passo mais fundo; é o ponto
+   mais escuro de todo o arco. 9,08:1 / 7,36:1 / 5,37:1. */
+:root[data-tema='tarde-alta'] {
+  --paginaA: #d2eefb;
+  --paginaB: #a2dcf4;
+  --paginaC: #67c0e7;
+  --sol-halo: 0.18;
+  --nuvem-fator: 0.94;
+}
+
+/* A RAMPA — escolas. Céu ainda azul, com o dourado aparecendo só no
+   horizonte: é ele que anuncia o bloco de download logo abaixo, para o
+   dourado não entrar em corte seco. 9,38:1 / 7,99:1 / 7,73:1. */
+:root[data-tema='pre-dourado'] {
+  --paginaA: #d9f1fb;
+  --paginaB: #b7e3f2;
+  --paginaC: #ffd27f;
+  --sol-halo: 0.34;
+  --nuvem-fator: 0.88;
+}
+
+/* DOURADO — o clímax, e o único momento quente da página inteira. Curto (só
+   o bloco de download veste isto) e saturado: é o --amarelo e o
+   --laranja-botao do jogo, clareados até caberem atrás de texto.
+   9,25:1 / 7,72:1 / 5,87:1. */
+:root[data-tema='dourado'] {
+  --paginaA: #ffe9c2;
+  --paginaB: #ffd27a;
+  --paginaC: #ffac3f;
+  --sol-halo: 0.6;
+  --nuvem-fator: 0.78;
+}
+
+/* A VOLTA — contato e autoras. O dourado sobe e sai pelo topo enquanto o
+   azul reaparece por baixo. 9,64:1 / 9,03:1 / 6,49:1. */
+:root[data-tema='dourado-fim'] {
+  /* MESMAS CORES DO 'dourado', COM O DEGRADÊ ENCURTADO.
+     O céu é uma camada do tamanho da TELA e o degradê ia de 0% a 100%
+     dela — mas no fim da página o rodapé (fundo azul-escuro sólido) cobre
+     a faixa de baixo e ESCONDE a ponta mais forte. Medido na queixa: o
+     céu encostava no rodapé num azul quase branco. Puxando as paradas
+     para 36% e 70%, o degradê COMPLETA acima do rodapé: o laranja
+     #ffac3f encosta nele, e dos 70% para baixo fica sólido, atrás do
+     rodapé. Se o rodapé mudar muito de altura, confira esta conta.
+     As cores são as mesmas do 'dourado' de propósito: o clima não muda
+     do download até o fim, só a geometria do degradê. */
+  --paginaA: #ffe9c2;
+  --paginaB: #ffd27a;
+  --paginaC: #ffac3f;
+  --paginaB-em: 36%;
+  --paginaC-em: 70%;
+  --sol-halo: 0.6;
+  --nuvem-fator: 0.78;
+}
+
+/* O AZUL DE VOLTA — o rodapé. O ciclo fecha onde começou: o céu do jogo.
+   8,91:1 / 7,23:1 / 5,50:1. */
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--altura-nav) + 16px);
+}
+
+body {
+  margin: 0;
+  color: var(--texto);
+  /* cor de base enquanto o cenário não pinta; nunca pode aparecer branco */
+  background: var(--ceu-meio);
+  font-family: var(--fonte-texto), system-ui, sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* O conteúdo fica acima do cenário decorativo (que é z-index 0).
+   O <header> não entra aqui: a barra do topo já é fixed com z-index 50. */
+body > main,
+body > footer {
+  position: relative;
+  z-index: 1;
+}
+
+h1, h2, h3 {
+  font-family: var(--fonte-titulo), system-ui, sans-serif;
+  line-height: 1.1;
+  margin: 0 0 16px;
+}
+
+h1 { font-size: clamp(34px, 6vw, 56px); }
+h2 { font-size: clamp(28px, 4.5vw, 42px); }
+h3 { font-size: clamp(20px, 3vw, 26px); }
+
+img { max-width: 100%; height: auto; }
+
+a { color: var(--azul-escuro); }
+
+.container {
+  width: 100%;
+  max-width: var(--largura);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.secao { padding: 72px 0; }
+
+/* Some da tela mas continua sendo lido por leitores de tela.
+   Usado nos titulos que existem so para a ordem de titulos ficar correta. */
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   HIERARQUIA DE TÍTULOS
+   São DOIS tratamentos, e a diferença entre eles é o que diz o que importa:
+
+   .tituloJogo   a voz do jogo — letra branca com contorno escuro grosso e
+                 sombra sólida, igual à logo. Ela custa caro: usada em tudo,
+                 deixa H1, H2 e nome de ilha com o mesmo peso e a página
+                 passa a ter sete momentos de igual intensidade e nenhum
+                 clímax. Por isso ela vale em EXATAMENTE DOIS lugares, a
+                 abertura e o clímax: o H1 do herói e o título do bloco de
+                 download. Mais nenhum.
+
+   .tituloSecao  todos os outros títulos: navy sólido, sem contorno. O navy
+                 (--contorno) dá no mínimo 5,67:1 contra o ponto mais escuro
+                 de qualquer céu do arco — o --azul-escuro cairia para 3,38:1
+                 e por isso não serve aqui.
+
+   O contorno é feito com text-shadow em volta porque -webkit-text-stroke
+   afina de um jeito diferente em cada navegador. Quem segura a legibilidade
+   do título branco sobre o céu é o contorno, não o branco.
+--------------------------------------------------------------------------- */
+.tituloJogo,
+.tituloSecao {
+  font-family: var(--fonte-titulo), system-ui, sans-serif;
+  font-weight: 800;
+}
+
+.tituloJogo {
+  color: #fff;
+  text-shadow:
+    3px 0 0 var(--contorno), -3px 0 0 var(--contorno),
+    0 3px 0 var(--contorno), 0 -3px 0 var(--contorno),
+    2px 2px 0 var(--contorno), -2px 2px 0 var(--contorno),
+    2px -2px 0 var(--contorno), -2px -2px 0 var(--contorno),
+    0 7px 0 rgba(18, 59, 94, 0.3);
+}
+
+.tituloSecao {
+  color: var(--contorno);
+  text-align: center;
+}
+
+/* Etiqueta curta acima do título ("sobrancelha"). O texto vem do
+   painel de controle; as setinhas são enfeite do CSS.
+
+   Ela é de propósito DISCRETA. Seis pílulas com contorno grosso de 3px e
+   degrau de sombra, em intervalos regulares, marcavam as sete seções todas
+   com a mesma importância e disputavam atenção com o próprio título que
+   deveriam apresentar. Agora são menores, com contorno fino e sem degrau:
+   acompanham o título em vez de brigar com ele.
+
+   O azul continua sendo --azul-escuro sobre branco, que dá 6,91:1 — a
+   etiqueta ficou mais quieta, não menos legível.
+
+   Centra sozinha, sem depender do text-align da seção: a do vídeo ficava
+   encostada na esquerda porque aquela seção não é centralizada. */
+.sobrancelha {
+  display: block;
+  width: fit-content;
+  background: var(--cartao);
+  color: var(--azul-escuro);
+  font-family: var(--fonte-titulo), system-ui, sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.5;
+  border: 1.5px solid rgba(18, 59, 94, 0.4);
+  border-radius: 999px;
+  padding: 2px 12px;
+  margin: 0 auto 10px;
+}
+
+.sobrancelha::before { content: "\00BB\00A0"; }
+.sobrancelha::after { content: "\00A0\00AB"; }
+
+.centralizado { text-align: center; }
+
+/* ---------------------------------------------------------------------------
+   O PARÁGRAFO QUE DÁ PARA LER
+   Três coisas somavam contra a leitura: fonte display, linha de 85–90
+   caracteres e texto centralizado em várias linhas (o olho perde a volta
+   porque a margem esquerda muda a cada linha). A fonte já virou Nunito; esta
+   classe resolve as outras duas.
+
+     • --medida (34em) corta a linha em uns 62 caracteres;
+     • text-align: left devolve ao olho uma margem esquerda fixa.
+
+   A classe é para BLOCO LONGO — mais de duas linhas. Frase curta de uma ou
+   duas linhas pode continuar centralizada: ali o olho não chega a se perder,
+   e a centralização ajuda a compor com o título.
+--------------------------------------------------------------------------- */
+.paragrafo {
+  max-width: var(--medida);
+  margin-inline: auto;
+  text-align: left;
+}
+
+/* ---------------------------------------------------------------------------
+   PLACAS (os antigos cartões brancos)
+   Objeto do jogo: contorno escuro grosso, sombra sólida deslocada para baixo
+   e para a direita (o mesmo "degrau" dos botões) e uma inclinação leve que
+   alterna de um cartão para o outro, para a fileira não parecer planilha.
+   No hover a placa sobe e fica reta.
+--------------------------------------------------------------------------- */
+.cartao {
+  background: var(--cartao);
+  border: 3px solid var(--contorno);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 6px 7px 0 var(--contorno);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.cartao:nth-child(odd) { transform: rotate(-1.1deg); }
+.cartao:nth-child(even) { transform: rotate(1.1deg); }
+
+.cartao:hover {
+  transform: rotate(0deg) translateY(-6px);
+  box-shadow: 8px 12px 0 var(--contorno);
+}
+
+/* ---------------------------------------------------------------------------
+   BOTÕES
+   O degrau da sombra virou variável para o :active poder afundar o botão
+   exatamente a altura do degrau e zerar a sombra.
+--------------------------------------------------------------------------- */
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 999px;
+  font-family: var(--fonte-titulo), system-ui, sans-serif;
+  font-size: 18px;
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+  --degrau: 5px;
+  --cor-degrau: transparent;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.botao:hover { transform: scale(1.03); }
+
+/* Afunda ao clicar: desce a altura do degrau e o degrau some. */
+.botao:active {
+  transform: translateY(var(--degrau));
+  box-shadow: 0 0 0 var(--cor-degrau);
+}
+
+.botao:focus-visible {
+  outline: 3px solid var(--contorno);
+  outline-offset: 3px;
+}
+
+/* O BOTÃO PRINCIPAL É O LARANJA DO JOGO (#F07C1E), SEM ESCURECER.
+   Antes ele era #b85a10, um laranja escurecido até o texto branco dar
+   4,66:1 — e foi isso que o deixou amarronzado (Pietro, 21/10). A saída foi
+   trocar a COR DO TEXTO, não a do fundo: azul-marinho --contorno sobre
+   #F07C1E dá 4,20:1, e o texto do botão é grande (19px, Baloo negrito), que
+   pela WCAG pede 3:1. O degrau embaixo é um laranja mais fundo, não marrom.
+   O secundário segue no azul-escuro com branco (6,91:1). */
+.botaoPrincipal {
+  background: var(--laranja-botao);
+  color: var(--contorno);
+  font-size: 19px;
+  --cor-degrau: #c4600f;
+  box-shadow: 0 var(--degrau) 0 var(--cor-degrau);
+}
+
+.botaoSecundario {
+  background: var(--azul-escuro);
+  --cor-degrau: #06356b;
+  box-shadow: 0 var(--degrau) 0 var(--cor-degrau);
+}
+
+.botaoDesativado {
+  background: #b8c4cc;
+  --cor-degrau: #93a0a8;
+  box-shadow: 0 var(--degrau) 0 var(--cor-degrau);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------------------
+   BIBLIOTECA DE ANIMAÇÕES
+   Sete movimentos nomeados que a página inteira reaproveita, mais a sombra
+   de contato das ilhas. Cada um é uma classe global: quem quiser se mexer
+   põe a classe e ajusta a duração e o atraso por --dur e --atraso.
+   Só transform e opacity são animados (é o que o celular fraco aguenta).
+--------------------------------------------------------------------------- */
+@keyframes flutuar {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -14px, 0); }
+}
+
+@keyframes balancar {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+
+@keyframes girarLento {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes cintilar {
+  0%, 100% { opacity: 0.2; transform: scale(0.7); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+/* Travessia completa da tela, da esquerda para a direita. Começa e termina
+   fora da tela, então o "pulo" do recomeço não aparece. */
+@keyframes deriva {
+  from { transform: translate3d(-340px, 0, 0); }
+  to { transform: translate3d(calc(100vw + 340px), 0, 0); }
+}
+
+/* As letras soltas: descem um pouco, voltam e vão girando devagar. */
+@keyframes cair {
+  0% { transform: translate3d(0, -12px, 0) rotate(-9deg); }
+  50% { transform: translate3d(7px, 16px, 0) rotate(8deg); }
+  100% { transform: translate3d(0, -12px, 0) rotate(-9deg); }
+}
+
+@keyframes pulsar {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.045); }
+}
+
+/* Sombra de contato: encolhe e clareia quando a ilha sobe (o 50% do flutuar).
+   É ela que faz a ilha parecer flutuando, mais do que o movimento.
+   A opacidade vem de --opSombra para a ilha apagada ter sombra apagada. */
+@keyframes sombraFlutuar {
+  0%, 100% { transform: scale(1); opacity: var(--opSombra, 0.3); }
+  50% { transform: scale(0.78); opacity: calc(var(--opSombra, 0.3) * 0.5); }
+}
+
+.aFlutuar { animation: flutuar var(--dur, 6s) ease-in-out var(--atraso, 0s) infinite; }
+.aBalancar { animation: balancar var(--dur, 7s) ease-in-out var(--atraso, 0s) infinite; }
+.aGirarLento { animation: girarLento var(--dur, 40s) linear var(--atraso, 0s) infinite; }
+.aCintilar { animation: cintilar var(--dur, 4s) ease-in-out var(--atraso, 0s) infinite; }
+.aDeriva { animation: deriva var(--dur, 60s) linear var(--atraso, 0s) infinite; }
+.aCair { animation: cair var(--dur, 12s) ease-in-out var(--atraso, 0s) infinite; }
+.aPulsar { animation: pulsar var(--dur, 2.4s) ease-in-out var(--atraso, 0s) infinite; }
+.aSombra { animation: sombraFlutuar var(--dur, 6s) ease-in-out var(--atraso, 0s) infinite; }
+
+/* ---------------------------------------------------------------------------
+   A TRAVESSIA DE UMA ILHA PARA A OUTRA (View Transitions API)
+   Quem pede a travessia é o carrossel das ilhas, chamando o
+   `document.startViewTransition` do próprio navegador — zero biblioteca, zero
+   quilobyte. Estas regras só dizem COMO ela se parece. Onde a API não existe
+   (Chrome antes do 111, Firefox antes do 133, Safari antes do 18), os
+   pseudo-elementos abaixo simplesmente nunca nascem e a troca é instantânea.
+
+   Elas moram aqui, e não no CSS Module do carrossel, porque
+   ::view-transition-* é do DOCUMENTO: não pertence a nenhuma classe, então o
+   empacotador de módulos recusaria a regra.
+
+   Dois nomes participam:
+     ilha-em-cena   a arte da ilha (o .cena do Ilhas.module.css). A caixa tem
+                    o MESMO tamanho nas seis, então uma recua e a outra chega
+                    sem nunca esticar nem espremer a arte.
+     camada-clima   a camada de efeito que varre a tela. Ela entra no HTML
+                    junto com a troca, então só existe no estado NOVO — e
+                    precisa ficar parada e opaca, porque quem anima é o CSS de
+                    dentro dela. Sem este nome, a foto que o navegador tira da
+                    página passaria por cima e o efeito não apareceria.
+--------------------------------------------------------------------------- */
+::view-transition-group(root) {
+  animation-duration: 0.45s;
+}
+
+::view-transition-old(ilha-em-cena),
+::view-transition-new(ilha-em-cena) {
+  /* o padrão do navegador mistura as duas somando luz, o que clareia a ilha
+     no meio do caminho; aqui a nova simplesmente entra por cima */
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(ilha-em-cena) {
+  animation: ilhaRecua 0.45s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+::view-transition-new(ilha-em-cena) {
+  animation: ilhaChega 0.45s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes ilhaRecua {
+  to { opacity: 0; transform: scale(0.86) translateY(-12px); }
+}
+
+@keyframes ilhaChega {
+  from { opacity: 0; transform: scale(1.14) translateY(14px); }
+}
+
+/* A camada de efeito não participa da travessia: ela já está animando
+   sozinha. Aqui ela só é mantida inteira e opaca enquanto a travessia roda. */
+::view-transition-old(camada-clima),
+::view-transition-new(camada-clima) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* Entrada das seções ao rolar, 100% em CSS.
+   Fica dentro de @supports de propósito: onde a animação por scroll não existir,
+   a regra inteira é ignorada e o conteúdo aparece normal, sem animação.
+   Nenhum JavaScript participa disso, então nada pode esconder texto se o JS falhar. */
+@keyframes subir {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    main > section {
+      animation: subir linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 45%;
+    }
+    main > section:first-child { animation: none; }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   QUEM PEDIU MENOS MOVIMENTO NÃO VÊ MOVIMENTO NENHUM
+   A regra geral (duration 0.001ms) não basta: uma animação cortada pode parar
+   com o elemento deslocado ou transparente. Por isso cada classe de animação
+   é desligada de verdade e volta para a posição e a opacidade de repouso.
+--------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  /* a regra geral de duração embaixo já alcança isto, mas a troca de céu é
+     grande demais para depender de "quase zero": aqui ela é desligada mesmo,
+     e o clima passa a mudar de um quadro para o outro. */
+  html { transition: none !important; }
+  .botao:hover, .botao:active { transform: none; }
+  .cartao:hover { transform: none; }
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+
+  .aFlutuar, .aBalancar, .aGirarLento, .aCintilar,
+  .aDeriva, .aCair, .aPulsar, .aSombra {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  /* o brilhinho não tem opacidade própria no CSS: sem a animação ele
+     precisa de um valor de repouso. As sombras já têm o delas. */
+  .aCintilar { opacity: 0.4 !important; }
+
+  /* A TRAVESSIA ENTRE AS ILHAS NÃO ACONTECE.
+     Quem de fato impede é o JavaScript do carrossel, que nem chama o
+     startViewTransition nesse caso — e precisa ser em JavaScript mesmo,
+     porque a regra de duração acima apaga a animação mas não impediria a
+     chamada. Isto aqui é o cinto e suspensório: se a travessia começar por
+     outro caminho, ela passa num quadro só, sem nada deslizando. */
+  ::view-transition-group(root),
+  ::view-transition-old(root),
+  ::view-transition-new(root),
+  ::view-transition-group(ilha-em-cena),
+  ::view-transition-old(ilha-em-cena),
+  ::view-transition-new(ilha-em-cena),
+  ::view-transition-group(camada-clima),
+  ::view-transition-old(camada-clima),
+  ::view-transition-new(camada-clima) {
+    animation: none !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   REVELAR AO ROLAR
+   Blocos com data-revelar entram em fade (e sobem 16px) quando aparecem na
+   tela; quem marca data-revelado é components/RevelarAoRolar.js. A regra de
+   esconder só vale depois de html[data-js]: sem JavaScript, tudo visível.
+   Só opacity e transform — nada de layout. A escada entre irmãos vem de
+   --atraso; data-imediato (já estava na tela ao carregar) não espera.
+--------------------------------------------------------------------------- */
+html[data-js] [data-revelar] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.8s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--atraso, 0ms);
+}
+
+html[data-js] [data-revelar][data-revelado] {
+  opacity: 1;
+  transform: none;
+}
+
+html[data-js] [data-revelar][data-imediato] {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-js] [data-revelar] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

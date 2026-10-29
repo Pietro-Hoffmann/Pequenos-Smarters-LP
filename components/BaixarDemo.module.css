@@ -1,0 +1,107 @@
+/* O amarelo saiu da placa. */
+.secao { text-align: center; overflow: hidden; }
+
+/* A PLACA BRANCA COM BORDA NAVY.
+   Ela era amarelo saturado — e o céu desta seção é o dourado do clímax. Dois
+   tons vizinhos: a placa derretia no fundo justamente no momento mais
+   importante da página, e o botão laranja de dentro ficava laranja sobre
+   amarelo sobre dourado. Em branco, a placa volta a existir como objeto e o
+   botão laranja passa a ser o ponto mais quente da tela inteira — que é o
+   que ele precisa ser.
+   Contorno grosso, canto bem redondo e o mesmo degrau de sombra sólida das
+   outras placas da página. */
+.placa {
+  width: min(840px, 100%);
+  margin: 24px auto 0;
+  background: var(--cartao);
+  border: 5px solid var(--contorno);
+  border-radius: 32px;
+  box-shadow: 8px 10px 0 var(--contorno);
+  padding: 32px 26px 28px;
+}
+
+.itens {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Num cartão branco, chip branco some. O creme mantém o chip visível e
+   mantém o calor do jogo sem disputar com o botão laranja.
+   #6b4a00 sobre #fff4d9 dá 7,37:1. */
+.itens li {
+  background: #fff4d9;
+  border: 3px solid var(--contorno);
+  border-radius: 999px;
+  padding: 6px 18px;
+  font-size: 17px;
+  color: #6b4a00;
+}
+
+/* Cortados na medida de leitura: na largura cheia da placa eles davam uma
+   linha de ~90 caracteres, que é onde a leitura começa a cansar. Duas linhas
+   curtas e centralizadas cabem na regra. */
+.plataforma {
+  color: var(--texto);
+  font-size: 16px;
+  max-width: var(--medida);
+  margin: 18px auto 0;
+}
+
+/* A linha dos dados da criança. Um pouco menor que o aviso de plataforma:
+   ela é a letra miúda honesta do card, não um alarme. Mesma medida de
+   leitura, para não virar uma linha de 90 caracteres dentro da placa. */
+.dados {
+  color: var(--texto);
+  font-size: 15px;
+  line-height: 1.5;
+  max-width: var(--medida);
+  margin: 10px auto 0;
+}
+
+.acao { margin: 22px 0 12px; display: inline-block; }
+
+.grande { font-size: 22px; padding: 18px 40px; --degrau: 6px; }
+
+/* mesma receita do .botaoPrincipal: o laranja do jogo com texto navy
+   (4,2:1, e o texto aqui é de 22px — grande). O marrom #b85a10 saiu. */
+.ativo {
+  background: var(--laranja-botao);
+  color: var(--contorno);
+  --cor-degrau: #c4600f;
+  box-shadow: 0 var(--degrau) 0 var(--cor-degrau);
+}
+
+.rodape { color: var(--texto); font-size: 17px; max-width: var(--medida); margin: 0 auto; }
+
+.qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: max-content;
+  margin: 0 auto 20px;
+  background: #fff;
+  border: 3px solid var(--contorno);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.qr span { font-size: 15px; color: var(--texto); }
+
+/* No celular os três chips quebravam 1 + 2 e a primeira linha ficava
+   sozinha, parecendo erro de quebra. Um por linha resolve sem depender de
+   quantos chips o painel de controle tiver: dois, três ou cinco, a pilha
+   nunca deixa órfão. */
+@media (max-width: 600px) {
+  .itens { flex-direction: column; align-items: center; gap: 8px; }
+}
+
+@media (max-width: 520px) {
+  .placa { padding: 24px 16px; border-radius: 26px; border-width: 4px; box-shadow: 6px 7px 0 var(--contorno); }
+  .grande { font-size: 19px; padding: 16px 24px; }
+}

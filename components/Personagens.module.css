@@ -1,0 +1,183 @@
+/* Sem faixa de céu pintada: aqui o céu que aparece é o de verdade.
+   O overflow: hidden é obrigatório — os mascotes e o vilão passam da borda
+   de propósito, e é ele que impede a página de ganhar rolagem lateral. */
+.secao {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  padding-bottom: 40px;
+}
+
+/* align-items: stretch, não end. Com "end" as três colunas eram alinhadas
+   pela base e, como as artes têm alturas bem diferentes (Lina 602px contra
+   448px do Ziggy), nome, pílula e balão caíam em três alturas distintas —
+   parecia acidente. Agora o topo das três coincide e a arte desce para a
+   base pelo margin-top: auto. */
+.grade {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  align-items: stretch;
+  margin-top: 24px;
+}
+
+.heroi {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Navy sólido, sem contorno branco: o contorno virou privilégio de dois
+   títulos só (o H1 do herói e o do bloco de download). Três nomes de mascote
+   com o mesmo tratamento do H1 eram três concorrentes a mais pela atenção.
+   #123B5E dá no mínimo 5,67:1 contra o ponto mais fundo de qualquer céu. */
+.nome {
+  margin: 0 0 2px;
+  color: var(--contorno);
+  font-family: var(--fonte-titulo), system-ui, sans-serif;
+  font-weight: 800;
+}
+
+/* #b85a10 sobre branco da 4.66:1; sobre o ceu daria so 2.47:1, por isso a
+   especie fica dentro de uma pilulinha branca. */
+.especie {
+  background: var(--cartao);
+  color: #b85a10;
+  font-family: var(--fonte-titulo), system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
+  border: 3px solid var(--contorno);
+  border-radius: 999px;
+  padding: 1px 14px;
+  margin-bottom: 12px;
+}
+
+/* O balão de fala é desenhado em CSS (plaquinha branca com rabicho).
+   A arte balao_fala.png tem forma fixa e as falas têm tamanhos bem
+   diferentes, então o texto vazaria dela. */
+.balao {
+  position: relative;
+  background: var(--cartao);
+  color: var(--texto);
+  border: 3px solid var(--contorno);
+  border-radius: 18px;
+  box-shadow: 5px 6px 0 var(--contorno);
+  padding: 14px 16px;
+  /* pouco espaço embaixo: o rabicho tem que encostar na cabeça do mascote,
+     senão aponta para o vazio */
+  margin: 0 0 14px;
+  font-size: 16px;
+  line-height: 1.45;
+  max-width: 290px;
+  /* a fala dá três ou quatro linhas nesta largura: alinhada à esquerda ela
+     se lê, centralizada ela só se vê */
+  text-align: left;
+}
+
+/* Rabicho: dois triângulos, o de trás faz o contorno escuro. */
+.balao::before,
+.balao::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+.balao::before {
+  bottom: -20px;
+  margin-left: -14px;
+  border-width: 20px 14px 0 14px;
+  border-color: var(--contorno) transparent transparent transparent;
+}
+
+.balao::after {
+  bottom: -14px;
+  margin-left: -10px;
+  border-width: 14px 10px 0 10px;
+  border-color: var(--cartao) transparent transparent transparent;
+}
+
+/* O palco de cada mascote: altura FIXA para os três ficarem do mesmo
+   tamanho e pisarem na mesma linha, e é ele que carrega a sombra de
+   contato — sem ela os três pareciam flutuando soltos no céu.
+   margin-top: auto empurra a arte para a base da coluna. */
+.palco {
+  position: relative;
+  display: block;
+  width: min(220px, 100%);
+  height: 230px;
+  margin-top: auto;
+}
+
+.palco::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  width: 64%;
+  height: 20px;
+  margin-left: -32%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(18, 59, 94, 0.5) 0%, rgba(18, 59, 94, 0) 70%);
+  opacity: 0.34;
+}
+
+.figura {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+}
+
+/* Os mascotes das pontas passam da borda da seção. */
+.heroi:first-child .palco { margin-left: -56px; }
+.heroi:last-child .palco { margin-right: -56px; }
+
+/* O VILÃO. Mesmo esqueleto dos mascotes — nome, pílula, balão, sombra —
+   e só o balão muda de cor. É o suficiente para dizer "este é o do mal"
+   sem ele virar um bloco à parte boiando no meio do céu. */
+.ehVilao .balao {
+  background: #2b2440;
+  color: #fff;
+  border-color: var(--contorno);
+}
+
+.ehVilao .balao::after {
+  border-color: #2b2440 transparent transparent transparent;
+}
+
+.ehVilao .especie {
+  color: #fff;
+  background: #2b2440;
+}
+
+.ehVilao .figura { transform-origin: 50% 100%; }
+
+/* Tablet: os três CONTINUAM lado a lado, só menores. Empilhar aqui deixava
+   um mascote de 230px sozinho numa coluna de 800px — pequeno e perdido,
+   exatamente o "solto" que a fileira de três resolve. */
+@media (max-width: 880px) {
+  /* quatro lado a lado não cabem aqui: viram 2x2 */
+  .grade { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .palco { width: min(170px, 100%); height: 190px; }
+  .heroi:first-child .palco { margin-left: -24px; }
+  .heroi:last-child .palco { margin-right: -24px; }
+  .balao { font-size: 15px; padding: 12px 12px; max-width: 100%; }
+}
+
+/* Celular: aí sim um embaixo do outro, e sem sangrar pelas bordas —
+   o reset precisa ser no .palco, que é quem carrega a margem negativa. */
+@media (max-width: 640px) {
+  .grade { grid-template-columns: 1fr; gap: 36px; }
+  .heroi:first-child .palco,
+  .heroi:last-child .palco { margin-left: 0; margin-right: 0; }
+  .palco { width: min(200px, 70%); height: 220px; }
+  .balao { font-size: 16px; padding: 14px 16px; }
+}
+
+@media (max-width: 420px) {
+  .balao { max-width: 100%; }
+}
