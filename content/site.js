@@ -56,6 +56,30 @@ export const site = {
     detalheWhatsapp: 'Resposta em horário comercial',
   },
 
+  // ---------------------------------------------------------------------------
+  // A TRILHA SONORA DO JOGO TOCANDO NO SITE
+  // Um controle de som fica fixo no canto inferior direito.
+  //
+  // COMO ELA COMEÇA: nenhum navegador deixa música começar sozinha — todos
+  // exigem que o visitante interaja com a página antes. Por isso ela fica
+  // armada e entra no PRIMEIRO clique ou toque em qualquer lugar, com o
+  // volume subindo do silêncio para não assustar ninguém.
+  //
+  // `ativo: false` tira o controle da página inteira, e aí o arquivo de
+  // música nunca é baixado por ninguém.
+  // O arquivo tem 4,3 MB: ele só é buscado quando alguém liga o som, nunca
+  // no carregamento da página. Se for trocar, vale recomprimir para 96 kbps
+  // (fica perto de 1,6 MB, e em música de fundo a diferença não se ouve).
+  trilha: {
+    ativo: true,
+    arquivo: '/sons/musica_fundo.mp3',
+    rotuloLigar: 'Ligar a música do jogo',
+    rotuloDesligar: 'Desligar a música',
+    rotuloVolume: 'Volume da música',
+    // de 0 a 1. 0.35 é um fundo presente sem atrapalhar quem está lendo.
+    volumeInicial: 0.35,
+  },
+
   // Menu do topo da página.
   nav: {
     ancoras: [

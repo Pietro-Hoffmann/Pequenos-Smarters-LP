@@ -1,6 +1,7 @@
 import Cenario from '@/components/Cenario'
 import TemaPorSecao from '@/components/TemaPorSecao'
 import RevelarAoRolar from '@/components/RevelarAoRolar'
+import Trilha from '@/components/Trilha'
 import Nav from '@/components/Nav'
 import Hero from '@/components/Hero'
 import Beneficios from '@/components/Beneficios'
@@ -46,6 +47,10 @@ export default function Pagina() {
           montarMailto/montarWhatsapp da seção de contato: ou os dois
           aparecem, ou nenhum dos dois — nunca um link morto aqui embaixo. */}
       <Footer dados={site.rodape} contato={site.contato} />
+      {/* O controle da música do jogo, fixo no canto inferior direito.
+          Fica fora do <main> de propósito: é controle da página, não
+          conteúdo dela. */}
+      <Trilha dados={site.trilha} />
     </>
   )
 }

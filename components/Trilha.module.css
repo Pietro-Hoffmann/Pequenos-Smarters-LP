@@ -1,0 +1,81 @@
+/* ---------------------------------------------------------------------------
+   O CONTROLE DA TRILHA
+   Bolinha fixa no canto inferior direito. A barra de volume fica recolhida
+   e abre ao passar o mouse, ao tocar ou quando o foco do teclado chega nela
+   — assim o controle não ocupa a tela o tempo todo, mas continua alcançável
+   por quem navega sem mouse.
+--------------------------------------------------------------------------- */
+.caixa {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 45;              /* abaixo da barra do topo (50), acima do conteúdo */
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 6px;
+  background: var(--cartao);
+  border: 3px solid var(--contorno);
+  border-radius: 999px;
+  box-shadow: 0 4px 0 var(--contorno);
+}
+
+.botao {
+  display: grid;
+  place-items: center;
+  width: 44px;              /* alvo de toque confortável */
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  flex: none;
+}
+
+.botao:focus-visible {
+  outline: 3px solid var(--contorno);
+  outline-offset: 2px;
+}
+
+.icone { font-size: 22px; line-height: 1; }
+
+/* A FAIXA RECOLHIDA.
+   Fecha por largura (e não por display: none) para a transição existir e
+   para o campo continuar no caminho do foco do teclado. */
+.faixa {
+  display: flex;
+  align-items: center;
+  width: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: width 0.22s ease, opacity 0.22s ease, margin 0.22s ease;
+}
+
+.caixa:hover .faixa,
+.caixa:focus-within .faixa {
+  width: 104px;
+  opacity: 1;
+  margin: 0 8px 0 4px;
+}
+
+.faixa input {
+  width: 100%;
+  accent-color: var(--laranja-botao);
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faixa { transition: none; }
+}
+
+/* No celular o dedo não tem "passar o mouse": a faixa fica sempre aberta,
+   senão o volume vira um controle inalcançável. */
+@media (hover: none) {
+  .faixa { width: 96px; opacity: 1; margin: 0 8px 0 4px; }
+}
+
+@media (max-width: 480px) {
+  .caixa { right: 12px; bottom: 12px; }
+  .faixa { width: 80px; }
+}
