@@ -67,9 +67,11 @@ export const site = {
   //
   // `ativo: false` tira o controle da página inteira, e aí o arquivo de
   // música nunca é baixado por ninguém.
-  // O arquivo tem 4,3 MB: ele só é buscado quando alguém liga o som, nunca
-  // no carregamento da página. Se for trocar, vale recomprimir para 96 kbps
-  // (fica perto de 1,6 MB, e em música de fundo a diferença não se ouve).
+  // O arquivo tem 1,6 MB e só é buscado quando alguém liga o som, nunca no
+  // carregamento da página. Ele é a música do jogo recomprimida de 256 para
+  // 96 kbps (de 4,3 MB para 1,6 MB): em música de fundo a 35% de volume a
+  // diferença não se ouve, e medimos que o volume continua o mesmo.
+  // SE FOR TROCAR A MÚSICA: recomprima antes, senão a página fica pesada.
   trilha: {
     ativo: true,
     arquivo: '/sons/musica_fundo.mp3',

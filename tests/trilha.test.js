@@ -10,7 +10,7 @@ import Trilha from '@/components/Trilha'
 // em 30/10, com o fade para não assustar.
 //
 // O que estes testes protegem:
-//   • os 4,3 MB da música NÃO são baixados antes de alguém ligar o som;
+//   • a música NÃO é baixada antes de alguém ligar o som;
 //   • o primeiro toque liga uma vez só;
 //   • quem desligou não é importunado de novo na próxima visita;
 //   • o controle é operável e anuncia o estado em que está.
@@ -61,7 +61,7 @@ describe('Trilha', () => {
     expect(el.getAttribute('preload'), 'preload precisa ser none').toBe('none')
     expect(
       el.getAttribute('src'),
-      'com src definido o navegador já começa a buscar os 4,3 MB'
+      'com src definido o navegador já começa a buscar o arquivo inteiro'
     ).toBeNull()
     expect(tocou).toBe(0)
   })

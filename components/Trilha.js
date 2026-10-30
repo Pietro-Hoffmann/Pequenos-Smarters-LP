@@ -14,9 +14,9 @@ import estilos from './Trilha.module.css'
 // Para o primeiro toque não virar susto, a música entra com o volume
 // subindo do silêncio até o alvo em um segundo e meio.
 //
-// PESO: a música tem 4,3 MB, quase o dobro de todas as imagens do site
-// somadas. Por isso o <audio> nasce SEM src e com preload="none": quem
-// nunca liga o som não baixa um byte. O src só é escrito na hora de tocar.
+// PESO: a música tem 1,6 MB (a do jogo, recomprimida de 256 para 96 kbps).
+// Mesmo assim o <audio> nasce SEM src e com preload="none": quem nunca
+// liga o som não baixa um byte. O src só é escrito na hora de tocar.
 //
 // A escolha do visitante (ligado/desligado e volume) fica guardada no
 // próprio navegador. Quem desligou não é importunado na visita seguinte:
