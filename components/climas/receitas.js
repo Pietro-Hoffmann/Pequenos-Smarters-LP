@@ -31,6 +31,15 @@ import {
   passoDaCorrente,
 } from '@/lib/vento'
 import {
+  HALO_BRASA,
+  quantasBrasas,
+  criarBrasa,
+  calorDaBrasa,
+  tomDoCalor,
+  passoDaBrasa,
+  desenharBrasa,
+} from '@/lib/brasas'
+import {
   TONS_AREIA,
   quantosGraos,
   criarGrao,
@@ -212,12 +221,51 @@ export const RECEITA_VENTO = {
   },
 }
 
+// ===========================================================================
+// FOGO — brasas subindo do vulcão e esfriando pelo caminho
+// Sem sprite e sem primitiva simples: cada brasa é um disco pintado com um
+// degradê do núcleo claro ao halo escuro. O sprite não serve aqui porque a
+// COR muda a cada quadro conforme a brasa esfria — teria de ser refeito o
+// tempo todo, e aí não economizaria nada.
+// ===========================================================================
+
+export const RECEITA_FOGO = {
+  preparar(ctx, L, A) {
+    const brasas = []
+    const quantas = quantasBrasas(L)
+    for (let i = 0; i < quantas; i += 1) brasas.push(criarBrasa(L, A))
+    return { brasas }
+  },
+
+  andar(estado, dt, relogio, L, A) {
+    for (let i = 0; i < estado.brasas.length; i += 1) {
+      passoDaBrasa(estado.brasas[i], dt, L, A)
+    }
+  },
+
+  pintar(ctx, estado) {
+    for (let i = 0; i < estado.brasas.length; i += 1) {
+      const b = estado.brasas[i]
+      const calor = calorDaBrasa(b)
+      if (calor <= 0.01) continue
+      // a brasa também ENCOLHE ao esfriar, não só escurece: é a soma das
+      // duas coisas que faz ela parecer apagar em vez de desbotar
+      const raio = b.raio * (0.45 + 0.55 * calor)
+      ctx.save()
+      ctx.translate(b.x, b.y)
+      desenharBrasa(ctx, raio, tomDoCalor(calor), HALO_BRASA, b.brilho * calor)
+      ctx.restore()
+    }
+  },
+}
+
 // O mapa que o ClimaCanvas consulta. Tema de fora desta lista não ganha
 // tela de desenho nenhuma, e continua no CSS.
 const RECEITAS = {
   natureza: RECEITA_NATUREZA,
   deserto: RECEITA_DESERTO,
   vento: RECEITA_VENTO,
+  fogo: RECEITA_FOGO,
 }
 
 export default RECEITAS

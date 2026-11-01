@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { render, screen, act, cleanup } from '@testing-library/react'
 import ClimaCanvas from '@/components/ClimaCanvas'
-import { RECEITA_DESERTO } from '@/components/climas/receitas'
+import { RECEITA_DESERTO, RECEITA_FOGO } from '@/components/climas/receitas'
+import { TONS_BRASA } from '@/lib/brasas'
 import fs from 'node:fs'
 import path from 'node:path'
 
@@ -83,6 +84,12 @@ beforeEach(() => {
     quadraticCurveTo: vi.fn(),
     ellipse: vi.fn(),
     arc: vi.fn(),
+    // as brasas do Fogo são pintadas com degradê: o duble anota cada
+    // parada de cor, que é como se confere que há núcleo E halo
+    paradas: [],
+    createRadialGradient: vi.fn(() => ({
+      addColorStop: (onde, cor) => contexto.paradas.push([onde, cor]),
+    })),
     closePath: vi.fn(),
     fill: vi.fn(),
     fillRect: vi.fn(),
@@ -449,5 +456,68 @@ describe('o Vento não pode voltar a ser listra', () => {
       temDash && temNonScaling,
       'stroke-dasharray + non-scaling-stroke = pontilhado regular'
     ).toBe(false)
+  })
+})
+
+describe('ClimaCanvas: o Fogo (brasas)', () => {
+  it('pinta as brasas assim que entra', () => {
+    render(<ClimaCanvas tema="fogo" />)
+    expect(tela()).toHaveAttribute('data-clima-tela', 'fogo')
+    expect(contexto.arc.mock.calls.length, 'nenhuma brasa foi pintada').toBeGreaterThan(0)
+  })
+
+  it('cada brasa tem NÚCLEO claro e HALO escuro', () => {
+    // é esta dupla que resolve o nó do clima: brasa é luz, e o céu do Fogo
+    // é pêssego claro. Só claro some; só escuro vira tinta.
+    render(<ClimaCanvas tema="fogo" />)
+    expect(contexto.createRadialGradient).toHaveBeenCalled()
+    const cores = contexto.paradas.map((p) => String(p[1]).toLowerCase())
+    const claras = cores.filter((c) => /^#(f|e)/.test(c))
+    const escuras = cores.filter((c) => /^#(7|a|8)/.test(c))
+    expect(claras.length, 'faltou o núcleo claro').toBeGreaterThan(0)
+    expect(escuras.length, 'faltou o halo escuro').toBeGreaterThan(0)
+  })
+
+  it('brasa fria é desenhada mais escura que brasa quente', () => {
+    const quente = { x: 0, y: 0, raio: 4, brilho: 1, idade: 0, vida: 4 }
+    const fria = { x: 0, y: 0, raio: 4, brilho: 1, idade: 3.6, vida: 4 }
+    const nucleoDe = (brasa) => {
+      contexto.paradas.length = 0
+      RECEITA_FOGO.pintar(contexto, { brasas: [brasa] })
+      return contexto.paradas[0] && contexto.paradas[0][1]
+    }
+    expect(nucleoDe(quente)).not.toBe(nucleoDe(fria))
+    expect(TONS_BRASA.indexOf(nucleoDe(fria))).toBeGreaterThan(
+      TONS_BRASA.indexOf(nucleoDe(quente))
+    )
+  })
+
+  it('brasa apagada não é desenhada', () => {
+    contexto.arc.mockClear()
+    RECEITA_FOGO.pintar(contexto, {
+      brasas: [{ x: 0, y: 0, raio: 4, brilho: 1, idade: 10, vida: 4 }],
+    })
+    expect(contexto.arc).not.toHaveBeenCalled()
+  })
+
+  it('os mesmos três freios valem para o fogo', () => {
+    render(<ClimaCanvas tema="fogo" />)
+    expect(agendados.size).toBe(1)
+
+    observadorDeTela.dispara(false)
+    expect(agendados.size).toBe(0)
+    observadorDeTela.dispara(true)
+
+    Object.defineProperty(document, 'hidden', { configurable: true, get: () => true })
+    act(() => document.dispatchEvent(new Event('visibilitychange')))
+    expect(agendados.size).toBe(0)
+    Object.defineProperty(document, 'hidden', { configurable: true, get: () => false })
+  })
+
+  it('quem pede menos movimento vê as brasas paradas, sem laço', () => {
+    movimentoReduzido = true
+    render(<ClimaCanvas tema="fogo" />)
+    expect(contexto.arc.mock.calls.length).toBeGreaterThan(0)
+    expect(agendados.size).toBe(0)
   })
 })

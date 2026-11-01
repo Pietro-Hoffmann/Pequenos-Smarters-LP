@@ -150,6 +150,11 @@ function CamadaDeClima({ clima }) {
       <span className={`${estilos.sopro} ${estilos.sopro1}`} />
       <span className={`${estilos.sopro} ${estilos.sopro2}`} />
       <span className={`${estilos.sopro} ${estilos.sopro3}`} />
+      {/* A quarta faixa nasceu para o Fogo, que precisava de DUAS camadas de
+          brasa em velocidades diferentes para a subida ter profundidade.
+          Nos outros climas ela fica sem regra nenhuma e, portanto, no
+          opacity: 0 da classe .sopro — um <span> vazio não custa nada. */}
+      <span className={`${estilos.sopro} ${estilos.sopro4}`} />
       {/* O VÉU: uma lavada da cor do clima que atravessa a tela junto com
           os sopros. É o que dá o "baque" da troca — os sopros sozinhos
           eram discretos demais. A cor vem do data-clima, no CSS. */}
