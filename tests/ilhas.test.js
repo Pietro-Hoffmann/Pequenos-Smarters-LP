@@ -325,6 +325,26 @@ describe('Ilhas (carrossel)', () => {
     expect(palco().contains(clima)).toBe(false)
   })
 
+  it('a tela das folhas existe só na Natureza, e sai do HTML nas outras ilhas', () => {
+    // é essa saída que garante que o laço de desenho não fica rodando
+    // enquanto a pessoa olha o Deserto ou o Gelo
+    render(<Ilhas dados={dados} />)
+    expect(screen.getByTestId('folhas')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByLabelText('Ver a próxima ilha'))
+    expect(screen.queryByTestId('folhas')).toBeNull()
+
+    fireEvent.click(screen.getByLabelText('Ver a ilha anterior'))
+    expect(screen.getByTestId('folhas')).toBeInTheDocument()
+  })
+
+  it('a tela das folhas mora dentro da camada de clima, e não solta na seção', () => {
+    // dentro dela a tela herda o recorte e o desbotado de baixo; solta,
+    // as folhas apareceriam por cima do texto e passariam do fim da seção
+    const { container } = render(<Ilhas dados={dados} />)
+    expect(climaDaSecao(container).contains(screen.getByTestId('folhas'))).toBe(true)
+  })
+
   it('a camada de clima da seção troca junto com a ilha', () => {
     const { container } = render(<Ilhas dados={dados} />)
     fireEvent.click(screen.getByRole('button', { name: 'Gelo' }))

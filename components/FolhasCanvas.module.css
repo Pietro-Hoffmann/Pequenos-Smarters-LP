@@ -1,0 +1,15 @@
+/* ---------------------------------------------------------------------------
+   A TELA DAS FOLHAS
+   Mora dentro da camada de clima da seção, então herda dela o recorte e o
+   desbotado de baixo. Enfeite puro: não recebe clique nem seleção.
+   `display: block` é obrigatório — canvas nasce inline e sobraria uma faixa
+   de descida de linha embaixo.
+--------------------------------------------------------------------------- */
+.tela {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}

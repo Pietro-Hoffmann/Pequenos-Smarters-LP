@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal, flushSync } from 'react-dom'
 import Sobrancelha from './Sobrancelha'
+import FolhasCanvas from './FolhasCanvas'
 import { FAIXA_CENTRAL, definirTemaDaIlha, devolverOComando } from '@/lib/tema'
 import estilos from './Ilhas.module.css'
 
@@ -426,6 +427,13 @@ export default function Ilhas({ dados }) {
         <span className={`${estilos.camada} ${estilos.extraA}`} />
         <span className={`${estilos.camada} ${estilos.p2}`} />
         <span className={`${estilos.camada} ${estilos.extraB}`} />
+        {/* A NATUREZA É O ÚNICO CLIMA PINTADO FOLHA A FOLHA.
+            As outras cinco ilhas continuam nas camadas de CSS acima, que
+            custam quase nada. Folha pedia mais: ela balança, gira e mostra o
+            verso, e um padrão que desce em bloco nunca ia fazer isso. A tela
+            de desenho só existe enquanto a Natureza está escolhida — trocar
+            de ilha a tira do HTML junto com o laço que a pinta. */}
+        {tema === 'natureza' && <FolhasCanvas />}
       </span>
 
       <div className={`container ${estilos.conteudo}`}>

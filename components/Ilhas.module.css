@@ -660,55 +660,16 @@
    pêssego também não. Então a neve puxa para o azul e a brasa escurece.
    =========================================================================== */
 
-/* NATUREZA — folhas caindo e vaga-lumes. */
-.climaSecao[data-tema='natureza'] .p1 {
-  opacity: 0.4;
-  background-image:
-    radial-gradient(ellipse 4.8px 2.4px at 11.5% 29.1%, #3f7a33 0 70%, transparent 71%),
-    radial-gradient(ellipse 6.4px 3.2px at 30.2% 22.3%, #4e8f3a 0 70%, transparent 71%),
-    radial-gradient(ellipse 3.9px 2.0px at 51.9% 6.1%, #2f6b2a 0 70%, transparent 71%),
-    radial-gradient(ellipse 7.5px 3.7px at 72.0% 6.3%, #3f7a33 0 70%, transparent 71%),
-    radial-gradient(ellipse 6.0px 3.0px at 82.9% 9.1%, #4e8f3a 0 70%, transparent 71%),
-    radial-gradient(ellipse 3.5px 1.8px at 4.1% 37.5%, #2f6b2a 0 70%, transparent 71%),
-    radial-gradient(ellipse 6.8px 3.4px at 35.3% 59.8%, #3f7a33 0 70%, transparent 71%),
-    radial-gradient(ellipse 5.8px 2.9px at 54.7% 56.8%, #4e8f3a 0 70%, transparent 71%),
-    radial-gradient(ellipse 3.2px 1.6px at 71.5% 44.5%, #2f6b2a 0 70%, transparent 71%),
-    radial-gradient(ellipse 7.3px 3.6px at 88.0% 46.9%, #3f7a33 0 70%, transparent 71%),
-    radial-gradient(ellipse 6.1px 3.1px at 11.6% 94.9%, #4e8f3a 0 70%, transparent 71%),
-    radial-gradient(ellipse 3.2px 1.6px at 30.0% 80.4%, #2f6b2a 0 70%, transparent 71%),
-    radial-gradient(ellipse 7.8px 3.9px at 44.4% 82.4%, #3f7a33 0 70%, transparent 71%),
-    radial-gradient(ellipse 4.5px 2.2px at 72.4% 87.0%, #4e8f3a 0 70%, transparent 71%),
-    radial-gradient(ellipse 5.1px 2.6px at 91.3% 74.5%, #2f6b2a 0 70%, transparent 71%);
-  background-size: 317px 263px;
-  animation: desce 17s linear infinite;
-}
-
-.climaSecao[data-tema='natureza'] .p2 {
-  opacity: 0.34;
-  background-image:
-    radial-gradient(ellipse 7.9px 3.5px at 7.3% 3.6%, #4a8d2f 0 70%, transparent 71%),
-    radial-gradient(ellipse 6.7px 3.4px at 30.0% 13.8%, #63a93c 0 70%, transparent 71%),
-    radial-gradient(ellipse 10.1px 4.5px at 53.9% 4.0%, #4a8d2f 0 70%, transparent 71%),
-    radial-gradient(ellipse 6.3px 3.2px at 74.8% 7.3%, #63a93c 0 70%, transparent 71%),
-    radial-gradient(ellipse 6.7px 3.0px at 91.2% 9.8%, #4a8d2f 0 70%, transparent 71%),
-    radial-gradient(ellipse 7.8px 3.9px at 6.1% 28.9%, #63a93c 0 70%, transparent 71%),
-    radial-gradient(ellipse 8.6px 3.8px at 34.2% 33.1%, #4a8d2f 0 70%, transparent 71%),
-    radial-gradient(ellipse 6.9px 3.5px at 56.4% 34.0%, #63a93c 0 70%, transparent 71%),
-    radial-gradient(ellipse 9.9px 4.4px at 73.5% 30.4%, #4a8d2f 0 70%, transparent 71%),
-    radial-gradient(ellipse 6.6px 3.3px at 95.5% 41.7%, #63a93c 0 70%, transparent 71%),
-    radial-gradient(ellipse 7.7px 3.4px at 14.8% 68.8%, #4a8d2f 0 70%, transparent 71%),
-    radial-gradient(ellipse 8.3px 4.1px at 25.8% 57.3%, #63a93c 0 70%, transparent 71%),
-    radial-gradient(ellipse 8.8px 3.9px at 49.3% 66.3%, #4a8d2f 0 70%, transparent 71%),
-    radial-gradient(ellipse 7.4px 3.7px at 66.7% 68.4%, #63a93c 0 70%, transparent 71%),
-    radial-gradient(ellipse 6.4px 2.8px at 97.8% 57.4%, #4a8d2f 0 70%, transparent 71%),
-    radial-gradient(ellipse 8.5px 4.2px at 17.6% 86.0%, #63a93c 0 70%, transparent 71%),
-    radial-gradient(ellipse 8.7px 3.9px at 32.5% 90.7%, #4a8d2f 0 70%, transparent 71%),
-    radial-gradient(ellipse 6.4px 3.2px at 54.0% 90.4%, #63a93c 0 70%, transparent 71%),
-    radial-gradient(ellipse 9.5px 4.2px at 71.4% 90.3%, #4a8d2f 0 70%, transparent 71%),
-    radial-gradient(ellipse 5.3px 2.6px at 94.3% 90.6%, #63a93c 0 70%, transparent 71%);
-  background-size: 419px 347px;
-  animation: desce 11s linear infinite;
-}
+/* NATUREZA — vaga-lumes aqui; as FOLHAS saíram deste arquivo.
+   As duas camadas de folha que moravam aqui (.p1 e .p2) eram um padrão de
+   elipses achatadas que descia em bloco: todas juntas, nenhuma girando. Lido
+   de perto, aquilo era uma textura deslizando, não folha caindo. Desde 31/10
+   a Natureza é pintada folha a folha pelo FolhasCanvas.js, com queda,
+   balanço e giro próprios de cada uma.
+   As camadas .p1 e .p2 continuam no HTML (são as mesmas dos outros cinco
+   climas) e aqui ficam sem regra nenhuma — ou seja, no opacity: 0 que a
+   classe .camada já dá. Os vaga-lumes abaixo não mudaram: são baratos e
+   bons do jeito que estão. */
 
 .climaSecao[data-tema='natureza'] .extraA {
   --op: 0.5;
