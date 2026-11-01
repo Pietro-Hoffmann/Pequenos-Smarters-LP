@@ -2,6 +2,8 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { render, screen, act, cleanup } from '@testing-library/react'
 import ClimaCanvas from '@/components/ClimaCanvas'
 import { RECEITA_DESERTO } from '@/components/climas/receitas'
+import fs from 'node:fs'
+import path from 'node:path'
 
 // ---------------------------------------------------------------------------
 // AS FOLHAS DA ILHA DA NATUREZA (a tela de desenho)
@@ -83,7 +85,13 @@ beforeEach(() => {
     arc: vi.fn(),
     closePath: vi.fn(),
     fill: vi.fn(),
-    stroke: vi.fn(),
+    fillRect: vi.fn(),
+    // grava a espessura de cada traço: é como se confere que o rastro do
+    // Vento afina para trás, sem precisar de um canvas de verdade
+    larguras: [],
+    stroke: vi.fn(() => {
+      contexto.larguras.push(contexto.lineWidth)
+    }),
     drawImage: vi.fn(() => {
       contexto.pintadas += 1
     }),
@@ -332,5 +340,114 @@ describe('ClimaCanvas: clima sem receita', () => {
   it('sem tema nenhum, nada quebra', () => {
     const { container } = render(<ClimaCanvas />)
     expect(container.innerHTML).toBe('')
+  })
+})
+
+describe('ClimaCanvas: o Vento (correntes de ar)', () => {
+  it('pinta as correntes assim que entra', () => {
+    render(<ClimaCanvas tema="vento" />)
+    expect(tela()).toHaveAttribute('data-clima-tela', 'vento')
+    expect(contexto.stroke.mock.calls.length, 'nenhum traço foi feito').toBeGreaterThan(0)
+  })
+
+  it('a corrente é um TRAÇO que segue o arco, não um retângulo', () => {
+    render(<ClimaCanvas tema="vento" />)
+    expect(contexto.lineTo.mock.calls.length).toBeGreaterThan(0)
+    expect(contexto.fillRect).not.toHaveBeenCalled()
+  })
+
+  it('o rastro afina para trás: a espessura cresce da cauda para a cabeça', () => {
+    // sem isso a corrente vira um fio de espessura única, que é um RISCO —
+    // e risco de espessura única repetido é o defeito que estamos consertando
+    render(<ClimaCanvas tema="vento" />)
+    const larguras = contexto.larguras
+    expect(larguras.length).toBeGreaterThan(4)
+    expect(Math.max(...larguras)).toBeGreaterThan(Math.min(...larguras) * 1.5)
+  })
+
+  it('os mesmos três freios valem para o vento', () => {
+    render(<ClimaCanvas tema="vento" />)
+    expect(agendados.size).toBe(1)
+
+    observadorDeTela.dispara(false)
+    expect(agendados.size).toBe(0)
+    observadorDeTela.dispara(true)
+
+    Object.defineProperty(document, 'hidden', { configurable: true, get: () => true })
+    act(() => document.dispatchEvent(new Event('visibilitychange')))
+    expect(agendados.size).toBe(0)
+    Object.defineProperty(document, 'hidden', { configurable: true, get: () => false })
+  })
+
+  it('quem pede menos movimento vê as correntes paradas, sem laço', () => {
+    movimentoReduzido = true
+    render(<ClimaCanvas tema="vento" />)
+    expect(contexto.stroke.mock.calls.length).toBeGreaterThan(0)
+    expect(agendados.size).toBe(0)
+  })
+})
+
+// ---------------------------------------------------------------------------
+// A GUARDA CONTRA A REINCIDÊNCIA DO VENTO
+// O Vento já foi "consertado" uma vez ajustando ângulo e opacidade das
+// listras, e voltou a parecer defeito de renderização. A causa é a técnica,
+// não o número: linear-gradient só sabe fazer RETA, e reta paralela
+// igualmente espaçada repetindo em padrão é a assinatura de artefato de
+// compressão. Este teste existe para que ninguém volte a resolver isso
+// mexendo no ângulo.
+// ---------------------------------------------------------------------------
+describe('o Vento não pode voltar a ser listra', () => {
+  const CSS = fs.readFileSync(
+    path.join(process.cwd(), 'components/Ilhas.module.css'),
+    'utf8'
+  )
+
+  const regrasDoVento = () => {
+    const achados = []
+    const re = /([^{}]*vento[^{}]*)\{([^}]*)\}/gi
+    let m = re.exec(CSS)
+    while (m) {
+      achados.push({ seletor: m[1].trim(), corpo: m[2] })
+      m = re.exec(CSS)
+    }
+    return achados
+  }
+
+  it('nenhuma regra de Vento usa linear-gradient', () => {
+    const culpadas = regrasDoVento().filter((r) => /linear-gradient/.test(r.corpo))
+    expect(
+      culpadas.map((r) => r.seletor),
+      'listra reta no Vento é o defeito que já voltou uma vez'
+    ).toEqual([])
+  })
+
+  it('as camadas de partícula do clima de Vento não existem mais no CSS', () => {
+    // elas ficam no opacity: 0 da classe .camada; quem pinta é o canvas
+    expect(CSS).not.toMatch(/\.climaSecao\[data-tema='vento'\]\s*\.p[12]\s*\{/)
+  })
+
+  it('todo caminho da varredura do Vento é CURVO, nenhum é reta', () => {
+    const JS = fs.readFileSync(path.join(process.cwd(), 'components/Ilhas.js'), 'utf8')
+    const caminhos = [...JS.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1])
+    expect(caminhos.length, 'os caminhos do Vento sumiram').toBeGreaterThanOrEqual(4)
+    for (const d of caminhos) {
+      expect(d, `"${d}" é uma reta: o Vento volta a parecer defeito`).toMatch(/[QCSqcs]/)
+    }
+  })
+
+  it('o tracejado não volta junto com o non-scaling-stroke', () => {
+    // A ARMADILHA, medida em 1/11: vector-effect: non-scaling-stroke leva o
+    // cálculo do tracejado para o espaço da TELA, onde o pathLength não
+    // vale. O resultado foi cada curva virar um pontilhado de uns doze
+    // traços iguais — exatamente a regularidade que este conserto elimina.
+    // Os dois juntos, nunca mais.
+    const bloco = CSS.match(/\.correnteArSvg path\s*\{([^}]*)\}/)
+    expect(bloco, 'o bloco do caminho do Vento sumiu do CSS').not.toBeNull()
+    const temDash = /stroke-dasharray/.test(bloco[1])
+    const temNonScaling = /non-scaling-stroke/.test(bloco[1])
+    expect(
+      temDash && temNonScaling,
+      'stroke-dasharray + non-scaling-stroke = pontilhado regular'
+    ).toBe(false)
   })
 })

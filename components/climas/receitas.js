@@ -23,6 +23,14 @@ import {
   desenharContornoDeFolha,
 } from '@/lib/folhas'
 import {
+  TONS_VENTO,
+  quantasCorrentes,
+  criarCorrente,
+  segmentosDoRastro,
+  envelopeDaCorrente,
+  passoDaCorrente,
+} from '@/lib/vento'
+import {
   TONS_AREIA,
   quantosGraos,
   criarGrao,
@@ -141,11 +149,75 @@ export const RECEITA_DESERTO = {
   },
 }
 
+// ===========================================================================
+// VENTO — correntes de ar em arco
+// Nem sprite nem elipse: aqui o desenho é um TRAÇO que segue o arco e afina
+// para trás. Cada corrente vira uma fieira de segmentos curtos com alfa e
+// espessura crescentes da cauda para a cabeça — é esse afinamento que dá
+// direção ao vento sem precisar de nenhuma seta.
+// ===========================================================================
+
+// Quantos pedaços formam o rastro. A semente (rastro curtíssimo) não precisa
+// de doze: com três já fica o pontinho redondo que ela deve ser, e isso
+// economiza dois terços das chamadas de desenho dela.
+const PEDACOS_DO_RASTRO = 12
+const PEDACOS_DA_SEMENTE = 3
+
+export const RECEITA_VENTO = {
+  preparar(ctx, L, A) {
+    const correntes = []
+    const quantas = quantasCorrentes(L)
+    for (let i = 0; i < quantas; i += 1) correntes.push(criarCorrente(L, A))
+    return { correntes }
+  },
+
+  andar(estado, dt, relogio, L, A) {
+    for (let i = 0; i < estado.correntes.length; i += 1) {
+      passoDaCorrente(estado.correntes[i], dt, L, A)
+    }
+  },
+
+  pintar(ctx, estado) {
+    ctx.lineCap = 'round'
+    ctx.lineJoin = 'round'
+    for (let i = 0; i < estado.correntes.length; i += 1) {
+      const c = estado.correntes[i]
+      const pontos = segmentosDoRastro(
+        c,
+        c.semente ? PEDACOS_DA_SEMENTE : PEDACOS_DO_RASTRO
+      )
+      if (pontos.length < 2) continue
+      // o envelope acende a corrente enquanto ela entra e apaga enquanto
+      // sai: sem ele o arco apareceria e sumiria do nada no meio do céu,
+      // já que ele não atravessa a tela de ponta a ponta
+      const aceso = c.opacidade * envelopeDaCorrente(c.progresso)
+      if (aceso <= 0.01) continue
+      ctx.strokeStyle = TONS_VENTO[c.tom]
+      for (let j = 1; j < pontos.length; j += 1) {
+        const atras = pontos[j - 1]
+        const frente = pontos[j]
+        // A RAIZ é o que dá corpo ao rastro. Com a força crua (linear), só
+        // o último doze avos do traço ficava forte e todo o resto saía
+        // pálido — na tela a corrente virava um fiapo. A raiz mantém a
+        // maior parte do rastro firme e deixa só a pontinha se dissolver.
+        const vigor = Math.sqrt(frente.forca)
+        ctx.globalAlpha = aceso * vigor
+        ctx.lineWidth = c.espessura * (0.3 + 0.7 * vigor)
+        ctx.beginPath()
+        ctx.moveTo(atras.x, atras.y)
+        ctx.lineTo(frente.x, frente.y)
+        ctx.stroke()
+      }
+    }
+  },
+}
+
 // O mapa que o ClimaCanvas consulta. Tema de fora desta lista não ganha
 // tela de desenho nenhuma, e continua no CSS.
 const RECEITAS = {
   natureza: RECEITA_NATUREZA,
   deserto: RECEITA_DESERTO,
+  vento: RECEITA_VENTO,
 }
 
 export default RECEITAS

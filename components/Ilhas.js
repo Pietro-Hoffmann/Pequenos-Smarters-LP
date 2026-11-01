@@ -155,6 +155,53 @@ function CamadaDeClima({ clima }) {
           eram discretos demais. A cor vem do data-clima, no CSS. */}
       <span className={estilos.veu} />
 
+      {/* AS CORRENTES DE AR DA TROCA PARA O VENTO.
+          Seis curvas que se desenham atravessando a tela. Vão em SVG, e não
+          em CSS como as outras travessias, por um motivo simples:
+          linear-gradient só sabe fazer RETA, e era justamente a reta
+          repetida que fazia o Vento parecer defeito de renderização. Curva
+          de verdade, nesta camada, só com caminho de SVG.
+
+          A caixa é 0 0 100 100 com preserveAspectRatio="none": ela se estica
+          para a tela inteira, seja qual for o formato. Os caminhos saem de
+          x = -12 e chegam a x = 112 porque precisam entrar e sair de fora
+          do quadro, nunca aparecer ou sumir no meio da tela.
+
+          Cada caminho ocupa pouco mais da metade da caixa e ATRAVESSA por
+          translação (ver o CSS): não há traço pontilhado aqui. A primeira
+          versão usava pathLength com stroke-dasharray para o traço se
+          desenhar, e isso brigava com o non-scaling-stroke — virava um
+          pontilhado regular, o oposto do que queremos. */}
+      {clima === 'vento' && (
+        <span className={estilos.correnteAr}>
+          <svg
+            className={estilos.correnteArSvg}
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+            focusable="false"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {/* Apaga as duas pontas de cada curva: a corrente entra e sai
+                do nada em vez de começar e terminar num toco. */}
+            <defs>
+              <linearGradient id="psVento" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stopColor="#2e8578" stopOpacity="0" />
+                <stop offset="0.22" stopColor="#2e8578" stopOpacity="0.8" />
+                <stop offset="0.78" stopColor="#2e8578" stopOpacity="0.8" />
+                <stop offset="1" stopColor="#2e8578" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <path d="M -2 16 Q 32 2 68 22" />
+            <path d="M 2 34 Q 38 60 70 30" />
+            <path d="M -4 50 Q 26 28 64 56" />
+            <path d="M 4 66 Q 40 86 72 60" />
+            <path d="M -2 82 Q 30 64 66 88" />
+            <path d="M 6 44 Q 44 18 74 42" />
+          </svg>
+        </span>
+      )}
+
       {clima === 'gelo' && (
         <span className={estilos.geada}>
           {/* O CRISTAL DA GEADA

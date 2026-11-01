@@ -989,35 +989,18 @@
   animation: ondular 3.4s ease-out infinite;
 }
 
-/* VENTO — riscos de vento cruzando a seção. Mesma correção da travessia logo
-   abaixo, pelo mesmo motivo: quase verticais e meio opacos sobre um céu
-   verde claro, eles liam como banda de compressão. Agora são inclinados,
-   bem mais transparentes e mais rápidos — rastro, não faixa. */
-.climaSecao[data-tema='vento'] .p1 {
-  opacity: 0.22;
-  background-image: linear-gradient(
-    118deg,
-    transparent 44%,
-    rgba(72, 104, 95, 0.5) 47%,
-    rgba(72, 104, 95, 0.5) 49%,
-    transparent 52%
-  );
-  background-size: 263px 149px;
-  animation: cruza 4.5s linear infinite;
-}
-
-.climaSecao[data-tema='vento'] .p2 {
-  opacity: 0.26;
-  background-image: linear-gradient(
-    124deg,
-    transparent 40%,
-    rgba(255, 255, 255, 0.85) 44%,
-    rgba(255, 255, 255, 0.85) 47%,
-    transparent 51%
-  );
-  background-size: 181px 227px;
-  animation: cruza 3s linear infinite;
-}
+/* VENTO — as listras saíram daqui, e desta vez pela causa certa.
+   Elas já tinham sido consertadas uma vez: inclinadas e deixadas mais
+   transparentes. Continuou parecendo defeito de renderização, porque o
+   problema nunca foi o ângulo nem o tom — era a RETA. Faixa reta, paralela,
+   igualmente espaçada e repetindo em padrão é a assinatura de artefato de
+   compressão de vídeo: o olho reconhece a REGULARIDADE, e nenhum ajuste de
+   cor desfaz isso.
+   Desde 1/11 o Vento é pintado pelo ClimaCanvas em CORRENTES DE AR curvas,
+   cada uma com o seu arco sorteado e um rastro que afina para trás. Duas
+   nunca saem paralelas, porque nenhuma é cópia de um padrão.
+   As camadas .p1 e .p2 continuam no HTML (são as mesmas dos outros climas) e
+   aqui ficam sem regra, ou seja, no opacity: 0 da classe .camada. */
 
 /* A ilha do Vento tem o movimento dela: a mesma subida das outras, mas
    inclinando de um lado para o outro. */
@@ -1468,50 +1451,81 @@
 }
 
 /* ---------------------------------------------------------------------------
-   VENTO — a rajada que leva poeira luminosa.
+   VENTO — correntes de ar curvas, e a poeira que elas levam.
 
-   Era a pior das seis travessias, e por um motivo concreto: listras CINZAS
-   quase VERTICAIS, meio opacas, sobre o verde claro do céu. Isso não lê como
-   vento — lê como degradê estragado ou faixa de compressão. A pessoa pensa
-   "o site bugou" antes de pensar "que vento bonito".
+   HISTÓRICO, porque este defeito já voltou uma vez e não pode voltar de
+   novo: a travessia do Vento eram listras cinzas quase verticais sobre o
+   céu claro, e a pessoa pensava "o site bugou" antes de pensar "que vento
+   bonito". A primeira correção inclinou as listras (100°/94° viraram
+   118°/124°), baixou a opacidade e acelerou a passagem. Melhorou e não
+   resolveu — porque o problema não era o ângulo nem o tom, era a RETA.
+   Faixa reta, paralela, igualmente espaçada e repetindo em padrão é a
+   assinatura de artefato de compressão: o olho reconhece a REGULARIDADE.
 
-   Três mudanças, nenhuma arte nova:
-     • INCLINAR. 100°/94° (quase vertical) viraram 118°/124°: risco inclinado
-       é rastro de velocidade, risco vertical é banda de renderização.
-     • BAIXAR A OPACIDADE. O branco caiu de 0,85 para 0,45 e o cinza
-       esverdeado de 0,50 para 0,18. O que some é a sensação de "faixa"; o
-       movimento continua lá.
-     • ACELERAR. A rajada passa em 60% e 45% do tempo da camada, em vez de
-       100% e 82%. Vento que demora um segundo para cruzar a tela é vento
-       parado.
+   A correção definitiva (1/11) troca a técnica em vez de ajustar o número:
+   linear-gradient só sabe fazer reta, então a rajada virou um SVG com seis
+   CAMINHOS CURVOS que se desenham atravessando a tela. O precedente é da
+   própria casa — a geada do Gelo já usa um SVG embutido nesta camada.
 
-   E a terceira faixa reaproveita o brilhinho que o céu já tem (as mesmas
-   bolinhas claras do <Cenario />), só que deslocadas na horizontal: é a
-   poeira que a rajada carrega. Zero arte nova, e é ela que faz o efeito ser
-   lido como vento e não como listra.
+   COMO A CURVA ATRAVESSA, e por que NÃO é por traço pontilhado: a primeira
+   tentativa usava pathLength="100" com stroke-dasharray, para o traço se
+   "desenhar" ao longo do caminho. Não funciona junto com
+   vector-effect: non-scaling-stroke — o non-scaling leva o cálculo do
+   tracejado para o espaço da TELA, onde o pathLength não vale, e cada curva
+   virou um pontilhado de uns doze traços iguais. Ou seja: produziu
+   exatamente a regularidade que este conserto existe para eliminar.
+   (Medido em 1/11 escondendo cada camada e contando os pixels.)
+
+   A técnica agora é a mais simples das duas: as curvas DESLIZAM. Cada
+   caminho atravessa a tela com um translateX próprio, em unidades do
+   viewBox. Sem dash, sem pathLength, e o non-scaling-stroke volta a poder
+   ser usado — é ele que impede a esticada do preserveAspectRatio="none" de
+   achatar a espessura do traço.
 --------------------------------------------------------------------------- */
-.efeito[data-clima='vento'] .sopro1 {
-  background-image: linear-gradient(
-    118deg,
-    transparent 44%,
-    rgba(255, 255, 255, 0.45) 46.5%,
-    rgba(255, 255, 255, 0.45) 48.5%,
-    transparent 51%
-  );
-  background-size: 180px 120px;
-  animation: riscosVarrem calc(var(--dur) * 0.6) ease-out both;
+.correnteAr {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
 }
 
-.efeito[data-clima='vento'] .sopro2 {
-  background-image: linear-gradient(
-    124deg,
-    transparent 40%,
-    rgba(60, 92, 84, 0.18) 43%,
-    rgba(60, 92, 84, 0.18) 45%,
-    transparent 48%
-  );
-  background-size: 120px 170px;
-  animation: riscosVarrem calc(var(--dur) * 0.45) ease-out both;
+.correnteArSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+}
+
+.correnteArSvg path {
+  fill: none;
+  /* o gradiente (definido no <defs> do SVG) apaga as duas pontas de cada
+     curva. É o que dá à corrente da troca o mesmo acabamento das correntes
+     do clima contínuo, que afinam no rastro — e sem usar tracejado, que é
+     a armadilha descrita acima. */
+  stroke: url(#psVento);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  animation: ventoRisca var(--dur) ease-out both;
+}
+
+/* Seis caminhos, seis ritmos. Sem os atrasos diferentes os traços entram
+   em bloco e a rajada vira — de novo — um padrão regular.
+   É nth-of-TYPE, e não nth-child: o <defs> do gradiente é o primeiro filho
+   do SVG, então contar filhos deslocaria todos os caminhos em um — e foi
+   isso que quebrou na primeira tentativa. nth-of-type conta só os <path>. */
+.correnteArSvg path:nth-of-type(2) { stroke-width: 3.1; animation-delay: 0.06s; opacity: 0.85; }
+.correnteArSvg path:nth-of-type(3) { stroke-width: 1.6; animation-delay: 0.13s; }
+.correnteArSvg path:nth-of-type(4) { stroke-width: 2.6; animation-delay: 0.04s; opacity: 0.7; }
+.correnteArSvg path:nth-of-type(5) { stroke-width: 1.4; animation-delay: 0.18s; }
+.correnteArSvg path:nth-of-type(6) { stroke-width: 3.5; animation-delay: 0.1s; opacity: 0.6; }
+
+/* As unidades aqui são as do viewBox (0 a 100), não pixels de tela: é o
+   preserveAspectRatio="none" que depois estica isso para a largura real. */
+@keyframes ventoRisca {
+  0% { opacity: 0; transform: translateX(-78px); }
+  18% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(104px); }
 }
 
 /* A poeira luminosa: o mesmo brilhinho branco do céu, em três tamanhos,
