@@ -5,6 +5,8 @@ import {
   criarBrasa,
   calorDaBrasa,
   tomDoCalor,
+  cintilarNoInstante,
+  alongamentoDaBrasa,
   passoDaBrasa,
   desenharBrasa,
 } from '@/lib/brasas'
@@ -254,5 +256,107 @@ describe('tomDoCalor', () => {
   it('valor inválido devolve o tom mais frio, não quebra', () => {
     expect(tomDoCalor(NaN)).toBe(TONS_BRASA[TONS_BRASA.length - 1])
     expect(tomDoCalor(undefined)).toBe(TONS_BRASA[TONS_BRASA.length - 1])
+  })
+})
+
+// ---------------------------------------------------------------------------
+// O ACABAMENTO (1/11, a pedido do dono: "mais bem feito e realista")
+// Três coisas que faltavam para a brasa parecer brasa, e nenhuma delas
+// custa desempenho: a cintilação, o alongamento pela velocidade e o
+// desfoque das que estão ao fundo.
+// ---------------------------------------------------------------------------
+
+describe('cintilarNoInstante', () => {
+  const brasa = criarBrasa(800, 600, sorteioFixo([0.5]))
+
+  it('a brasa PULSA: é o ar quente passando por ela', () => {
+    const amostras = []
+    for (let t = 0; t < 12; t += 0.02) amostras.push(cintilarNoInstante(brasa, t))
+    expect(Math.max(...amostras) - Math.min(...amostras), 'a brasa ficou constante').toBeGreaterThan(
+      0.2
+    )
+  })
+
+  it('nunca apaga de todo nem estoura o brilho', () => {
+    for (let t = 0; t < 60; t += 0.013) {
+      const v = cintilarNoInstante(brasa, t)
+      expect(v).toBeGreaterThan(0.4)
+      expect(v).toBeLessThan(1.3)
+    }
+  })
+
+  it('DUAS BRASAS NÃO PULSAM JUNTAS', () => {
+    // se pulsassem em sincronia a seção inteira piscaria, que é o oposto
+    // do efeito desejado
+    const a = criarBrasa(800, 600)
+    const b = criarBrasa(800, 600)
+    let diferiu = 0
+    for (let t = 0; t < 8; t += 0.05) {
+      if (Math.abs(cintilarNoInstante(a, t) - cintilarNoInstante(b, t)) > 0.05) diferiu += 1
+    }
+    expect(diferiu).toBeGreaterThan(40)
+  })
+
+  it('tempo inválido devolve brilho normal, não apaga a brasa', () => {
+    expect(cintilarNoInstante(brasa, NaN)).toBe(1)
+    expect(cintilarNoInstante({}, 1)).toBeGreaterThan(0)
+  })
+})
+
+describe('alongamentoDaBrasa', () => {
+  it('a brasa rápida estica, a lenta fica redonda', () => {
+    expect(alongamentoDaBrasa({ vy: 170 })).toBeGreaterThan(alongamentoDaBrasa({ vy: 30 }))
+    expect(alongamentoDaBrasa({ vy: 26 })).toBeCloseTo(1, 1)
+  })
+
+  it('o esticão tem limite: brasa não vira risco', () => {
+    expect(alongamentoDaBrasa({ vy: 100000 })).toBeLessThanOrEqual(1.9)
+  })
+
+  it('velocidade inválida devolve brasa redonda', () => {
+    expect(alongamentoDaBrasa({ vy: NaN })).toBe(1)
+    expect(alongamentoDaBrasa({})).toBe(1)
+  })
+})
+
+describe('o desfoque das brasas de fundo', () => {
+  const paradasDe = (nitidez) => {
+    const paradas = []
+    const ctx = new Proxy(
+      {},
+      {
+        get: (_, nome) =>
+          nome === 'createRadialGradient'
+            ? () => ({ addColorStop: (onde) => paradas.push(onde) })
+            : () => {},
+        set: () => true,
+      }
+    )
+    desenharBrasa(ctx, 6, '#f87b14', '#5c1600', 1, nitidez)
+    return paradas
+  }
+
+  it('a brasa do FUNDO tem o núcleo mais difuso que a da FRENTE', () => {
+    // é isto que faz as de trás parecerem fora de foco, sem nenhum filtro
+    // de desfoque e, portanto, sem custo nenhum
+    const frente = paradasDe(1)
+    const fundo = paradasDe(0)
+    expect(fundo[1], 'o núcleo do fundo devia terminar antes').toBeLessThan(frente[1])
+  })
+
+  it('as paradas do degradê ficam em ordem, seja qual for a nitidez', () => {
+    for (const n of [0, 0.25, 0.5, 0.75, 1, NaN, undefined]) {
+      const p = paradasDe(n)
+      for (let i = 1; i < p.length; i += 1) {
+        expect(p[i], `parada fora de ordem com nitidez ${n}`).toBeGreaterThan(p[i - 1])
+      }
+      expect(p[p.length - 1]).toBeLessThanOrEqual(1)
+    }
+  })
+
+  it('a brasa guarda a própria nitidez ao nascer', () => {
+    const fundo = criarBrasa(800, 600, sorteioFixo([0.05]))
+    const frente = criarBrasa(800, 600, sorteioFixo([0.95]))
+    expect(fundo.nitidez).toBeLessThan(frente.nitidez)
   })
 })

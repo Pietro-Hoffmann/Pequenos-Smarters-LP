@@ -36,9 +36,19 @@ import {
   criarBrasa,
   calorDaBrasa,
   tomDoCalor,
+  cintilarNoInstante,
+  alongamentoDaBrasa,
   passoDaBrasa,
   desenharBrasa,
 } from '@/lib/brasas'
+import {
+  quantasBaforadas,
+  criarBaforada,
+  opacidadeDaBaforada,
+  raioDaBaforada,
+  passoDaBaforada,
+  desenharBaforada,
+} from '@/lib/fumaca'
 import {
   TONS_AREIA,
   quantosGraos,
@@ -234,16 +244,38 @@ export const RECEITA_FOGO = {
     const brasas = []
     const quantas = quantasBrasas(L)
     for (let i = 0; i < quantas; i += 1) brasas.push(criarBrasa(L, A))
-    return { brasas }
+
+    const fumaca = []
+    const baforadas = quantasBaforadas(L)
+    for (let i = 0; i < baforadas; i += 1) fumaca.push(criarBaforada(L, A))
+
+    return { brasas, fumaca, relogio: 0 }
   },
 
   andar(estado, dt, relogio, L, A) {
+    estado.relogio = relogio
     for (let i = 0; i < estado.brasas.length; i += 1) {
       passoDaBrasa(estado.brasas[i], dt, L, A)
+    }
+    for (let i = 0; i < estado.fumaca.length; i += 1) {
+      passoDaBaforada(estado.fumaca[i], dt, L, A)
     }
   },
 
   pintar(ctx, estado) {
+    // A FUMAÇA VEM PRIMEIRO, para ficar ATRÁS das brasas. Fumaça por cima
+    // de brasa apagaria justamente o que ela deveria emoldurar.
+    for (let i = 0; i < estado.fumaca.length; i += 1) {
+      const b = estado.fumaca[i]
+      const alfa = opacidadeDaBaforada(b)
+      if (alfa <= 0.004) continue
+      ctx.save()
+      ctx.translate(b.x, b.y)
+      desenharBaforada(ctx, raioDaBaforada(b), alfa)
+      ctx.restore()
+    }
+
+    const agora = estado.relogio || 0
     for (let i = 0; i < estado.brasas.length; i += 1) {
       const b = estado.brasas[i]
       const calor = calorDaBrasa(b)
@@ -251,9 +283,20 @@ export const RECEITA_FOGO = {
       // a brasa também ENCOLHE ao esfriar, não só escurece: é a soma das
       // duas coisas que faz ela parecer apagar em vez de desbotar
       const raio = b.raio * (0.45 + 0.55 * calor)
+      // o pulso do ar quente passando por ela
+      const pulso = cintilarNoInstante(b, agora)
       ctx.save()
       ctx.translate(b.x, b.y)
-      desenharBrasa(ctx, raio, tomDoCalor(calor), HALO_BRASA, b.brilho * calor)
+      // esticar só na vertical: é o rastro de quem sobe depressa
+      ctx.scale(1, alongamentoDaBrasa(b))
+      desenharBrasa(
+        ctx,
+        raio,
+        tomDoCalor(calor),
+        HALO_BRASA,
+        Math.min(1, b.brilho * calor * pulso),
+        b.nitidez
+      )
       ctx.restore()
     }
   },

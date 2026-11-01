@@ -483,7 +483,9 @@ describe('ClimaCanvas: o Fogo (brasas)', () => {
     const fria = { x: 0, y: 0, raio: 4, brilho: 1, idade: 3.6, vida: 4 }
     const nucleoDe = (brasa) => {
       contexto.paradas.length = 0
-      RECEITA_FOGO.pintar(contexto, { brasas: [brasa] })
+      // fumaca: [] porque o estado real vem sempre de preparar(), que
+      // devolve os dois; aqui só o desenho da brasa está sob teste
+      RECEITA_FOGO.pintar(contexto, { brasas: [brasa], fumaca: [] })
       return contexto.paradas[0] && contexto.paradas[0][1]
     }
     expect(nucleoDe(quente)).not.toBe(nucleoDe(fria))
@@ -496,6 +498,7 @@ describe('ClimaCanvas: o Fogo (brasas)', () => {
     contexto.arc.mockClear()
     RECEITA_FOGO.pintar(contexto, {
       brasas: [{ x: 0, y: 0, raio: 4, brilho: 1, idade: 10, vida: 4 }],
+      fumaca: [],
     })
     expect(contexto.arc).not.toHaveBeenCalled()
   })
@@ -519,5 +522,52 @@ describe('ClimaCanvas: o Fogo (brasas)', () => {
     render(<ClimaCanvas tema="fogo" />)
     expect(contexto.arc.mock.calls.length).toBeGreaterThan(0)
     expect(agendados.size).toBe(0)
+  })
+})
+
+describe('ClimaCanvas: o acabamento do Fogo', () => {
+  it('a fumaça é pintada ATRÁS das brasas', () => {
+    // fumaça por cima apagaria justamente o que ela deveria emoldurar.
+    // A ordem se prova pela sequência das chamadas de desenho.
+    const ordem = []
+    const espiao = new Proxy(contexto, {
+      get(alvo, nome) {
+        if (nome === 'arc') {
+          return (x, y, r) => {
+            ordem.push(r > 20 ? 'fumaca' : 'brasa')
+            return alvo.arc(x, y, r)
+          }
+        }
+        return alvo[nome]
+      },
+      set: () => true,
+    })
+    RECEITA_FOGO.pintar(espiao, {
+      relogio: 1,
+      brasas: [{ x: 10, y: 10, raio: 4, brilho: 1, idade: 0.2, vida: 4, nitidez: 1, vy: 40 }],
+      fumaca: [
+        { x: 50, y: 50, idade: 2, vida: 5, alfa: 0.12, raioInicial: 40, raioFinal: 120 },
+      ],
+    })
+    expect(ordem).toEqual(['fumaca', 'brasa'])
+  })
+
+  it('o Fogo tem brasa E fumaça em cena', () => {
+    render(<ClimaCanvas tema="fogo" />)
+    const raios = contexto.arc.mock.calls.map((c) => c[2])
+    expect(raios.some((r) => r < 25), 'nenhuma brasa').toBe(true)
+    expect(raios.some((r) => r > 30), 'nenhuma baforada de fumaça').toBe(true)
+  })
+
+  it('a brasa que sobe depressa é desenhada esticada na vertical', () => {
+    contexto.scale.mockClear()
+    RECEITA_FOGO.pintar(contexto, {
+      relogio: 1,
+      brasas: [{ x: 0, y: 0, raio: 4, brilho: 1, idade: 0, vida: 4, nitidez: 1, vy: 170 }],
+      fumaca: [],
+    })
+    const [ex, ey] = contexto.scale.mock.calls[0]
+    expect(ex, 'o esticão é só na vertical').toBe(1)
+    expect(ey, 'a brasa rápida precisa esticar').toBeGreaterThan(1.2)
   })
 })
