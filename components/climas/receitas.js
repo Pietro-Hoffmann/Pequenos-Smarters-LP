@@ -42,6 +42,14 @@ import {
   desenharBrasa,
 } from '@/lib/brasas'
 import {
+  quantasBolhas,
+  criarBolha,
+  raioDaBolha,
+  estouroDaBolha,
+  passoDaBolha,
+  desenharBolha,
+} from '@/lib/bolhas'
+import {
   quantasBaforadas,
   criarBaforada,
   opacidadeDaBaforada,
@@ -302,6 +310,46 @@ export const RECEITA_FOGO = {
   },
 }
 
+// ===========================================================================
+// LAGOS — bolhas subindo da água
+// A bolha é uma CASCA: o miolo fica transparente e deixa ver o céu. Quem
+// desenha a casca é o lib/bolhas.js; aqui mora só o que muda a cada
+// quadro — o tamanho (ela cresce ao subir) e o ESTOURO do fim da vida.
+// ===========================================================================
+
+export const RECEITA_LAGOS = {
+  preparar(ctx, L, A) {
+    const bolhas = []
+    const quantas = quantasBolhas(L)
+    for (let i = 0; i < quantas; i += 1) bolhas.push(criarBolha(L, A))
+    return { bolhas }
+  },
+
+  andar(estado, dt, relogio, L, A) {
+    for (let i = 0; i < estado.bolhas.length; i += 1) {
+      passoDaBolha(estado.bolhas[i], dt, L, A)
+    }
+  },
+
+  pintar(ctx, estado) {
+    for (let i = 0; i < estado.bolhas.length; i += 1) {
+      const b = estado.bolhas[i]
+      const arrebenta = estouroDaBolha(b)
+      // O ESTOURO: nos últimos instantes a bolha INCHA de repente e some.
+      // É a combinação das duas coisas que faz ela arrebentar em vez de
+      // desbotar — inchar sozinho pareceria um balão, sumir sozinho
+      // pareceria desbotamento.
+      const raio = raioDaBolha(b) * (1 + arrebenta * 0.85)
+      const alfa = b.alfa * (1 - arrebenta)
+      if (alfa <= 0.02) continue
+      ctx.save()
+      ctx.translate(b.x, b.y)
+      desenharBolha(ctx, { raio, alfa, nitidez: b.nitidez })
+      ctx.restore()
+    }
+  },
+}
+
 // O mapa que o ClimaCanvas consulta. Tema de fora desta lista não ganha
 // tela de desenho nenhuma, e continua no CSS.
 const RECEITAS = {
@@ -309,6 +357,7 @@ const RECEITAS = {
   deserto: RECEITA_DESERTO,
   vento: RECEITA_VENTO,
   fogo: RECEITA_FOGO,
+  lagos: RECEITA_LAGOS,
 }
 
 export default RECEITAS

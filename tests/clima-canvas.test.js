@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { render, screen, act, cleanup } from '@testing-library/react'
 import ClimaCanvas from '@/components/ClimaCanvas'
-import { RECEITA_DESERTO, RECEITA_FOGO } from '@/components/climas/receitas'
+import { RECEITA_DESERTO, RECEITA_FOGO, RECEITA_LAGOS } from '@/components/climas/receitas'
 import { TONS_BRASA } from '@/lib/brasas'
 import fs from 'node:fs'
 import path from 'node:path'
@@ -569,5 +569,67 @@ describe('ClimaCanvas: o acabamento do Fogo', () => {
     const [ex, ey] = contexto.scale.mock.calls[0]
     expect(ex, 'o esticão é só na vertical').toBe(1)
     expect(ey, 'a brasa rápida precisa esticar').toBeGreaterThan(1.2)
+  })
+})
+
+describe('ClimaCanvas: os Lagos (bolhas)', () => {
+  it('pinta as bolhas assim que entra', () => {
+    render(<ClimaCanvas tema="lagos" />)
+    expect(tela()).toHaveAttribute('data-clima-tela', 'lagos')
+    expect(contexto.arc.mock.calls.length, 'nenhuma bolha foi pintada').toBeGreaterThan(0)
+  })
+
+  it('cada bolha é uma CASCA: anel mais brilho, não um disco só', () => {
+    // dois arcos por bolha — o anel e o pontinho de luz. Um só seria disco.
+    render(<ClimaCanvas tema="lagos" />)
+    expect(contexto.arc.mock.calls.length % 2, 'faltou o brilho de alguma bolha').toBe(0)
+    expect(contexto.createRadialGradient).toHaveBeenCalled()
+  })
+
+  it('o miolo da bolha fica transparente: dá para ver o céu através dela', () => {
+    render(<ClimaCanvas tema="lagos" />)
+    const centro = contexto.paradas.filter((p) => p[0] === 0).map((p) => String(p[1]))
+    expect(centro.length).toBeGreaterThan(0)
+    for (const cor of centro) expect(cor, 'o miolo da bolha está pintado').toMatch(/,\s*0\)$/)
+  })
+
+  it('a bolha que está estourando é desenhada maior e mais apagada', () => {
+    const medir = (idade) => {
+      contexto.arc.mockClear()
+      contexto.paradas.length = 0
+      RECEITA_LAGOS.pintar(contexto, {
+        bolhas: [
+          { x: 0, y: 0, raioInicial: 10, crescimento: 0.3, idade, vida: 4, alfa: 0.9, nitidez: 1 },
+        ],
+      })
+      const raio = contexto.arc.mock.calls[0][2]
+      const borda = contexto.paradas.find((p) => p[0] === 0.94)
+      return { raio, alfa: Number(String(borda[1]).match(/([\d.]+)\)$/)[1]) }
+    }
+    const inteira = medir(2)
+    const estourando = medir(3.98)
+    expect(estourando.raio, 'a bolha precisa INCHAR ao estourar').toBeGreaterThan(inteira.raio)
+    expect(estourando.alfa, 'e sumir ao mesmo tempo').toBeLessThan(inteira.alfa)
+  })
+
+  it('os mesmos três freios valem para os lagos', () => {
+    render(<ClimaCanvas tema="lagos" />)
+    expect(agendados.size).toBe(1)
+
+    observadorDeTela.dispara(false)
+    expect(agendados.size).toBe(0)
+    observadorDeTela.dispara(true)
+
+    Object.defineProperty(document, 'hidden', { configurable: true, get: () => true })
+    act(() => document.dispatchEvent(new Event('visibilitychange')))
+    expect(agendados.size).toBe(0)
+    Object.defineProperty(document, 'hidden', { configurable: true, get: () => false })
+  })
+
+  it('quem pede menos movimento vê as bolhas paradas, sem laço', () => {
+    movimentoReduzido = true
+    render(<ClimaCanvas tema="lagos" />)
+    expect(contexto.arc.mock.calls.length).toBeGreaterThan(0)
+    expect(agendados.size).toBe(0)
   })
 })
