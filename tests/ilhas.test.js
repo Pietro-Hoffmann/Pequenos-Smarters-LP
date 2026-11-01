@@ -325,24 +325,34 @@ describe('Ilhas (carrossel)', () => {
     expect(palco().contains(clima)).toBe(false)
   })
 
-  it('a tela das folhas existe só na Natureza, e sai do HTML nas outras ilhas', () => {
-    // é essa saída que garante que o laço de desenho não fica rodando
-    // enquanto a pessoa olha o Deserto ou o Gelo
+  it('a tela de desenho acompanha a ilha, e só existe uma por vez', () => {
+    // é isso que mantém o custo no tamanho de UM clima, não de seis: ao
+    // trocar de ilha a tela anterior sai do HTML junto com o laço dela
     render(<Ilhas dados={dados} />)
-    expect(screen.getByTestId('folhas')).toBeInTheDocument()
+    expect(screen.getByTestId('clima-tela')).toHaveAttribute('data-clima-tela', 'natureza')
+    expect(screen.getAllByTestId('clima-tela')).toHaveLength(1)
 
     fireEvent.click(screen.getByLabelText('Ver a próxima ilha'))
-    expect(screen.queryByTestId('folhas')).toBeNull()
+    expect(screen.getByTestId('clima-tela')).toHaveAttribute('data-clima-tela', 'deserto')
+    expect(screen.getAllByTestId('clima-tela')).toHaveLength(1)
 
     fireEvent.click(screen.getByLabelText('Ver a ilha anterior'))
-    expect(screen.getByTestId('folhas')).toBeInTheDocument()
+    expect(screen.getByTestId('clima-tela')).toHaveAttribute('data-clima-tela', 'natureza')
+  })
+
+  it('ilha cujo clima ainda não migrou não monta tela de desenho nenhuma', () => {
+    // Gelo, Fogo, Lagos e Vento continuam nas camadas de CSS: montar um
+    // canvas vazio para eles seria laço rodando para pintar nada
+    render(<Ilhas dados={dados} />)
+    fireEvent.click(screen.getByLabelText('Gelo'))
+    expect(screen.queryByTestId('clima-tela')).toBeNull()
   })
 
   it('a tela das folhas mora dentro da camada de clima, e não solta na seção', () => {
     // dentro dela a tela herda o recorte e o desbotado de baixo; solta,
     // as folhas apareceriam por cima do texto e passariam do fim da seção
     const { container } = render(<Ilhas dados={dados} />)
-    expect(climaDaSecao(container).contains(screen.getByTestId('folhas'))).toBe(true)
+    expect(climaDaSecao(container).contains(screen.getByTestId('clima-tela'))).toBe(true)
   })
 
   it('a camada de clima da seção troca junto com a ilha', () => {

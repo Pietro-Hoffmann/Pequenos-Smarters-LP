@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal, flushSync } from 'react-dom'
 import Sobrancelha from './Sobrancelha'
-import FolhasCanvas from './FolhasCanvas'
+import ClimaCanvas from './ClimaCanvas'
 import { FAIXA_CENTRAL, definirTemaDaIlha, devolverOComando } from '@/lib/tema'
 import estilos from './Ilhas.module.css'
 
@@ -427,13 +427,16 @@ export default function Ilhas({ dados }) {
         <span className={`${estilos.camada} ${estilos.extraA}`} />
         <span className={`${estilos.camada} ${estilos.p2}`} />
         <span className={`${estilos.camada} ${estilos.extraB}`} />
-        {/* A NATUREZA É O ÚNICO CLIMA PINTADO FOLHA A FOLHA.
-            As outras cinco ilhas continuam nas camadas de CSS acima, que
-            custam quase nada. Folha pedia mais: ela balança, gira e mostra o
-            verso, e um padrão que desce em bloco nunca ia fazer isso. A tela
-            de desenho só existe enquanto a Natureza está escolhida — trocar
-            de ilha a tira do HTML junto com o laço que a pinta. */}
-        {tema === 'natureza' && <FolhasCanvas />}
+        {/* OS CLIMAS QUE JÁ SÃO PINTADOS PARTÍCULA A PARTÍCULA.
+            Natureza (folhas) e Deserto (areia) passaram para a tela de
+            desenho; os outros quatro continuam nas camadas de CSS acima, que
+            custam quase nada. O padrão de CSS desliza em bloco, e isso basta
+            para pontinho — não basta para folha que gira nem para areia que
+            atravessa em lufada.
+            Só UMA tela existe por vez: a da ilha escolhida. Trocar de ilha
+            tira a anterior do HTML junto com o laço que a pintava, então o
+            custo em qualquer instante é o de um clima só. */}
+        <ClimaCanvas tema={tema} />
       </span>
 
       <div className={`container ${estilos.conteudo}`}>

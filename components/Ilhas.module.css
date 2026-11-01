@@ -704,80 +704,16 @@
   animation: piscar 4.6s ease-in-out -1.7s infinite;
 }
 
-/* DESERTO — poeira subindo e o ar tremendo de calor. */
-.climaSecao[data-tema='deserto'] .p1 {
-  opacity: 0.42;
-  background-image:
-    radial-gradient(circle 2.2px at 8.4% 5.9%, #8a6628 0 60%, transparent 61%),
-    radial-gradient(circle 1.1px at 20.2% 3.8%, #9a7336 0 60%, transparent 61%),
-    radial-gradient(circle 2.3px at 31.6% 12.5%, #8a6628 0 60%, transparent 61%),
-    radial-gradient(circle 1.3px at 54.6% 2.7%, #9a7336 0 60%, transparent 61%),
-    radial-gradient(circle 1.8px at 63.3% 11.6%, #8a6628 0 60%, transparent 61%),
-    radial-gradient(circle 1.9px at 84.1% 14.6%, #9a7336 0 60%, transparent 61%),
-    radial-gradient(circle 1.6px at 88.1% 13.5%, #8a6628 0 60%, transparent 61%),
-    radial-gradient(circle 1.1px at 2.3% 26.0%, #9a7336 0 60%, transparent 61%),
-    radial-gradient(circle 2.0px at 23.9% 18.8%, #8a6628 0 60%, transparent 61%),
-    radial-gradient(circle 1.3px at 35.4% 21.0%, #9a7336 0 60%, transparent 61%),
-    radial-gradient(circle 1.9px at 52.3% 31.4%, #8a6628 0 60%, transparent 61%),
-    radial-gradient(circle 1.2px at 58.4% 29.1%, #9a7336 0 60%, transparent 61%),
-    radial-gradient(circle 1.9px at 77.0% 31.7%, #8a6628 0 60%, transparent 61%),
-    radial-gradient(circle 1.2px at 91.2% 25.5%, #9a7336 0 60%, transparent 61%),
-    radial-gradient(circle 1.7px at 8.0% 41.1%, #8a6628 0 60%, transparent 61%),
-    radial-gradient(circle 1.3px at 19.9% 41.5%, #9a7336 0 60%, transparent 61%),
-    radial-gradient(circle 2.4px at 29.9% 36.8%, #8a6628 0 60%, transparent 61%),
-    radial-gradient(circle 1.1px at 51.8% 42.0%, #9a7336 0 60%, transparent 61%),
-    radial-gradient(circle 1.5px at 63.3% 39.3%, #8a6628 0 60%, transparent 61%),
-    radial-gradient(circle 1.4px at 78.6% 43.6%, #9a7336 0 60%, transparent 61%),
-    radial-gradient(circle 2.5px at 87.2% 40.3%, #8a6628 0 60%, transparent 61%),
-    radial-gradient(circle 2.0px at 1.6% 51.8%, #9a7336 0 60%, transparent 61%),
-    radial-gradient(circle 2.1px at 16.4% 57.7%, #8a6628 0 60%, transparent 61%),
-    radial-gradient(circle 2.0px at 38.7% 56.8%, #9a7336 0 60%, transparent 61%),
-    radial-gradient(circle 1.8px at 53.8% 58.4%, #8a6628 0 60%, transparent 61%),
-    radial-gradient(circle 1.5px at 69.6% 55.7%, #9a7336 0 60%, transparent 61%),
-    radial-gradient(circle 2.7px at 83.3% 63.6%, #8a6628 0 60%, transparent 61%),
-    radial-gradient(circle 1.2px at 91.0% 60.3%, #9a7336 0 60%, transparent 61%),
-    radial-gradient(circle 2.6px at 9.1% 79.9%, #8a6628 0 60%, transparent 61%),
-    radial-gradient(circle 1.2px at 21.3% 78.9%, #9a7336 0 60%, transparent 61%),
-    radial-gradient(circle 2.0px at 37.1% 70.5%, #8a6628 0 60%, transparent 61%),
-    radial-gradient(circle 1.1px at 44.4% 79.8%, #9a7336 0 60%, transparent 61%),
-    radial-gradient(circle 2.3px at 59.6% 73.9%, #8a6628 0 60%, transparent 61%),
-    radial-gradient(circle 1.8px at 81.6% 76.3%, #9a7336 0 60%, transparent 61%),
-    radial-gradient(circle 2.6px at 90.2% 77.2%, #8a6628 0 60%, transparent 61%),
-    radial-gradient(circle 1.5px at 5.8% 91.4%, #9a7336 0 60%, transparent 61%),
-    radial-gradient(circle 2.5px at 16.9% 96.7%, #8a6628 0 60%, transparent 61%),
-    radial-gradient(circle 1.6px at 30.7% 95.0%, #9a7336 0 60%, transparent 61%),
-    radial-gradient(circle 2.5px at 50.3% 95.6%, #8a6628 0 60%, transparent 61%),
-    radial-gradient(circle 1.3px at 59.5% 94.3%, #9a7336 0 60%, transparent 61%);
-  background-size: 317px 263px;
-  animation: sobe 14s linear infinite;
-}
-
-.climaSecao[data-tema='deserto'] .p2 {
-  opacity: 0.34;
-  background-image:
-    radial-gradient(circle 3.9px at 15.6% 9.8%, #7a5720 0 60%, transparent 61%),
-    radial-gradient(circle 3.3px at 36.2% 3.5%, #a07a38 0 60%, transparent 61%),
-    radial-gradient(circle 3.8px at 48.5% 15.6%, #7a5720 0 60%, transparent 61%),
-    radial-gradient(circle 2.1px at 61.6% 17.7%, #a07a38 0 60%, transparent 61%),
-    radial-gradient(circle 2.2px at 94.4% 14.3%, #7a5720 0 60%, transparent 61%),
-    radial-gradient(circle 2.1px at 9.1% 47.3%, #a07a38 0 60%, transparent 61%),
-    radial-gradient(circle 3.1px at 26.1% 33.7%, #7a5720 0 60%, transparent 61%),
-    radial-gradient(circle 2.2px at 50.0% 34.4%, #a07a38 0 60%, transparent 61%),
-    radial-gradient(circle 2.5px at 70.9% 31.4%, #7a5720 0 60%, transparent 61%),
-    radial-gradient(circle 1.8px at 87.2% 33.0%, #a07a38 0 60%, transparent 61%),
-    radial-gradient(circle 4.0px at 7.1% 70.2%, #7a5720 0 60%, transparent 61%),
-    radial-gradient(circle 3.1px at 27.8% 57.4%, #a07a38 0 60%, transparent 61%),
-    radial-gradient(circle 2.5px at 45.5% 72.6%, #7a5720 0 60%, transparent 61%),
-    radial-gradient(circle 2.8px at 62.7% 61.5%, #a07a38 0 60%, transparent 61%),
-    radial-gradient(circle 3.8px at 88.0% 58.4%, #7a5720 0 60%, transparent 61%),
-    radial-gradient(circle 3.1px at 2.2% 90.4%, #a07a38 0 60%, transparent 61%),
-    radial-gradient(circle 2.2px at 33.1% 78.2%, #7a5720 0 60%, transparent 61%),
-    radial-gradient(circle 1.8px at 43.4% 83.7%, #a07a38 0 60%, transparent 61%),
-    radial-gradient(circle 2.7px at 65.0% 89.7%, #7a5720 0 60%, transparent 61%),
-    radial-gradient(circle 2.0px at 91.8% 77.1%, #a07a38 0 60%, transparent 61%);
-  background-size: 419px 347px;
-  animation: sobe 8.5s linear infinite;
-}
+/* DESERTO — a onda de calor fica aqui; a AREIA saiu deste arquivo.
+   As duas camadas de grão que moravam aqui faziam os pontos SUBIREM, como
+   fumaça — movimento errado para areia soprada, que atravessa rente ao chão.
+   E vinham a velocidade constante, o que vira chuvisco e nunca lufada.
+   Desde 1/11 a areia do Deserto é pintada grão a grão pelo ClimaCanvas, com
+   travessia horizontal, rajada com pico e vale, e o risco esticando no pico.
+   As camadas .p1 e .p2 continuam no HTML (são as mesmas dos outros climas) e
+   aqui ficam sem regra, ou seja, no opacity: 0 da classe .camada.
+   A onda de calor abaixo não mudou: ela não é partícula, é um véu, e um véu
+   o CSS faz tão bem quanto o canvas e de graça. */
 
 .climaSecao[data-tema='deserto'] .extraA {
   opacity: 0.2;
@@ -1347,6 +1283,146 @@
 /* ---------------------------------------------------------------------------
    DESERTO — uma rajada de areia cruza a tela.
 --------------------------------------------------------------------------- */
+/* A VARREDURA DA TROCA PARA O DESERTO.
+   Fica em CSS de propósito, e não no canvas como o clima contínuo: esta
+   camada nasce e morre em 1,2s, e montar uma tela de desenho ali significa
+   medir, montar sprites e semear DENTRO desse 1,2s — com risco real de o
+   primeiro quadro atrasar e a varredura começar vazia. O CSS entrega o
+   baque no quadro zero.
+   O que mudou (1/11): os grãos eram BOLINHAS num padrão único, e o
+   resultado na tela era uma mancha amarela passando. Agora são RISCOS
+   deitados em três camadas com velocidades diferentes — a da frente anda
+   mais que a do fundo, e é essa diferença que dá profundidade à rajada. */
+.efeito[data-clima='deserto'] .sopro1 {
+  background-image:
+    radial-gradient(ellipse 7.1px 1.5px at 39.3% 66.6%, #6b4f1c 0 62%, transparent 63%),
+    radial-gradient(ellipse 7.8px 1.5px at 24.0% 73.5%, #7d5d22 0 62%, transparent 63%),
+    radial-gradient(ellipse 7.9px 2.1px at 64.9% 15.7%, #8f6b28 0 62%, transparent 63%),
+    radial-gradient(ellipse 10.2px 1.8px at 41.2% 95.7%, #a37d33 0 62%, transparent 63%),
+    radial-gradient(ellipse 7.6px 1.4px at 91.3% 40.5%, #6b4f1c 0 62%, transparent 63%),
+    radial-gradient(ellipse 8.2px 1.7px at 36.7% 91.8%, #7d5d22 0 62%, transparent 63%),
+    radial-gradient(ellipse 8.3px 1.6px at 57.6% 53.9%, #8f6b28 0 62%, transparent 63%),
+    radial-gradient(ellipse 12.7px 2.2px at 35.8% 22.0%, #a37d33 0 62%, transparent 63%),
+    radial-gradient(ellipse 12.0px 2.4px at 4.9% 71.4%, #6b4f1c 0 62%, transparent 63%);
+  background-size: 118px 84px;
+  animation: areiaCruzaPerto var(--dur) ease-out both;
+}
+
+.efeito[data-clima='deserto'] .sopro2 {
+  background-image:
+    radial-gradient(ellipse 7.5px 1.4px at 22.7% 77.1%, #6b4f1c 0 62%, transparent 63%),
+    radial-gradient(ellipse 6.9px 1.0px at 62.9% 23.4%, #7d5d22 0 62%, transparent 63%),
+    radial-gradient(ellipse 4.2px 1.1px at 33.8% 39.8%, #8f6b28 0 62%, transparent 63%),
+    radial-gradient(ellipse 6.6px 1.5px at 93.3% 93.8%, #a37d33 0 62%, transparent 63%),
+    radial-gradient(ellipse 8.0px 1.5px at 31.1% 19.4%, #6b4f1c 0 62%, transparent 63%),
+    radial-gradient(ellipse 6.5px 1.3px at 66.1% 11.7%, #7d5d22 0 62%, transparent 63%),
+    radial-gradient(ellipse 4.8px 1.5px at 59.1% 67.7%, #8f6b28 0 62%, transparent 63%),
+    radial-gradient(ellipse 4.4px 1.2px at 88.5% 63.4%, #a37d33 0 62%, transparent 63%),
+    radial-gradient(ellipse 8.0px 1.0px at 45.2% 77.5%, #6b4f1c 0 62%, transparent 63%),
+    radial-gradient(ellipse 5.8px 1.5px at 55.4% 14.0%, #7d5d22 0 62%, transparent 63%),
+    radial-gradient(ellipse 4.4px 1.6px at 13.3% 21.1%, #8f6b28 0 62%, transparent 63%);
+  background-size: 176px 128px;
+  animation: areiaCruzaLonge var(--dur) ease-out both;
+}
+
+/* A terceira camada é a poeira em si: a faixa de luz que atravessa junto
+   com os grãos e é o que faz a rajada ter corpo, e não ser só pontinhos. */
+.efeito[data-clima='deserto'] .sopro3 {
+  background-image: linear-gradient(
+    96deg,
+    transparent 14%,
+    rgba(198, 148, 60, 0.72) 38%,
+    rgba(246, 227, 182, 0.62) 54%,
+    rgba(198, 148, 60, 0.38) 68%,
+    transparent 86%
+  );
+  animation: varreDaEsquerda var(--dur) ease-out both;
+}
+
+.efeito[data-clima='fogo'] .sopro1 {
+  background-image:
+    radial-gradient(circle 3.5px at 22% 30%, #ff6a12 0 60%, transparent 61%),
+    radial-gradient(circle 2.5px at 66% 70%, #ffa83c 0 60%, transparent 61%),
+    radial-gradient(circle 2px at 88% 16%, #e0450a 0 60%, transparent 61%);
+  background-size: 68px 76px;
+  animation: brasasSobem var(--dur) ease-out both;
+}
+
+@keyframes brasasSobem {
+  0% { opacity: 0; transform: translate3d(0, 24vh, 0) scale(1.12); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(0, -26vh, 0) scale(0.92); }
+}
+
+.efeito[data-clima='fogo'] .sopro2 {
+  background-image: linear-gradient(
+    0deg,
+    rgba(214, 72, 10, 0.72) 0%,
+    rgba(255, 140, 50, 0.45) 30%,
+    rgba(255, 196, 120, 0.22) 50%,
+    transparent 76%
+  );
+  animation: calorSobe var(--dur) ease-out both;
+}
+
+@keyframes calorSobe {
+  0% { opacity: 0; transform: translate3d(0, 50vh, 0) scaleY(1.15); }
+  28% { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(0, -22vh, 0) scaleY(0.9); }
+}
+
+.efeito[data-clima='fogo'] .sopro3 {
+  background-image: radial-gradient(
+    ellipse 58% 58% at 50% 50%,
+    transparent 28%,
+    rgba(150, 40, 0, 0.32) 66%,
+    rgba(96, 22, 0, 0.6) 100%
+  );
+  animation: chamuscar 0.8s ease-out both;
+}
+
+@keyframes chamuscar {
+  0% { opacity: 0; }
+  35% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ---------------------------------------------------------------------------
+   LAGOS — uma ondulação de água atravessa a tela.
+--------------------------------------------------------------------------- */
+.efeito[data-clima='lagos'] .sopro1 {
+  background-image: repeating-radial-gradient(
+    circle at 50% 46%,
+    rgba(226, 250, 255, 0) 0 24px,
+    rgba(226, 250, 255, 0.6) 26px 31px,
+    rgba(13, 96, 110, 0.28) 32px 36px,
+    rgba(226, 250, 255, 0) 37px 62px
+  );
+  animation: ondaAbre var(--dur) ease-out both;
+}
+
+/* Crescer a escala do elemento faz os anéis abrirem para fora — é a ondinha
+   da sombra da ilha, agora do tamanho da tela. */
+@keyframes ondaAbre {
+  0% { opacity: 0; transform: scale(0.12); }
+  16% { opacity: 1; }
+  100% { opacity: 0; transform: scale(3.2); }
+}
+
+.efeito[data-clima='lagos'] .sopro2 {
+  background-image: linear-gradient(
+    100deg,
+    rgba(88, 216, 208, 0) 28%,
+    rgba(88, 216, 208, 0.5) 48%,
+    rgba(15, 111, 120, 0.3) 60%,
+    transparent 78%
+  );
+  animation: varreDaEsquerda var(--dur) ease-out both;
+}
+
+/* ---------------------------------------------------------------------------
+   DESERTO — uma rajada de areia cruza a tela.
+--------------------------------------------------------------------------- */
 .efeito[data-clima='deserto'] .sopro1 {
   background-image:
     radial-gradient(circle 2.5px at 18% 42%, #8a6628 0 60%, transparent 61%),
@@ -1358,6 +1434,23 @@
 
 @keyframes areiaCruza {
   0% { opacity: 0; transform: translate3d(-120%, 5vh, 0) skewX(-12deg); }
+
+/* DUAS VELOCIDADES PARA A MESMA RAJADA.
+   A camada de PERTO atravessa mais tela no mesmo tempo que a de LONGE — é
+   só isso que o olho precisa para ler as duas como estando a distâncias
+   diferentes. Sem essa diferença, as camadas andam coladas e a rajada fica
+   chapada. */
+@keyframes areiaCruzaPerto {
+  0% { opacity: 0; transform: translate3d(-150%, 6vh, 0) skewX(-10deg); }
+  14% { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(155%, -5vh, 0) skewX(-10deg); }
+}
+
+@keyframes areiaCruzaLonge {
+  0% { opacity: 0; transform: translate3d(-95%, 3vh, 0) skewX(-6deg); }
+  24% { opacity: 0.8; }
+  100% { opacity: 0; transform: translate3d(98%, -2vh, 0) skewX(-6deg); }
+}
   18% { opacity: 1; }
   100% { opacity: 0; transform: translate3d(120%, -5vh, 0) skewX(-12deg); }
 }
