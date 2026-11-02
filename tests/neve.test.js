@@ -54,7 +54,11 @@ const contra = (a, b) => {
 }
 
 describe('as cores da neve', () => {
-  const CEU = '#dcf0fb'
+  // O PIOR CASO, e não o tom nominal. O céu desta seção é um degradê: em
+  // cima ele é #e8f5fd, mas lá embaixo chega a #b9e0f3. Medir contra o
+  // claro foi o que deixou passar um contorno de 2,34:1, que na tela ficou
+  // "quase do mesmo tom" do fundo.
+  const CEU = '#b9e0f3'
 
   it('O MIOLO CONTINUA BRANCO: neve escurecida deixa de ser neve', () => {
     expect(lum(COR_FLOCO), 'o floco escureceu e virou confete').toBeGreaterThan(lum('#eef6ff'))
@@ -62,7 +66,9 @@ describe('as cores da neve', () => {
 
   it('o CONTORNO é escuro o bastante para o floco existir no céu quase branco', () => {
     // é ele que faz todo o trabalho de visibilidade; branco puro dá 1,17:1
-    expect(contra(COR_CONTORNO, CEU), 'o contorno clareou e o floco vai sumir').toBeGreaterThan(2.5)
+    // 3:1 é o mínimo para elemento gráfico. O valor antigo passava no
+    // teste frouxo e falhava no olho.
+    expect(contra(COR_CONTORNO, CEU), 'o contorno clareou e o floco vai sumir').toBeGreaterThan(3)
   })
 })
 

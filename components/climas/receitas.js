@@ -396,7 +396,7 @@ export const RECEITA_GELO = {
       // ao fundo, traço grosso e apagado, que é como uma coisa fora de
       // foco se comporta. (A primeira versão tinha a conta invertida e
       // deixava o da FRENTE mais grosso — pego pelo teste.)
-      const fino = 2.1 - 1 * f.nitidez
+      const fino = 2.4 - 1 * f.nitidez
       ctx.save()
       ctx.globalAlpha = f.opacidade
       ctx.translate(f.x, f.y)
@@ -404,7 +404,7 @@ export const RECEITA_GELO = {
 
       if (f.cristal) {
         ctx.strokeStyle = COR_CONTORNO
-        ctx.lineWidth = fino + 1.3
+        ctx.lineWidth = fino + 1.6
         desenharCristal(ctx, f.raio)
         ctx.strokeStyle = COR_FLOCO
         ctx.lineWidth = fino

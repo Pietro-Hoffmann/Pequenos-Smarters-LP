@@ -8,6 +8,7 @@ import {
   RECEITA_GELO,
 } from '@/components/climas/receitas'
 import { TONS_BRASA } from '@/lib/brasas'
+import { COR_FLOCO, COR_CONTORNO } from '@/lib/neve'
 import fs from 'node:fs'
 import path from 'node:path'
 
@@ -677,7 +678,9 @@ describe('ClimaCanvas: o Gelo (neve)', () => {
         { x: 0, y: 0, raio: 7, cristal: true, giro: 0, opacidade: 1, nitidez: 1 },
       ],
     })
-    expect(cores, 'faltou o contorno azul ou o miolo branco').toEqual(['#4e97cc', '#ffffff'])
+    // usa as constantes, não as cores escritas à mão: assim o teste segue
+    // valendo quando a cor for calibrada de novo
+    expect(cores, 'faltou o contorno azul ou o miolo branco').toEqual([COR_CONTORNO, COR_FLOCO])
   })
 
   it('o contorno é traçado ANTES do miolo, senão ele cobre o branco', () => {
