@@ -1,7 +1,12 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { render, screen, act, cleanup } from '@testing-library/react'
 import ClimaCanvas from '@/components/ClimaCanvas'
-import { RECEITA_DESERTO, RECEITA_FOGO, RECEITA_LAGOS } from '@/components/climas/receitas'
+import {
+  RECEITA_DESERTO,
+  RECEITA_FOGO,
+  RECEITA_LAGOS,
+  RECEITA_GELO,
+} from '@/components/climas/receitas'
 import { TONS_BRASA } from '@/lib/brasas'
 import fs from 'node:fs'
 import path from 'node:path'
@@ -338,10 +343,25 @@ describe('ClimaCanvas: o Deserto (areia)', () => {
 })
 
 describe('ClimaCanvas: clima sem receita', () => {
-  it('tema que ainda não migrou não monta canvas nem liga laço', () => {
-    const { container } = render(<ClimaCanvas tema="gelo" />)
+  it('tema desconhecido não monta canvas nem liga laço', () => {
+    // os seis climas do jogo têm receita desde 2/11. A guarda continua
+    // valendo para o caso de alguém escrever um tema novo no painel de
+    // controle antes de existir a receita dele: a seção não quebra, só
+    // fica sem partícula.
+    const { container } = render(<ClimaCanvas tema="pantano" />)
     expect(container.innerHTML).toBe('')
     expect(agendados.size).toBe(0)
+  })
+
+  it('os seis climas do jogo têm receita', () => {
+    for (const tema of ['natureza', 'deserto', 'vento', 'fogo', 'lagos', 'gelo']) {
+      cleanup()
+      render(<ClimaCanvas tema={tema} />)
+      expect(screen.getByTestId('clima-tela'), `${tema} ficou sem receita`).toHaveAttribute(
+        'data-clima-tela',
+        tema
+      )
+    }
   })
 
   it('sem tema nenhum, nada quebra', () => {
@@ -630,6 +650,124 @@ describe('ClimaCanvas: os Lagos (bolhas)', () => {
     movimentoReduzido = true
     render(<ClimaCanvas tema="lagos" />)
     expect(contexto.arc.mock.calls.length).toBeGreaterThan(0)
+    expect(agendados.size).toBe(0)
+  })
+})
+
+describe('ClimaCanvas: o Gelo (neve)', () => {
+  it('pinta a neve assim que entra', () => {
+    render(<ClimaCanvas tema="gelo" />)
+    expect(tela()).toHaveAttribute('data-clima-tela', 'gelo')
+    expect(contexto.stroke.mock.calls.length, 'nenhum floco foi pintado').toBeGreaterThan(0)
+  })
+
+  it('o floco é BRANCO POR DENTRO e AZUL POR FORA', () => {
+    // é o contorno que faz o floco existir no céu quase branco; é o miolo
+    // branco que o mantém sendo neve e não confete
+    const cores = []
+    const espiao = new Proxy(contexto, {
+      get: (alvo, nome) => (nome === 'stroke' ? () => cores.push(alvo.strokeStyle) : alvo[nome]),
+      set: (alvo, nome, valor) => {
+        alvo[nome] = valor
+        return true
+      },
+    })
+    RECEITA_GELO.pintar(espiao, {
+      flocos: [
+        { x: 0, y: 0, raio: 7, cristal: true, giro: 0, opacidade: 1, nitidez: 1 },
+      ],
+    })
+    expect(cores, 'faltou o contorno azul ou o miolo branco').toEqual(['#4e97cc', '#ffffff'])
+  })
+
+  it('o contorno é traçado ANTES do miolo, senão ele cobre o branco', () => {
+    const larguras = []
+    const espiao = new Proxy(contexto, {
+      get: (alvo, nome) => (nome === 'stroke' ? () => larguras.push(alvo.lineWidth) : alvo[nome]),
+      set: (alvo, nome, valor) => {
+        alvo[nome] = valor
+        return true
+      },
+    })
+    RECEITA_GELO.pintar(espiao, {
+      flocos: [{ x: 0, y: 0, raio: 7, cristal: true, giro: 0, opacidade: 1, nitidez: 1 }],
+    })
+    expect(larguras[0], 'o contorno tem de ser o traço grosso, e vir primeiro').toBeGreaterThan(
+      larguras[1]
+    )
+  })
+
+  it('o floco graúdo tem seis braços; o miúdo é um ponto', () => {
+    const contar = (floco) => {
+      contexto.moveTo.mockClear()
+      contexto.arc.mockClear()
+      RECEITA_GELO.pintar(contexto, { flocos: [floco] })
+      return { idas: contexto.moveTo.mock.calls.length, arcos: contexto.arc.mock.calls.length }
+    }
+    const graudo = contar({ x: 0, y: 0, raio: 7, cristal: true, giro: 0, opacidade: 1, nitidez: 1 })
+    const miudo = contar({ x: 0, y: 0, raio: 2, cristal: false, giro: 0, opacidade: 1, nitidez: 1 })
+    expect(graudo.idas).toBeGreaterThanOrEqual(12)
+    expect(graudo.arcos, 'cristal desenhado como disco é a volta do defeito').toBe(0)
+    expect(miudo.arcos, 'o miúdo é um pontinho').toBe(1)
+  })
+
+  it('o floco miúdo é um disco CHEIO, não um aro vazio', () => {
+    // num ponto de 2 a 4px o miolo branco some no céu quase branco e
+    // sobra só a borda, que lê como bolhinha em vez de neve
+    const traçou = []
+    const espiao = new Proxy(contexto, {
+      get: (alvo, nome) => (nome === 'stroke' ? () => traçou.push(alvo.strokeStyle) : alvo[nome]),
+      set: (alvo, nome, valor) => {
+        alvo[nome] = valor
+        return true
+      },
+    })
+    contexto.fill.mockClear()
+    RECEITA_GELO.pintar(espiao, {
+      flocos: [{ x: 0, y: 0, raio: 2, cristal: false, giro: 0, opacidade: 1, nitidez: 0.1 }],
+    })
+    expect(contexto.fill, 'o miúdo precisa ser preenchido').toHaveBeenCalled()
+    expect(traçou, 'o aro em volta do miúdo é o que o fazia parecer bolha').toEqual([])
+  })
+
+  it('o floco do FUNDO tem traço mais grosso que o da FRENTE', () => {
+    // é assim que o desfoque de profundidade é feito aqui: traço grosso e
+    // apagado ao fundo, fino e firme à frente
+    const grossura = (nitidez) => {
+      const larguras = []
+      const espiao = new Proxy(contexto, {
+        get: (alvo, nome) => (nome === 'stroke' ? () => larguras.push(alvo.lineWidth) : alvo[nome]),
+        set: (alvo, nome, valor) => {
+          alvo[nome] = valor
+          return true
+        },
+      })
+      RECEITA_GELO.pintar(espiao, {
+        flocos: [{ x: 0, y: 0, raio: 7, cristal: true, giro: 0, opacidade: 1, nitidez }],
+      })
+      return larguras[1]
+    }
+    expect(grossura(0)).toBeGreaterThan(grossura(1))
+  })
+
+  it('os mesmos três freios valem para o gelo', () => {
+    render(<ClimaCanvas tema="gelo" />)
+    expect(agendados.size).toBe(1)
+
+    observadorDeTela.dispara(false)
+    expect(agendados.size).toBe(0)
+    observadorDeTela.dispara(true)
+
+    Object.defineProperty(document, 'hidden', { configurable: true, get: () => true })
+    act(() => document.dispatchEvent(new Event('visibilitychange')))
+    expect(agendados.size).toBe(0)
+    Object.defineProperty(document, 'hidden', { configurable: true, get: () => false })
+  })
+
+  it('quem pede menos movimento vê a neve parada, sem laço', () => {
+    movimentoReduzido = true
+    render(<ClimaCanvas tema="gelo" />)
+    expect(contexto.stroke.mock.calls.length).toBeGreaterThan(0)
     expect(agendados.size).toBe(0)
   })
 })

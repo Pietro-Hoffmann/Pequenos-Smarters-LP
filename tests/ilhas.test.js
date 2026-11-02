@@ -340,12 +340,14 @@ describe('Ilhas (carrossel)', () => {
     expect(screen.getByTestId('clima-tela')).toHaveAttribute('data-clima-tela', 'natureza')
   })
 
-  it('ilha cujo clima ainda não migrou não monta tela de desenho nenhuma', () => {
-    // Gelo, Fogo, Lagos e Vento continuam nas camadas de CSS: montar um
-    // canvas vazio para eles seria laço rodando para pintar nada
+  it('TODAS as seis ilhas têm o clima pintado na tela de desenho', () => {
+    // desde 2/11 não sobrou nenhum clima nas camadas de CSS: Natureza,
+    // Deserto, Vento, Fogo, Lagos e Gelo têm todos a sua receita
     render(<Ilhas dados={dados} />)
-    fireEvent.click(screen.getByLabelText('Gelo'))
-    expect(screen.queryByTestId('clima-tela')).toBeNull()
+    for (const ilha of dados.lista) {
+      fireEvent.click(screen.getByLabelText(ilha.nome))
+      expect(screen.getByTestId('clima-tela')).toHaveAttribute('data-clima-tela', ilha.tema)
+    }
   })
 
   it('a tela das folhas mora dentro da camada de clima, e não solta na seção', () => {

@@ -42,6 +42,15 @@ import {
   desenharBrasa,
 } from '@/lib/brasas'
 import {
+  COR_FLOCO,
+  COR_CONTORNO,
+  quantosFlocos,
+  criarFloco,
+  brisaNoInstante,
+  passoDoFloco,
+  desenharCristal,
+} from '@/lib/neve'
+import {
   quantasBolhas,
   criarBolha,
   raioDaBolha,
@@ -350,6 +359,74 @@ export const RECEITA_LAGOS = {
   },
 }
 
+// ===========================================================================
+// GELO — neve caindo
+// O floco é desenhado em DUAS PASSADAS: primeiro o contorno azul, grosso,
+// depois o miolo branco por cima, fino. É o contorno que faz o floco
+// existir sobre o céu quase branco; é o branco que o mantém sendo neve.
+//
+// Sem sprite, e por um motivo: o DESFOQUE DE PROFUNDIDADE aqui é feito
+// pela espessura da linha. Floco de perto, traço fino e firme; floco ao
+// fundo, traço grosso e apagado, que é como uma coisa fora de foco se
+// comporta. Com sprite isso exigiria um desenho por nível de desfoque.
+// ===========================================================================
+
+export const RECEITA_GELO = {
+  preparar(ctx, L, A) {
+    const flocos = []
+    const quantos = quantosFlocos(L)
+    for (let i = 0; i < quantos; i += 1) flocos.push(criarFloco(L, A))
+    return { flocos }
+  },
+
+  andar(estado, dt, relogio, L, A) {
+    const brisa = brisaNoInstante(relogio)
+    for (let i = 0; i < estado.flocos.length; i += 1) {
+      passoDoFloco(estado.flocos[i], dt, brisa, L, A)
+    }
+  },
+
+  pintar(ctx, estado) {
+    ctx.lineCap = 'round'
+    ctx.lineJoin = 'round'
+    for (let i = 0; i < estado.flocos.length; i += 1) {
+      const f = estado.flocos[i]
+      // O TRAÇO ENGROSSA conforme o floco se AFASTA: é assim que o
+      // desfoque de profundidade é feito aqui. Perto, traço fino e firme;
+      // ao fundo, traço grosso e apagado, que é como uma coisa fora de
+      // foco se comporta. (A primeira versão tinha a conta invertida e
+      // deixava o da FRENTE mais grosso — pego pelo teste.)
+      const fino = 2.1 - 1 * f.nitidez
+      ctx.save()
+      ctx.globalAlpha = f.opacidade
+      ctx.translate(f.x, f.y)
+      ctx.rotate(f.giro)
+
+      if (f.cristal) {
+        ctx.strokeStyle = COR_CONTORNO
+        ctx.lineWidth = fino + 1.3
+        desenharCristal(ctx, f.raio)
+        ctx.strokeStyle = COR_FLOCO
+        ctx.lineWidth = fino
+        desenharCristal(ctx, f.raio)
+      } else {
+        // O MIÚDO É UM DISCO AZUL CHEIO, e não um ponto branco com aro.
+        // A primeira versão repetia aqui a receita do cristal (miolo
+        // branco, contorno azul) e o resultado, num ponto de 2 a 4px, era
+        // um ARO VAZIO: o branco some no céu quase branco e sobra só a
+        // borda, que lê como bolhinha, não como neve. Nesse tamanho não
+        // cabe miolo nenhum — floco distante é um pontinho, e ponto.
+        ctx.fillStyle = COR_CONTORNO
+        ctx.beginPath()
+        ctx.arc(0, 0, f.raio, 0, Math.PI * 2)
+        ctx.fill()
+      }
+
+      ctx.restore()
+    }
+  },
+}
+
 // O mapa que o ClimaCanvas consulta. Tema de fora desta lista não ganha
 // tela de desenho nenhuma, e continua no CSS.
 const RECEITAS = {
@@ -358,6 +435,7 @@ const RECEITAS = {
   vento: RECEITA_VENTO,
   fogo: RECEITA_FOGO,
   lagos: RECEITA_LAGOS,
+  gelo: RECEITA_GELO,
 }
 
 export default RECEITAS
