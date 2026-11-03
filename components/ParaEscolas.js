@@ -38,15 +38,28 @@ export default function ParaEscolas({ dados, temContato = false }) {
           </ul>
         )}
 
-        {/* COMO SE PAGA. As duas portas do modelo de receita (escolas e
-            famílias), cada uma com o plano, o preço e o que inclui. O preço
-            vem do painel de controle; enquanto estiver vazio, aparece a
-            linha `precoVazio` ("Valor sob consulta") — nunca um número
-            inventado e nunca um espaço em branco. Sem o bloco `modelo`, ou
-            com `portas` vazio, nada disto é desenhado. Não há link aqui:
-            quem quer o valor usa o botão de contato logo abaixo. */}
+        {/* COMO SE PAGA. As portas do modelo de receita, cada uma com o
+            plano, o preço e o que inclui. Desde 3/11 há UMA só, a licença
+            para escolas: o plano de negócios passou a vender apenas para
+            instituições, e a porta das famílias saiu.
+            O preço vem do painel de controle; enquanto estiver vazio,
+            aparece a linha `precoVazio` ("Valor sob consulta") — nunca um
+            número inventado e nunca um espaço em branco. Sem o bloco
+            `modelo`, ou com `portas` vazio, nada disto é desenhado. Não há
+            link aqui: quem quer o valor usa o botão de contato logo abaixo.
+
+            O QUADRO BRANCO EXTERNO SÓ EXISTE COM MAIS DE UMA PLACA. Ele
+            serve para agrupar as portas lado a lado; com uma só vira
+            cartão dentro de cartão — uma moldura de 1040px em volta de
+            outra de 520px, com o dobro de branco sobrando. */}
         {dados.modelo && Array.isArray(dados.modelo.portas) && dados.modelo.portas.length > 0 && (
-          <div className={estilos.modelo} data-testid="modelo" data-revelar>
+          <div
+            className={`${estilos.modelo} ${
+              dados.modelo.portas.length === 1 ? estilos.semQuadro : ''
+            }`}
+            data-testid="modelo"
+            data-revelar
+          >
             {dados.modelo.sobrancelha && <Sobrancelha texto={dados.modelo.sobrancelha} />}
             {dados.modelo.titulo && <h3 className={`tituloSecao ${estilos.modeloTitulo}`}>{dados.modelo.titulo}</h3>}
             {dados.modelo.texto && <p className={estilos.modeloTexto}>{dados.modelo.texto}</p>}

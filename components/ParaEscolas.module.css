@@ -68,6 +68,20 @@
 }
 .lista + .modelo { margin-top: 44px; }
 
+/* UMA PLACA SÓ: o quadro branco sai de cena. Ele existe para agrupar as
+   portas uma do lado da outra; com uma só, sobrava o dobro de branco em
+   volta e virava cartão dentro de cartão. O conteúdo passa a ficar
+   direto sobre o céu, como nas outras seções da página. */
+.semQuadro .modeloTexto { margin-bottom: 52px; }
+
+.semQuadro {
+  background: none;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+  max-width: var(--largura);
+}
+
 .modeloTitulo {
   font-size: clamp(30px, 3.2vw, 44px);
   line-height: 1.05;

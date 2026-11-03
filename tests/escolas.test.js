@@ -173,3 +173,40 @@ describe('o modelo de negócio', () => {
     expect(tudo, 'sobrou "a família pode assinar"').not.toMatch(/fam[íi]lia pode assinar/i)
   })
 })
+
+describe('o quadro branco em volta do modelo', () => {
+  const CSS = require('node:fs').readFileSync(
+    require('node:path').join(process.cwd(), 'components/ParaEscolas.module.css'),
+    'utf8'
+  )
+
+  it('some quando há uma placa só', () => {
+    // com uma placa, o quadro de 1040px emoldurava uma de 520px: cartão
+    // dentro de cartão, com o dobro de branco sobrando
+    const umaPorta = site.paraEscolas.modelo.portas[0]
+    const dadosUmaPorta = {
+      ...dados,
+      modelo: { ...site.paraEscolas.modelo, portas: [umaPorta] },
+    }
+    render(<ParaEscolas dados={dadosUmaPorta} />)
+    expect(screen.getByTestId('modelo').className).toMatch(/semQuadro/)
+  })
+
+  it('volta a existir se alguém acrescentar uma segunda placa', () => {
+    const umaPorta = site.paraEscolas.modelo.portas[0]
+    const duas = {
+      ...dados,
+      modelo: { ...site.paraEscolas.modelo, portas: [umaPorta, { ...umaPorta, nome: 'Outra' }] },
+    }
+    render(<ParaEscolas dados={duas} />)
+    expect(screen.getByTestId('modelo').className).not.toMatch(/semQuadro/)
+  })
+
+  it('a regra que apaga o quadro tira fundo, borda e sombra', () => {
+    const bloco = CSS.match(/\.semQuadro\s*\{([^}]*)\}/)
+    expect(bloco, 'o bloco .semQuadro sumiu do CSS').not.toBeNull()
+    expect(bloco[1]).toMatch(/background:\s*none/)
+    expect(bloco[1]).toMatch(/border:\s*0/)
+    expect(bloco[1]).toMatch(/box-shadow:\s*none/)
+  })
+})
