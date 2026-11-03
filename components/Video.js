@@ -19,9 +19,23 @@ export default function Video({ video }) {
         <Sobrancelha texto={video.sobrancelha} />
         <h2 className="tituloSecao" data-revelar>{video.titulo}</h2>
 
+        {/* DOIS ATRIBUTOS DO PLAYER QUE NÃO SÃO ENFEITE:
+            preload="metadata" e não "auto" — sem isso o navegador começa a
+            baixar o vídeo inteiro só por a pessoa ter rolado até aqui. Assim
+            ele pega só o cabeçalho, e o arquivo (dezenas de MB) só desce de
+            verdade quando alguém aperta o play.
+            playsInline — sem ele o Safari do iPhone toma a tela inteira à
+            força no play, tirando a pessoa de dentro da página. */}
         <div className={`${estilos.telao} ${video.src ? '' : estilos.telaoVazio}`} data-revelar>
           {video.src ? (
-            <video className={estilos.player} src={video.src} poster={video.poster} controls preload="metadata" />
+            <video
+              className={estilos.player}
+              src={video.src}
+              poster={video.poster}
+              controls
+              preload="metadata"
+              playsInline
+            />
           ) : (
             <div className={estilos.espera}>
               <img src={video.poster} alt="" aria-hidden="true" width={840} height={756} loading="lazy" />

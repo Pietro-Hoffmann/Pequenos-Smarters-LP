@@ -24,9 +24,20 @@ export const site = {
 
   video: {
     // Coloque o arquivo em public/video/ e escreva o caminho aqui.
-    // Exemplo: '/video/gameplay.mp4'
-    // Vazio = aparece "Gameplay em breve" no lugar do vídeo.
-    src: '',
+    // Vazio = aparece "Gameplay em breve" no lugar do vídeo, e o telão
+    // fica claro em vez de escuro.
+    //
+    // O ARQUIVO DE HOJE (3/11) é a gravação de tela do jogo, de 7min50s.
+    // O original tinha 830 MB porque o celular gravou a 90 quadros por
+    // segundo; ele foi reduzido para 1280 de largura e 30 quadros antes
+    // de entrar aqui. PARA TROCAR O VÍDEO: um arquivo de celular não
+    // pode ser copiado direto para esta pasta — acima de 100 MB o GitHub
+    // recusa, e quem abrir a página pelo celular paga o download. Peça
+    // para reduzir antes.
+    src: '/video/gameplay.mp4',
+    // A capa que aparece ANTES de a pessoa apertar o play. Hoje é a arte
+    // da ilha, e não um quadro do próprio vídeo — se um dia quiser um
+    // quadro do jogo, é só trocar o caminho.
     poster: '/images/ilha_natureza.png',
     sobrancelha: 'Gameplay',
     titulo: 'Veja o jogo em ação',
