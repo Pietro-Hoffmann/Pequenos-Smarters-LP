@@ -201,6 +201,16 @@ export const site = {
     // quadro "em breve" quando a ilha escolhida ainda não tem atividades.
     // Os textos das atividades continuam guardados abaixo, em cada ilha.
     mostrarAtividades: false,
+    // A ORDEM DESTA LISTA É A DO JOGO, e não uma escolha de layout.
+    // No jogo as ilhas ficam num arco e são percorridas em ordem
+    // CRONOLÓGICA — a criança só abre a seguinte quando termina a
+    // anterior. O MapScreen do jogo diz isso no próprio comentário, e o
+    // painel dos pais de lá as numera de 1 a 6:
+    //   1 Natureza, 2 Deserto, 3 Gelo, 4 Ventos, 5 Fogo, 6 Lagos.
+    // Até 2/11 o carrossel estava com Fogo e Gelo trocados e Lagos antes
+    // dos Ventos, enquanto a prévia do Painel dos Pais mais abaixo NESTE
+    // MESMO ARQUIVO já seguia a ordem certa — o site se contradizia.
+    // Há teste guardando as duas listas em sincronia.
     lista: [
       {
         nome: 'Natureza',
@@ -238,13 +248,6 @@ export const site = {
         tema: 'deserto',
       },
       {
-        nome: 'Fogo',
-        descricao: 'Em breve a criança vai atravessar o vulcão juntando as letras que saem das brasas.',
-        arte: '/images/ilha_fogo.png',
-        disponivel: false,
-        tema: 'fogo',
-      },
-      {
         nome: 'Gelo',
         descricao: 'Logo mais a criança vai derreter o gelo para soltar as palavras congeladas.',
         arte: '/images/ilha_gelo.png',
@@ -252,18 +255,25 @@ export const site = {
         tema: 'gelo',
       },
       {
+        nome: 'Ventos',
+        descricao: 'Um dia a criança vai subir com as pipas e agarrar as letras que voam no céu.',
+        arte: '/images/ilha_vento.png',
+        disponivel: false,
+        tema: 'vento',
+      },
+      {
+        nome: 'Fogo',
+        descricao: 'Em breve a criança vai atravessar o vulcão juntando as letras que saem das brasas.',
+        arte: '/images/ilha_fogo.png',
+        disponivel: false,
+        tema: 'fogo',
+      },
+      {
         nome: 'Lagos',
         descricao: 'Em breve a criança vai mergulhar fundo para pescar as palavras que boiam.',
         arte: '/images/ilha_lagos.png',
         disponivel: false,
         tema: 'lagos',
-      },
-      {
-        nome: 'Vento',
-        descricao: 'Um dia a criança vai subir com as pipas e agarrar as letras que voam no céu.',
-        arte: '/images/ilha_vento.png',
-        disponivel: false,
-        tema: 'vento',
       },
     ],
   },
