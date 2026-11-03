@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { montarMailto, montarWhatsapp, temContato } from '@/lib/links'
+import { montarMailto, montarWhatsapp, temContato, formatarWhatsapp } from '@/lib/links'
 
 describe('montarMailto', () => {
   it('devolve null quando não há e-mail', () => {
@@ -70,5 +70,26 @@ describe('temContato', () => {
     // combina com montarWhatsapp: se o cartão não vai aparecer, o link
     // "Contato" do menu também não pode aparecer.
     expect(temContato({ email: '', whatsapp: '51999999999' })).toBe(false)
+  })
+})
+
+describe('formatarWhatsapp', () => {
+  it('escreve o número do jeito que a gente lê', () => {
+    expect(formatarWhatsapp('5551999754680')).toBe('(51) 99975-4680')
+  })
+
+  it('aceita o número já pontuado', () => {
+    expect(formatarWhatsapp('+55 (51) 99975-4680')).toBe('(51) 99975-4680')
+  })
+
+  it('serve também para número de oito dígitos', () => {
+    expect(formatarWhatsapp('554133334444')).toBe('(41) 3333-4444')
+  })
+
+  it('número curto demais não vira texto nenhum', () => {
+    // quem chama não mostra nada, em vez de mostrar os dígitos crus
+    expect(formatarWhatsapp('51999754680')).toBeNull()
+    expect(formatarWhatsapp('')).toBeNull()
+    expect(formatarWhatsapp(undefined)).toBeNull()
   })
 })

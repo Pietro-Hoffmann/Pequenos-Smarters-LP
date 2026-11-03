@@ -1,4 +1,4 @@
-import { montarMailto, montarWhatsapp } from '@/lib/links'
+import { montarMailto, montarWhatsapp, formatarWhatsapp } from '@/lib/links'
 import estilos from './Footer.module.css'
 
 // O RODAPÉ DE FORNECEDOR, NÃO DE PORTFÓLIO.
@@ -19,6 +19,21 @@ export default function Footer({ dados, contato }) {
   const email = montarMailto(contato?.email, contato?.assunto ?? '')
   const whatsapp = montarWhatsapp(contato?.whatsapp, contato?.mensagem ?? '')
 
+  // OS TELEFONES DA EQUIPE.
+  // O contato da página é por e-mail: o botão de WhatsApp saiu do
+  // cabeçalho e o cartão saiu da seção "Fale com a gente" (decisão do
+  // dono, 3/11). Os telefones ficaram aqui embaixo, com o nome de quem
+  // atende — para quem procurar, sem disputar com o canal principal.
+  // Quem não tiver número utilizável some da lista em vez de virar um
+  // link morto, que é a regra de estado vazio do site inteiro.
+  const equipe = (dados.equipe || [])
+    .map((pessoa) => ({
+      nome: pessoa.nome,
+      link: montarWhatsapp(pessoa.whatsapp, dados.mensagemEquipe ?? ''),
+      numero: formatarWhatsapp(pessoa.whatsapp),
+    }))
+    .filter((pessoa) => pessoa.nome && pessoa.link && pessoa.numero)
+
   return (
     <footer className={estilos.rodape} id="rodape">
       <div className={`container ${estilos.conteudo}`}>
@@ -34,6 +49,29 @@ export default function Footer({ dados, contato }) {
               </a>
             )}
           </p>
+        )}
+
+        {equipe.length > 0 && (
+          <div className={estilos.equipe}>
+            {dados.tituloEquipe && (
+              <h2 className={estilos.tituloEquipe} id="rodape-equipe">
+                {dados.tituloEquipe}
+              </h2>
+            )}
+            <ul aria-labelledby={dados.tituloEquipe ? 'rodape-equipe' : undefined}
+                aria-label={dados.tituloEquipe ? undefined : 'Telefones da equipe'}>
+              {equipe.map((pessoa) => (
+                <li key={pessoa.nome}>
+                  <a href={pessoa.link} target="_blank" rel="noopener noreferrer">
+                    <span className={estilos.nome}>{pessoa.nome}</span>
+                    {/* o número ESCRITO, e não só o nome: quem vai anotar
+                        num papel ou ligar de outro aparelho precisa vê-lo */}
+                    <span className={estilos.numero}>{pessoa.numero}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
 
         {dados.dados && <p className={estilos.dados}>{dados.dados}</p>}

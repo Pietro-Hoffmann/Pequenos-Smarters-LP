@@ -39,9 +39,15 @@ export const site = {
     // Vazio = o cartão correspondente não aparece.
     // Se os dois ficarem vazios, a seção inteira de contato some.
     email: 'pequenossmarters@gmail.com',
-    // Só números, COM o código do país (55). Ex.: '5551999999999'.
-    // Sem o código do país o número fica curto demais e o cartão não aparece.
-    whatsapp: '5551999754680',
+    // O CONTATO DA PÁGINA É SÓ POR E-MAIL (decisão do dono, 3/11).
+    // Este campo ficou VAZIO de propósito, e é isso que tira o botão
+    // verde do cabeçalho E o cartão "Chamar no WhatsApp" da seção de
+    // contato, sem precisar mexer em código nenhum: os dois só existem
+    // quando há número aqui.
+    // Os telefones da equipe foram para o RODAPÉ, lá embaixo em
+    // `rodape.equipe`. Escrever um número aqui traz o botão e o cartão de
+    // volta, se um dia quiserem.
+    whatsapp: '',
     assunto: 'Pequenos Smarters',
     mensagem: 'Olá! Vi a página do Pequenos Smarters e quero saber mais sobre o licenciamento.',
     // Textos da seção de contato.
@@ -649,5 +655,20 @@ export const site = {
     // extenso; o WhatsApp, por este rótulo. Os dois só aparecem quando os
     // campos lá de cima, em `contato`, estiverem preenchidos.
     rotuloWhatsapp: 'WhatsApp',
+
+    // -----------------------------------------------------------------
+    // OS TELEFONES DA EQUIPE
+    // O contato da página é por e-mail; estes números ficam aqui embaixo
+    // para quem preferir falar direto. Cada pessoa precisa de nome E de
+    // número COM o código do país (55) — sem ele o número fica curto
+    // demais e a pessoa some da lista, em vez de virar um link morto.
+    // Lista vazia = o bloco inteiro não aparece.
+    // -----------------------------------------------------------------
+    tituloEquipe: 'Falar direto com a gente',
+    mensagemEquipe: 'Olá! Vi a página do Pequenos Smarters e quero saber mais.',
+    equipe: [
+      { nome: 'Rafaela de Oliveira Lopes dos Santos', whatsapp: '5551999000251' },
+      { nome: 'Estefanie Oliveira Cardozo dos Santos', whatsapp: '5551999754680' },
+    ],
   },
 }

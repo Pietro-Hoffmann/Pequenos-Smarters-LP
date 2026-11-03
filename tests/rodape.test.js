@@ -80,3 +80,62 @@ describe('Footer', () => {
     expect(container.querySelectorAll('p')).toHaveLength(1) // só o copyright
   })
 })
+
+// ---------------------------------------------------------------------------
+// OS TELEFONES DA EQUIPE NO RODAPÉ (3/11, a pedido do dono)
+// O contato da página passou a ser SÓ e-mail: o botão de WhatsApp saiu do
+// cabeçalho e o cartão saiu da seção "Fale com a gente". Os telefones
+// ficaram aqui embaixo, com o nome de quem atende — para quem procurar,
+// e sem disputar com o canal principal.
+// ---------------------------------------------------------------------------
+describe('os telefones da equipe no rodapé', () => {
+  const equipe = [
+    { nome: 'Rafaela', whatsapp: '5551999754680' },
+    { nome: 'Estefanie', whatsapp: '5551988887777' },
+  ]
+  const comEquipe = { ...dados, tituloEquipe: 'Falar direto com a gente', equipe }
+
+  it('mostra cada pessoa com o nome e o link do WhatsApp dela', () => {
+    render(<Footer dados={comEquipe} contato={contatoVazio} />)
+    for (const pessoa of equipe) {
+      const link = screen.getByRole('link', { name: new RegExp(pessoa.nome) })
+      expect(link).toHaveAttribute('href', expect.stringContaining(`wa.me/${pessoa.whatsapp}`))
+      expect(link).toHaveAttribute('target', '_blank')
+      expect(link.getAttribute('rel')).toMatch(/noopener/)
+    }
+  })
+
+  it('mostra o número escrito, e não só o nome', () => {
+    // quem vai ligar precisa ver o número; quem vai tocar usa o link
+    render(<Footer dados={comEquipe} contato={contatoVazio} />)
+    expect(screen.getByText('(51) 99975-4680')).toBeInTheDocument()
+  })
+
+  it('SEM a lista no painel, nada aparece', () => {
+    const { container } = render(<Footer dados={dados} contato={contatoVazio} />)
+    expect(container.textContent).not.toContain('Falar direto')
+  })
+
+  it('pessoa sem número é ignorada em vez de virar link morto', () => {
+    const meio = {
+      ...comEquipe,
+      equipe: [{ nome: 'Rafaela', whatsapp: '5551999754680' }, { nome: 'Alguém', whatsapp: '' }],
+    }
+    render(<Footer dados={meio} contato={contatoVazio} />)
+    expect(screen.getByRole('link', { name: /Rafaela/ })).toBeInTheDocument()
+    expect(screen.queryByText(/Alguém/)).toBeNull()
+  })
+
+  it('número curto demais para ser real também é ignorado', () => {
+    // sem o código do país o wa.me aponta para uma conta que não existe
+    const curto = { ...comEquipe, equipe: [{ nome: 'Rafaela', whatsapp: '51999754680' }] }
+    render(<Footer dados={curto} contato={contatoVazio} />)
+    expect(screen.queryByText(/Rafaela/)).toBeNull()
+  })
+
+  it('a lista é uma lista de verdade, para quem usa leitor de tela', () => {
+    render(<Footer dados={comEquipe} contato={contatoVazio} />)
+    const lista = screen.getByRole('list', { name: 'Falar direto com a gente' })
+    expect(lista.querySelectorAll('li')).toHaveLength(2)
+  })
+})

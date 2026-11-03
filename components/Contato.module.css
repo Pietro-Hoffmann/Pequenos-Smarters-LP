@@ -5,11 +5,15 @@
    centralizado sem o olho perder a volta. */
 .intro { max-width: var(--medida); margin: 0 auto 28px; color: var(--texto); }
 
+/* 680px é a MESMA largura da caixa de mensagem logo acima, e é de
+   propósito: desde que o WhatsApp saiu daqui (3/11) sobrou um cartão só,
+   e com os 760px antigos ele ficava mais largo que a caixa — duas coisas
+   empilhadas e desalinhadas. Com dois cartões continua cabendo bem. */
 .grade {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 24px;
-  max-width: 760px;
+  max-width: 680px;
   margin: 0 auto;
 }
 
