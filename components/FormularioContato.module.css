@@ -11,7 +11,12 @@
   padding: 22px;
   margin: 0 auto 26px;
   max-width: 680px;
-  text-align: left;
+  /* Centralizado por decisão da Rafaela (3/11/2026), junto com toda a prosa
+     da página — vale para o título da caixa e os rótulos dos campos.
+     Os CAMPOS em si não acompanham: input e textarea herdam o text-align, e
+     escrever um texto que se centraliza letra a letra é desconfortável.
+     A trava deles está mais abaixo, junto com .campo. */
+  text-align: center;
 }
 
 .titulo {
@@ -60,6 +65,12 @@ label.rotulo { cursor: pointer; }
   background: #fff;
   border: 2px solid #9fb3c4;
   border-radius: 12px;
+  /* O LIMITE DA CENTRALIZAÇÃO DENTRO DESTA CAIXA. O título e os rótulos
+     acompanham a página e ficam no meio; o que a pessoa DIGITA, não. input e
+     textarea herdam o text-align da caixa, e escrever num campo em que o
+     texto se recentraliza a cada letra é desconfortável — mais ainda numa
+     mensagem de várias linhas. */
+  text-align: left;
 }
 
 .campo textarea {
@@ -96,6 +107,8 @@ label.rotulo { cursor: pointer; }
 .rodape {
   display: flex;
   align-items: center;
+  /* a linha é flex: text-align não a alcança, quem centraliza é isto */
+  justify-content: center;
   gap: 14px;
   flex-wrap: wrap;
   margin-top: 4px;
@@ -105,7 +118,13 @@ label.rotulo { cursor: pointer; }
   margin: 0;
   font-size: 16px;
   font-weight: 700;
-  flex: 1 1 220px;
+  /* `flex: 0 1 auto` e não `1 1 220px`: o desfecho passa quase toda a vida
+     VAZIO, e vazio com flex-basis ele continua reservando a sua faixa e
+     empurrando o botão para a esquerda — ficava o único elemento torto de
+     uma caixa centralizada. Assim ele ocupa zero enquanto não há recado, e
+     o flex-wrap acima deixa a frase descer para a linha de baixo quando ela
+     é longa demais para caber ao lado do botão. */
+  flex: 0 1 auto;
 }
 
 .desfecho[data-estado='enviado'] { color: #1d6b2f; }  /* 5,4:1 sobre branco */

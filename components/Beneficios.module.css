@@ -7,12 +7,18 @@
   gap: 28px;
 }
 
-/* Alinhado à esquerda: o texto de cada plaquinha dá três ou quatro linhas na
-   largura da coluna, e bloco de mais de duas linhas centralizado é
-   justamente o que faz o olho perder a volta. O ícone e o título acompanham
-   o texto, senão o cartão ficaria com duas margens esquerdas diferentes. */
-.item { text-align: left; padding: 22px 20px; }
-.item img { display: block; width: 64px; height: 64px; object-fit: contain; }
+/* Centralizado por decisão da Rafaela (3/11/2026), junto com toda a prosa da
+   página. Era `left`: o texto de cada plaquinha dá três ou quatro linhas na
+   largura da coluna, e bloco de mais de duas linhas centralizado é o que faz
+   o olho perder a volta. Fica o registro de por que era assim; a decisão de
+   quem é dona da página vale mais que a regra.
+   O ícone precisa de `margin-inline: auto` logo abaixo: ele é `display:block`
+   e NÃO acompanha o text-align sozinho — sem isso o cartão fica com o
+   desenho na esquerda e o texto no meio. */
+.item { text-align: center; padding: 22px 20px; }
+/* margin-inline: auto é o que põe o ícone no meio — <img> é display:block
+   aqui e bloco não obedece ao text-align do cartão */
+.item img { display: block; width: 64px; height: 64px; object-fit: contain; margin-inline: auto; }
 .item h3 { margin: 12px 0 6px; color: var(--azul-escuro); }
 .item p { margin: 0; font-size: 17px; }
 

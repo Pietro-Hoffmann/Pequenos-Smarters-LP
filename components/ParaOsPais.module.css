@@ -24,7 +24,10 @@
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 24px;
   align-items: stretch;          /* os dois painéis com a MESMA altura */
-  text-align: left;
+  /* Centralizado por decisão da Rafaela (3/11/2026), junto com toda a prosa
+     da página. ATENÇÃO: a PRÉVIA mora dentro desta grade e NÃO acompanha —
+     ela é tabela, não prosa. A trava dela está logo abaixo. */
+  text-align: center;
 }
 
 /* PLACA RETA E DA MESMA ALTURA QUE A VIZINHA.
@@ -45,8 +48,15 @@
 @media (prefers-reduced-motion: reduce) { .paineis li.painel:hover { transform: none; } }
 
 /* a prévia ocupa o que sobrar, para o painel mais curto não ficar com a
-   placa "sobrando" embaixo */
-.painel > [data-testid='previa'] { flex: 1; }
+   placa "sobrando" embaixo.
+
+   E ela TRAVA o alinhamento à esquerda. Enquanto a grade acima era `left`, a
+   prévia só herdava; agora que a grade é `center`, sem este `left` explícito
+   a herança centralizaria as linhas de Área / Domínio / Tendência e cada uma
+   passaria a começar num lugar diferente — o painel deixa de se ler como
+   relatório. O limite da centralização é aqui, e tem teste em
+   tests/alinhamento.test.js. */
+.painel > [data-testid='previa'] { flex: 1; text-align: left; }
 
 /* o mascote espia no canto de cima, por fora da placa */
 .mascote {
@@ -62,6 +72,9 @@
 .topo {
   display: flex;
   align-items: center;
+  /* flex não olha para text-align: sem justify-content o topo continuaria
+     encostado na esquerda com o resto do painel centralizado */
+  justify-content: center;
   flex-wrap: wrap;
   gap: 6px 10px;
   margin: 0 0 4px;
@@ -84,6 +97,8 @@
 .painelTitulo {
   display: flex;
   align-items: center;
+  /* idem .topo: é flex, quem centraliza é justify-content */
+  justify-content: center;
   gap: 10px;
   margin: 0;
   font-family: var(--fonte-titulo), system-ui, sans-serif;
@@ -97,8 +112,10 @@
 .painelTexto { margin: 0 0 10px; font-size: 14px; line-height: 1.35; color: var(--texto); }
 
 .inclui { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 7px; font-size: 16px; line-height: 1.4; }
-.inclui li { padding-left: 24px; position: relative; }
-.inclui li::before { content: '\2605'; position: absolute; left: 0; color: #e3a500; }
+/* marcador inline, pelo mesmo motivo do ParaEscolas: com o texto no meio,
+   estrela em absolute fica largada na borda apontando para o vazio */
+.inclui li { padding: 0; }
+.inclui li::before { content: '\2605\00A0'; color: #e3a500; }
 
 /* ---- as fichas pequenas ---- */
 .extras {
@@ -109,7 +126,8 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
-  text-align: left;
+  /* centralizado com o resto da prosa (Rafaela, 3/11/2026) */
+  text-align: center;
 }
 
 .extra {

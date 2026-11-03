@@ -69,9 +69,11 @@
   font-size: 16px;
   line-height: 1.45;
   max-width: 290px;
-  /* a fala dá três ou quatro linhas nesta largura: alinhada à esquerda ela
-     se lê, centralizada ela só se vê */
-  text-align: left;
+  /* Centralizada por decisão da Rafaela (3/11/2026), junto com toda a prosa
+     da página. Era `left` porque a fala dá três ou quatro linhas nesta
+     largura. Num balão de fala a centralização custa menos que nos
+     parágrafos longos: o rabicho já marca o eixo do meio. */
+  text-align: center;
 }
 
 /* Rabicho: dois triângulos, o de trás faz o contorno escuro. */

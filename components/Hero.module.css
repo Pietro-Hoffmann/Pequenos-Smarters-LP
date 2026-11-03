@@ -57,7 +57,11 @@
   margin: 0 auto 20px;
   /* --texto da 5.82:1 ate no tom mais fundo do ceu; o --azul-escuro dava 3.66:1 */
   color: var(--texto);
-  text-align: left;
+  /* Centralizado por decisão da Rafaela (3/11/2026), junto com toda a prosa
+     da página. Era `left`, pela regra de que bloco de mais de duas linhas
+     centralizado faz o olho perder a volta — a --medida continua aqui e
+     segura a linha em uns 62 caracteres, que é o que ameniza. */
+  text-align: center;
 }
 
 .botoes { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }

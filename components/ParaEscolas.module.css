@@ -1,13 +1,16 @@
 /* Sem fundo branco: o céu passa por trás. */
 .secao { text-align: center; position: relative; overflow: hidden; }
 
-/* Passa de duas linhas: medida de leitura e alinhado à esquerda. É o
-   parágrafo que carrega o argumento para a escola — este precisa ser LIDO. */
+/* Centralizado por decisão da Rafaela (3/11/2026), junto com toda a prosa da
+   página. Era `left` e este é o caso mais caro da mudança: passa de duas
+   linhas e é o parágrafo que carrega o argumento para a escola — o que um
+   coordenador precisa ler inteiro. A --medida fica, e é ela que segura o
+   estrago: linha curta centralizada ainda se lê. */
 .intro {
   max-width: var(--medida);
   margin: 0 auto 28px;
   color: var(--texto);
-  text-align: left;
+  text-align: center;
 }
 
 .lista {
@@ -22,7 +25,8 @@
      bordas de baixo não coincidem */
   align-items: stretch;
   gap: 18px;
-  text-align: left;
+  /* centralizado com o resto da prosa (Rafaela, 3/11/2026) */
+  text-align: center;
 }
 
 .lista li { padding: 14px 18px; font-size: 17px; }
@@ -115,7 +119,10 @@
   grid-template-columns: 1.15fr 1fr;
   align-items: stretch;
   gap: 22px;
-  text-align: left;
+  /* centralizado com o resto da prosa (Rafaela, 3/11/2026). As placas são
+     flex em coluna: as pílulas de etiqueta e de preço precisam de
+     `align-self: center` logo abaixo, senão ficam presas na esquerda. */
+  text-align: center;
 }
 
 .porta {
@@ -134,9 +141,12 @@
 }
 .porta.destaque:hover { box-shadow: 8px 12px 0 #e3a500; }
 
-/* a etiqueta do pitch ("Foco principal", "Porta de entrada") */
+/* a etiqueta do pitch ("Foco principal", "Porta de entrada").
+   `align-self: center` e não flex-start: a placa é flex em coluna, e aí o
+   text-align: center dela não alcança este filho — com flex-start a pílula
+   ficava encostada na esquerda e o resto do texto no meio. */
 .etiqueta {
-  align-self: flex-start;
+  align-self: center;
   font-family: var(--fonte-titulo), system-ui, sans-serif;
   font-size: 12px;
   letter-spacing: 0.1em;
@@ -172,7 +182,12 @@
   font-weight: 800;
   font-size: 28px;
   line-height: 1.1;
-  margin: 0 110px 4px 0;
+  /* Margem SIMÉTRICA. Era `0 110px 4px 0`, reservando o canto direito para o
+     mascote que espia por cima da placa; com o texto centralizado, uma caixa
+     110px mais estreita de um lado só joga o título para a esquerda do
+     centro e ele fica torto sem motivo visível. O espaço do mascote agora é
+     aberto pelo padding de cima da .porta. */
+  margin: 0 0 4px;
   color: var(--contorno);
 }
 
@@ -189,7 +204,8 @@
 }
 
 .precoVazio {
-  align-self: flex-start;
+  /* idem .etiqueta: filho de flex column não obedece text-align */
+  align-self: center;
   margin: 0 0 14px;
   background: #fff4d9;
   border: 2px dashed var(--contorno);
@@ -210,11 +226,13 @@
   line-height: 1.4;
 }
 
-.inclui li { padding-left: 26px; position: relative; }
+/* A estrela é marcador INLINE, não `position: absolute; left: 0`. Com o item
+   centralizado, uma estrela presa na borda esquerda ficaria apontando para o
+   vazio enquanto o texto flutua no meio. Inline ela anda junto. O \00A0 é
+   espaço não separável: a estrela nunca se desgruda da primeira palavra. */
+.inclui li { padding: 0; }
 .inclui li::before {
-  content: '\2605';
-  position: absolute;
-  left: 0;
+  content: '\2605\00A0';
   font-size: 18px;
   color: #e3a500;
 }
