@@ -42,7 +42,7 @@ export const site = {
     // Só números, COM o código do país (55). Ex.: '5551999999999'.
     // Sem o código do país o número fica curto demais e o cartão não aparece.
     whatsapp: '5551999754680',
-    assunto: 'Licenciamento — Pequenos Smarters',
+    assunto: 'Pequenos Smarters',
     mensagem: 'Olá! Vi a página do Pequenos Smarters e quero saber mais sobre o licenciamento.',
     // Textos da seção de contato.
     sobrancelha: 'Contato',
