@@ -85,5 +85,7 @@ describe('o arquivo apontado pelo painel de controle', () => {
     const player = container.querySelector('video')
     expect(player.getAttribute('preload'), 'preload auto baixa tudo sem pedir').toBe('metadata')
     expect(player.hasAttribute('playsinline'), 'sem isto o Safari do iPhone abre em tela cheia').toBe(true)
+    // pedido do dono em 3/11: ao acabar, recomeça sozinho
+    expect(player.hasAttribute('loop'), 'o vídeo parou de repetir').toBe(true)
   })
 })

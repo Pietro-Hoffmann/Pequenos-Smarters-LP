@@ -35,6 +35,7 @@ export default function Video({ video }) {
               controls
               preload="metadata"
               playsInline
+              loop
             />
           ) : (
             <div className={estilos.espera}>
