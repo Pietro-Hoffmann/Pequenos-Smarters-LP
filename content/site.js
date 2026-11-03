@@ -38,7 +38,7 @@ export const site = {
     // uma vez, sem mexer em mais nada.
     // Vazio = o cartão correspondente não aparece.
     // Se os dois ficarem vazios, a seção inteira de contato some.
-    email: '',
+    email: 'pequenossmarters@gmail.com',
     // Só números, COM o código do país (55). Ex.: '5551999999999'.
     // Sem o código do país o número fica curto demais e o cartão não aparece.
     whatsapp: '5551999754680',
