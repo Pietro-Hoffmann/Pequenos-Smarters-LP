@@ -1,0 +1,119 @@
+/* ---------------------------------------------------------------------------
+   A CAIXA DE MENSAGEM
+   Mesma linguagem dos cartões da seção: fundo branco, contorno navy grosso
+   e o degrau de sombra do jogo. Nada de campo cinza de formulário de banco.
+--------------------------------------------------------------------------- */
+.caixa {
+  background: var(--cartao);
+  border: 3px solid var(--contorno);
+  border-radius: 22px;
+  box-shadow: 6px 7px 0 var(--contorno);
+  padding: 22px;
+  margin: 0 auto 26px;
+  max-width: 680px;
+  text-align: left;
+}
+
+.titulo {
+  margin: 0 0 16px;
+  font-family: var(--fonte-titulo, inherit);
+  font-size: 22px;
+  color: var(--contorno);
+}
+
+/* Nome e e-mail dividem a linha no computador e empilham no celular.
+   minmax(0, 1fr) e não 1fr: com 1fr um campo de texto longo alarga a
+   coluna além da tela — já aconteceu nesta mesma página, na prévia dos
+   painéis, em 21/10. */
+.linha {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 14px;
+}
+
+.campo {
+  display: block;
+  margin-bottom: 14px;
+  min-width: 0;
+}
+
+/* o rótulo virou <label> de verdade quando o aviso de erro saiu de dentro
+   dele (ver o comentário no FormularioContato.js) */
+label.rotulo { cursor: pointer; }
+
+.rotulo {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--contorno);
+}
+
+.campo input,
+.campo textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 13px;
+  font: inherit;
+  font-size: 16px;   /* 16px impede o iPhone de dar zoom ao focar o campo */
+  color: var(--contorno);
+  background: #fff;
+  border: 2px solid #9fb3c4;
+  border-radius: 12px;
+}
+
+.campo textarea {
+  resize: vertical;
+  min-height: 112px;
+}
+
+.campo input:focus-visible,
+.campo textarea:focus-visible {
+  outline: 3px solid var(--contorno);
+  outline-offset: 1px;
+  border-color: var(--contorno);
+}
+
+.campo input[aria-invalid='true'],
+.campo textarea[aria-invalid='true'] {
+  border-color: #c0392b;
+}
+
+/* O aviso de erro NÃO É SÓ VERMELHO: quem não distingue a cor precisa de
+   outra pista, e aqui ela é o texto em si mais o símbolo. */
+.aviso {
+  display: block;
+  margin-top: 6px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #a5281b;   /* 6,1:1 sobre o branco do cartão */
+}
+
+.aviso::before {
+  content: '⚠ ';
+}
+
+.rodape {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.desfecho {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  flex: 1 1 220px;
+}
+
+.desfecho[data-estado='enviado'] { color: #1d6b2f; }  /* 5,4:1 sobre branco */
+.desfecho[data-estado='falhou']  { color: #a5281b; }
+.desfecho:focus-visible { outline: 3px solid var(--contorno); outline-offset: 3px; }
+
+@media (max-width: 620px) {
+  .caixa { padding: 18px; border-radius: 18px; }
+  .linha { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .titulo { font-size: 20px; }
+}

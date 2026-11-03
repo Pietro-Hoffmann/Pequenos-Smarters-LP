@@ -54,6 +54,53 @@ export const site = {
     tituloEmail: 'Mandar um e-mail',
     tituloWhatsapp: 'Chamar no WhatsApp',
     detalheWhatsapp: 'Resposta em horário comercial',
+
+    // -----------------------------------------------------------------
+    // A CAIXA DE MENSAGEM
+    // Enquanto a `chave` estiver vazia, a caixa NÃO APARECE na página e
+    // ficam só os dois cartões. É de propósito: uma caixa sem chave
+    // engoliria a mensagem da pessoa sem avisar, e isso é pior do que
+    // não ter caixa.
+    //
+    // COMO CONSEGUIR A CHAVE, em dois minutos e de graça:
+    //   1. entre em web3forms.com
+    //   2. digite pequenossmarters@gmail.com e peça a chave
+    //   3. ela chega nesse mesmo e-mail; cole aqui dentro das aspas
+    // O plano gratuito aceita 250 mensagens por mês. As mensagens passam
+    // pelo servidor do Web3Forms antes de chegar no Gmail.
+    // -----------------------------------------------------------------
+    formulario: {
+      chave: '',
+      titulo: 'Escreva para a gente',
+      rotuloNome: 'Seu nome',
+      rotuloEmail: 'Seu e-mail',
+      rotuloMensagem: 'Sua mensagem',
+      dicaMensagem: 'Conte de qual escola você fala, quantas turmas, o que quer saber.',
+      botao: 'Enviar mensagem',
+      botaoEnviando: 'Enviando…',
+      // O que a pessoa lê quando dá certo e quando dá errado.
+      sucesso: 'Mensagem enviada! A gente responde no seu e-mail.',
+      falha: 'Não deu para enviar agora. Sua mensagem continua aqui — tente de novo ou chame no WhatsApp.',
+      // Os avisos de cada campo. As chaves (vazio, curto, longo,
+      // invalido) são as que o código devolve; os textos são seus.
+      avisos: {
+        nome: {
+          vazio: 'Escreva o seu nome.',
+          curto: 'Esse nome parece curto demais.',
+          longo: 'Esse nome é comprido demais.',
+        },
+        email: {
+          vazio: 'Escreva o seu e-mail, senão não temos como responder.',
+          invalido: 'Esse e-mail parece incompleto.',
+          longo: 'Esse e-mail é comprido demais.',
+        },
+        mensagem: {
+          vazio: 'Escreva a sua mensagem.',
+          curto: 'Conte um pouquinho mais, para a gente poder ajudar.',
+          longo: 'A mensagem passou do tamanho. Resuma um pouco, por favor.',
+        },
+      },
+    },
   },
 
   // ---------------------------------------------------------------------------

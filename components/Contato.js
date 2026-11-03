@@ -1,5 +1,6 @@
 import { montarMailto, montarWhatsapp } from '@/lib/links'
 import Sobrancelha from './Sobrancelha'
+import FormularioContato from './FormularioContato'
 import estilos from './Contato.module.css'
 
 export default function Contato({ contato }) {
@@ -14,6 +15,14 @@ export default function Contato({ contato }) {
         <Sobrancelha texto={contato.sobrancelha} />
         <h2 className="tituloSecao" data-revelar>{contato.titulo}</h2>
         <p className={estilos.intro} data-revelar>{contato.intro}</p>
+
+        {/* A CAIXA VEM ANTES DOS CARTÕES: é o caminho principal desde
+            2/11. Os dois cartões continuam logo abaixo como atalho para
+            quem prefere falar direto, e aparecem mesmo sem a caixa — que
+            some sozinha enquanto não houver chave no painel de controle. */}
+        <div data-revelar>
+          <FormularioContato dados={contato.formulario} assunto={contato.assunto} />
+        </div>
 
         <div className={estilos.grade} data-revelar-grupo>
           {email && (
