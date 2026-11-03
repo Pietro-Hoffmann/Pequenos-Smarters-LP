@@ -70,7 +70,7 @@ export const site = {
     // pelo servidor do Web3Forms antes de chegar no Gmail.
     // -----------------------------------------------------------------
     formulario: {
-      chave: '',
+      chave: '890f9be0-f336-4447-9081-a878aacad4e1',
       titulo: 'Escreva para a gente',
       rotuloNome: 'Seu nome',
       rotuloEmail: 'Seu e-mail',
