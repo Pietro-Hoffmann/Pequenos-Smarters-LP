@@ -41,7 +41,7 @@ export const site = {
     email: '',
     // Só números, COM o código do país (55). Ex.: '5551999999999'.
     // Sem o código do país o número fica curto demais e o cartão não aparece.
-    whatsapp: '',
+    whatsapp: '5551999754680',
     assunto: 'Licenciamento — Pequenos Smarters',
     mensagem: 'Olá! Vi a página do Pequenos Smarters e quero saber mais sobre o licenciamento.',
     // Textos da seção de contato.
@@ -93,6 +93,13 @@ export const site = {
     // Este link só aparece quando há e-mail ou WhatsApp preenchido acima.
     contato: 'Contato',
     botao: 'Baixar a demo',
+    // O botão verde do cabeçalho. Ele só aparece se o WhatsApp estiver
+    // preenchido lá embaixo em `contato` — apagou o número, some o botão.
+    botaoContato: 'Falar no WhatsApp',
+    // O mesmo botão em telas bem estreitas (abaixo de 420px), onde o texto
+    // cheio empurraria o "Baixar a demo" para fora. Quem lê com leitor de
+    // tela continua ouvindo o texto cheio acima, em qualquer largura.
+    botaoContatoCurto: 'WhatsApp',
   },
 
   hero: {

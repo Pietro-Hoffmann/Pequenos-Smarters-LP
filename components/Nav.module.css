@@ -21,7 +21,12 @@
   min-height: var(--altura-nav);
 }
 
-.logo { display: flex; line-height: 0; }
+/* flex: none porque a logo é item de um flex e ESTAVA SENDO ESPREMIDA.
+   Com os dois botões no cabeçalho o espaço apertou, a caixa da logo
+   encolheu e a imagem foi junto (o globals.css dá max-width: 100% em toda
+   imagem) — medido em 2/11: no celular a logo tinha virado um carimbo de
+   30px. Travar o item impede isso. */
+.logo { display: flex; line-height: 0; flex: none; }
 .logo img { width: 140px; height: auto; }
 
 .links { display: flex; gap: 22px; }
@@ -35,9 +40,70 @@
 
 .links a:hover { text-decoration: underline; }
 
+.acoes { display: flex; align-items: center; gap: 10px; flex: none; }
+
 .cta { padding: 8px 18px; font-size: 19px; }   /* 19px: texto grande, 4,2:1 sobre o laranja */
+
+/* O BOTÃO DE CONTATO É VERDE, e a escolha tem motivo de acessibilidade,
+   não só de gosto.
+   O laranja do botão principal com o texto navy dá 4,20:1, que pela WCAG
+   só vale para TEXTO GRANDE — por isso ele está travado em 19px e não
+   pode encolher (escurecer o laranja foi tentado em 21/10 e rejeitado:
+   ficou amarronzado). O verde do jogo com o mesmo navy dá 5,09:1, que
+   vale para texto normal — então ESTE botão pode diminuir no celular
+   sem quebrar nada. É o que permite os dois caberem lá.
+   E, de quebra, ele não compete com o laranja: baixar a demo continua
+   sendo a ação principal da página. */
+/* As duas versões do texto do botão de contato. A troca é por LARGURA, e
+   não por dispositivo: o que decide é caber. */
+.textoCurto { display: none; }
+
+.contato {
+  background: var(--verde-botao);
+  color: var(--contorno);
+  --cor-degrau: #3f9636;
+  box-shadow: 0 var(--degrau) 0 var(--cor-degrau);
+  white-space: nowrap;
+}
 
 @media (max-width: 880px) {
   .links { display: none; }
   .logo img { width: 110px; }
+}
+
+/* NO CELULAR OS DOIS BOTÕES FICAM, COM TEXTO — escolha do dono (2/11).
+   O que encolhe é o ESPAÇAMENTO, não a letra do laranja: ele continua em
+   19px porque abaixo disso o contraste dele deixa de passar. O verde pode
+   ir a 17px, que é o que o contraste maior dele permite, e é essa folga
+   que faz os dois caberem lado a lado. */
+@media (max-width: 560px) {
+  .acoes { gap: 6px; }
+  .cta { padding: 7px 11px; }
+  .contato { font-size: 17px; padding: 8px 10px; }
+  .logo img { width: 92px; }
+}
+
+/* ABAIXO DE 420px o texto cheio não cabe mais: "Falar no WhatsApp" come
+   60px a mais que "WhatsApp", e era isso que empurrava o "Baixar a demo"
+   para fora da tela num aparelho de 320px (medido em 2/11). Troca-se a
+   palavra, não o tamanho da letra — o laranja continua travado em 19px. */
+@media (max-width: 420px) {
+  .textoLongo { display: none; }
+  .textoCurto { display: inline; }
+  .conteudo { gap: 8px; }
+  .cta { padding: 7px 10px; }
+  .contato { font-size: 17px; }
+  .logo img { width: 74px; }
+}
+
+/* Em 320px (o iPhone SE antigo) faltavam 24px, e eles estavam no RECUO
+   LATERAL do .container, que é de 20px de cada lado. Só no cabeçalho esse
+   recuo encolhe: é a última folga disponível antes de ter de cortar algum
+   dos dois botões. Medido em 2/11 — com isto o último botão passa a caber
+   com sobra em vez de estourar 5px. */
+@media (max-width: 340px) {
+  .conteudo { gap: 6px; padding-left: 10px; padding-right: 10px; }
+  .cta { padding: 7px 8px; }
+  .contato { font-size: 16px; }
+  .logo img { width: 56px; }
 }

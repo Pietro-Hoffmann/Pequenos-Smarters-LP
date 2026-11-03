@@ -27,7 +27,7 @@ export default function Pagina() {
       {/* Não desenha nada: faz os blocos marcados com data-revelar
           aparecerem em fade conforme a página desce. */}
       <RevelarAoRolar />
-      <Nav dados={site.nav} temContato={comContato} />
+      <Nav dados={site.nav} contato={site.contato} temContato={comContato} />
       <main>
         <Hero hero={site.hero} />
         {/* O vídeo demonstrativo vem logo depois da abertura, por pedido do

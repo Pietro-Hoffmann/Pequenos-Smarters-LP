@@ -1,9 +1,10 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { montarWhatsapp } from '@/lib/links'
 import estilos from './Nav.module.css'
 
-export default function Nav({ dados, temContato = false }) {
+export default function Nav({ dados, contato, temContato = false }) {
   const [rolou, setRolou] = useState(false)
   const barra = useRef(null)
 
@@ -64,6 +65,13 @@ export default function Nav({ dados, temContato = false }) {
     ? [...dados.ancoras, { href: '#contato', texto: dados.contato }]
     : dados.ancoras
 
+  // O BOTÃO DE WHATSAPP DO CABEÇALHO.
+  // O número vem do painel de controle, como tudo no site: este componente
+  // não conhece número nenhum. Se o campo estiver vazio — ou curto demais
+  // para ser real, o que o montarWhatsapp confere — o botão simplesmente
+  // não existe, em vez de levar a uma conta que não abre.
+  const linkDoWhatsapp = montarWhatsapp(contato && contato.whatsapp, (contato && contato.mensagem) || '')
+
   return (
     <header ref={barra} className={`${estilos.barra} ${rolou ? estilos.rolou : ''}`}>
       <div className={`container ${estilos.conteudo}`}>
@@ -78,7 +86,35 @@ export default function Nav({ dados, temContato = false }) {
             <a key={a.href} href={a.href}>{a.texto}</a>
           ))}
         </nav>
-        <a className={`botao botaoPrincipal ${estilos.cta}`} href="#baixar">{dados.botao}</a>
+        <div className={estilos.acoes}>
+          {linkDoWhatsapp && dados.botaoContato && (
+            /* VERDE, E NÃO LARANJA, por dois motivos: não competir com o
+               "Baixar a demo", que é a ação principal da página, e poder
+               encolher no celular — o navy sobre o verde do jogo dá 5,09:1
+               e vale para texto normal, enquanto sobre o laranja dá 4,20:1
+               e só vale para texto grande. */
+            <a
+              className={`botao ${estilos.contato} ${estilos.cta}`}
+              href={linkDoWhatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              // O NOME ACESSÍVEL É SEMPRE O TEXTO CHEIO, em qualquer
+              // largura: quem usa leitor de tela ouve "Falar no WhatsApp"
+              // mesmo no celular estreito, onde a tela mostra só a palavra
+              // curta. Por isso as duas versões abaixo são aria-hidden —
+              // sem isso o leitor leria as duas em sequência.
+              aria-label={dados.botaoContato}
+            >
+              <span className={estilos.textoLongo} aria-hidden="true">
+                {dados.botaoContato}
+              </span>
+              <span className={estilos.textoCurto} aria-hidden="true">
+                {dados.botaoContatoCurto || dados.botaoContato}
+              </span>
+            </a>
+          )}
+          <a className={`botao botaoPrincipal ${estilos.cta}`} href="#baixar">{dados.botao}</a>
+        </div>
       </div>
     </header>
   )
