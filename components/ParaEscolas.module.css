@@ -139,7 +139,9 @@
 
 .porta {
   position: relative;
-  padding: 22px 24px 24px;
+  /* apertado em 3/11: com uma placa só e seis itens, ela tomava 51% da
+     altura da tela no computador e 70% no celular */
+  padding: 18px 22px 20px;
   display: flex;
   flex-direction: column;
   overflow: visible;
@@ -206,8 +208,18 @@
 .plano { margin: 0 0 10px; font-size: 18px; color: var(--texto); }
 
 /* o preço: preenchido fala alto; "sob consulta" vem numa pílula creme */
+.precoMes {
+  margin: -8px 0 12px;
+  font-size: 16px;
+  opacity: 0.75;
+}
+
 .preco {
-  margin: 0 0 14px;
+  margin: 0 0 6px;
+  /* equilibra as duas linhas quando o preço não cabe numa só: sem isto o
+     celular quebrava em "R$ 30 por aluno, por" / "ano", com uma palavra
+     solta. Navegador antigo ignora e quebra como antes. */
+  text-wrap: balance;
   font-family: var(--fonte-titulo), system-ui, sans-serif;
   font-weight: 800;
   font-size: 34px;
@@ -267,6 +279,12 @@
   .numeros { grid-template-columns: 1fr; gap: 12px; margin-bottom: 60px; }
   .numeros li + li { border-left: 0; border-top: 2px solid rgba(255, 255, 255, 0.25); padding-top: 12px; }
   .portas { grid-template-columns: 1fr; gap: 40px; }
+  /* O PREÇO QUEBRAVA EM DUAS LINHAS no celular e sozinho comia 75px da
+     placa. Em 27px ele cabe numa linha só e continua sendo a maior
+     coisa do cartão, que é o papel dele. */
+  .preco { font-size: 27px; }
+  .precoMes { font-size: 15px; margin-top: -6px; }
+  .porta { padding: 16px 18px 18px; }
   .modelo { padding: 26px 16px 24px; border-radius: 22px; box-shadow: 6px 8px 0 var(--contorno); }
   .portaNome { margin-right: 90px; font-size: 24px; }
   .mascote { width: 92px; top: -40px; right: -10px; }

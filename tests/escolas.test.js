@@ -141,9 +141,21 @@ describe('o modelo de negócio', () => {
     expect(porta.preco).toMatch(/R\$/)
   })
 
-  it('diz o valor MENSAL junto: é ele que mostra que cabe no orçamento', () => {
+  it('diz o valor MENSAL junto do anual: é ele que mostra que cabe no orçamento', () => {
+    // ele mora ao lado do preço, e não na lista de itens: não é uma coisa
+    // que a escola recebe, é o mesmo preço dito de outro jeito — e na
+    // lista custava uma linha inteira da placa
     const porta = site.paraEscolas.modelo.portas[0]
-    expect(porta.itens.join(' ')).toMatch(/m[êe]s/i)
+    expect(porta.precoMes, 'sumiu o valor mensal').toBeTruthy()
+    expect(porta.precoMes).toMatch(/m[êe]s/i)
+  })
+
+  it('cada item da placa cabe em uma linha: nada de texto comprido ali', () => {
+    // medido em 3/11: com itens de duas e três linhas a placa tomava 70%
+    // da altura da tela no celular. O detalhe fica para a conversa.
+    for (const item of site.paraEscolas.modelo.portas[0].itens) {
+      expect(item.length, `"${item}" é comprido demais para a placa`).toBeLessThanOrEqual(42)
+    }
   })
 
   it('oferece o teste gratuito, que é o que tira o risco de quem decide', () => {

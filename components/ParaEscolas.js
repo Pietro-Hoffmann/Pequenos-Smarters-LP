@@ -98,6 +98,13 @@ export default function ParaEscolas({ dados, temContato = false }) {
                   <p className={porta.preco ? estilos.preco : estilos.precoVazio}>
                     {porta.preco || porta.precoVazio}
                   </p>
+                  {/* O valor mensal mora JUNTO do anual, e não na lista de
+                      itens: ele não é uma coisa que a escola recebe, é o
+                      mesmo preço dito de outro jeito. Na lista ele também
+                      custava uma linha inteira do cartão. */}
+                  {porta.preco && porta.precoMes && (
+                    <p className={estilos.precoMes}>{porta.precoMes}</p>
+                  )}
                   {Array.isArray(porta.itens) && porta.itens.length > 0 && (
                     <ul className={estilos.inclui}>
                       {porta.itens.map((item) => <li key={item}>{item}</li>)}

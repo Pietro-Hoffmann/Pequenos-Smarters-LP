@@ -585,14 +585,19 @@ export const site = {
           // O MENSAL VEM JUNTO DE PROPÓSITO: é o número que faz uma
           // secretaria ver que cabe no orçamento.
           preco: 'R$ 30 por aluno, por ano',
+          // o mesmo preço dito por mês, logo abaixo do anual
+          precoMes: 'R$ 2,50 por aluno ao mês',
           precoVazio: 'Valor sob consulta',
+          // CADA ITEM EM UMA LINHA SÓ. Os textos longos quebravam em duas
+          // e três linhas e faziam a placa tomar 70% da tela do celular
+          // (medido em 3/11). O detalhe de cada item fica para a conversa;
+          // aqui é só a lista do que entra.
           itens: [
-            'R$ 2,50 por aluno ao mês',
-            'Instalação nos tablets e celulares Android que a escola já tem',
-            'Cadastro das turmas e dos alunos junto com as professoras',
-            'Formação de cerca de 1 hora com as professoras',
-            'Painel com as estrelas, as fases e os acertos de cada aluno',
-            'Suporte por WhatsApp e e-mail durante o ano',
+            'Instalação nos aparelhos da escola',
+            'Cadastro das turmas com as professoras',
+            'Formação para a equipe',
+            'Acompanhamento por aluno',
+            'Suporte o ano todo',
           ],
         },
       ],
