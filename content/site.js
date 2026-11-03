@@ -172,7 +172,7 @@ export const site = {
     // as duas portas do pitch). Se for reescrever, não deixe parecer que o
     // jogo inteiro é gratuito — não é.
     subtitulo:
-      'Um jogo de alfabetização para crianças de 6 a 8 anos. A demo da Ilha da Natureza é gratuita; o jogo completo vem por licença para escolas ou por assinatura para a família.',
+      'Um jogo de alfabetização para crianças de 6 a 8 anos. A demo com as três primeiras ilhas é gratuita; o jogo completo vem por licença para escolas ou por assinatura para a família.',
     // Etiqueta pequena acima da logo. Vazia = não aparece nada.
     // Se um dia quiser de volta, escreva aqui dentro das aspas.
     selo: '',
@@ -204,10 +204,11 @@ export const site = {
 
   // A SEÇÃO DO JOGO: as seis ilhas, uma de cada vez, no carrossel.
   // Esta é a seção do menu "O jogo". Ela conta o jogo inteiro: mostra as seis
-  // ilhas e, na Ilha da Natureza (a única pronta), as três atividades que a
+  // ilhas e, nas três que já estão prontas, as atividades que a
   // criança enfrenta na demo.
   //
-  // Só a Natureza está pronta; as outras cinco aparecem inteiras e coloridas,
+  // Natureza, Deserto e Gelo estão prontas; as outras três aparecem
+  // inteiras e coloridas,
   // com a etiqueta "Em breve". Quando uma ficar pronta, troque o disponivel
   // dela de false para true e pronto.
   //
@@ -223,8 +224,10 @@ export const site = {
   //                natureza, deserto, fogo, gelo, lagos, vento.
   //                Trocar o tema de uma ilha troca o clima dela na hora.
   //   atividades — OPCIONAL. As plaquinhas que aparecem embaixo do carrossel
-  //                quando aquela ilha está escolhida. Hoje só a Natureza tem,
-  //                porque só ela está pronta. Uma ilha SEM atividades mostra,
+  //                quando aquela ilha está escolhida. Hoje só a Natureza
+  //                tem a lista escrita; como as plaquinhas estão desligadas
+  //                (mostrarAtividades: false), isso não aparece na página.
+  //                Uma ilha SEM atividades mostra,
   //                no lugar das plaquinhas, a plaquinha de "ilha a caminho"
   //                (o bloco `futura`, logo abaixo) — assim a seção não
   //                encolhe e não sobra campo vazio quando alguém clica numa
@@ -236,19 +239,19 @@ export const site = {
     // depois o que vem. "Seis ilhas para explorar" prometia seis e entregava
     // uma — para um comprador de escola isso lia como "estou licenciando um
     // sexto de um produto". Dito assim, a mesma informação vira roteiro.
-    titulo: 'A Ilha da Natureza está pronta. Mais cinco estão a caminho.',
+    titulo: 'Três ilhas já estão prontas. Mais três estão a caminho.',
     texto:
-      'A criança desembarca na Ilha da Natureza, que vem inteira na demo, e enfrenta as três atividades no ritmo dela, com os mascotes por perto. As outras cinco ainda estão sendo feitas: clique em cada uma para ver o que vem por aí.',
+      'A criança começa na Ilha da Natureza e segue pelo Deserto até o Gelo: são nove atividades, no ritmo dela e com os mascotes por perto. As outras três ainda estão sendo feitas — clique em cada uma para ver o que vem por aí.',
     rodape: 'Cada atividade vale até 3 estrelas — errou pouco, brilhou mais.',
     // O QUE APARECE QUANDO A ILHA ESCOLHIDA AINDA NÃO EXISTE.
-    // Antes, clicar numa das cinco ilhas futuras fazia as plaquinhas sumirem
+    // Antes, clicar numa das ilhas que ainda vêm fazia as plaquinhas sumirem
     // e deixava um campo vazio enorme embaixo: a pessoa interagia e ganhava
     // MENOS página. Esta plaquinha ocupa esse lugar com algo honesto e com o
     // mesmo convite de sempre. Apague o bloco inteiro e volta a não aparecer
     // nada (nada quebra, a seção só encolhe de novo).
     futura: {
       texto:
-        'Esta ilha ainda está sendo construída — a arte já existe, as atividades ainda não. Quem já dá para jogar inteira, hoje, é a Ilha da Natureza.',
+        'Esta ilha ainda está sendo construída — a arte já existe, as atividades ainda não. Hoje dá para jogar inteiras a Natureza, o Deserto e o Gelo.',
       // É o mesmo convite do resto da página, e leva para o mesmo lugar: o
       // bloco de download. Enquanto o link do APK não existir, lá está o
       // "Em breve" desativado — que é o estado honesto, não um defeito.
@@ -285,7 +288,9 @@ export const site = {
         arte: '/images/ilha_natureza.png',
         disponivel: true,
         tema: 'natureza',
-        // As três atividades da demo. Só esta ilha tem.
+        // As três atividades desta ilha. O Deserto e o Gelo também têm
+        // três cada, mas a lista só precisa existir aqui enquanto as
+        // plaquinhas estiverem desligadas no painel.
         atividades: [
           {
             nome: 'Floresta das Vogais',
@@ -309,16 +314,16 @@ export const site = {
       },
       {
         nome: 'Deserto',
-        descricao: 'Um dia a criança vai cavar a areia quente atrás das sílabas perdidas.',
+        descricao: 'A criança cava a areia quente atrás das sílabas perdidas.',
         arte: '/images/ilha_deserto.png',
-        disponivel: false,
+        disponivel: true,
         tema: 'deserto',
       },
       {
         nome: 'Gelo',
-        descricao: 'Logo mais a criança vai derreter o gelo para soltar as palavras congeladas.',
+        descricao: 'A criança derrete o gelo para soltar as palavras congeladas.',
         arte: '/images/ilha_gelo.png',
-        disponivel: false,
+        disponivel: true,
         tema: 'gelo',
       },
       {
@@ -424,7 +429,7 @@ export const site = {
               ],
             },
             // pct: 0 a 100 · texto: do que é a porcentagem
-            { tipo: 'anel', titulo: 'Progresso geral', pct: 72, texto: 'concluiu 7 de 9 fases da Ilha da Natureza' },
+            { tipo: 'anel', titulo: 'Progresso geral', pct: 72, texto: 'concluiu 7 das 9 fases liberadas' },
             {
               tipo: 'destaque',
               titulo: 'Onde precisa de mais atenção',
@@ -543,7 +548,7 @@ export const site = {
       'O progresso fica registrado criança a criança, atividade por atividade, com os acertos e as estrelas de cada tentativa — quem abre esse acompanhamento é o responsável, pelo Painel dos Pais',
       'Modo daltonismo, narração em voz, música e efeitos sonoros ligam e desligam nas configurações do próprio jogo',
       'Roda nos celulares e tablets Android que a escola já tem: instala o aplicativo e usa a internet da escola, sem servidor local, sem laboratório e sem equipamento novo',
-      'Alfabetização de 6 a 8 anos em três atividades: caçar as vogais, identificar as consoantes e descobrir com qual letra a palavra começa',
+      'Alfabetização de 6 a 8 anos em nove atividades, da Ilha da Natureza até a do Gelo: caçar as vogais, identificar as consoantes, descobrir com qual letra a palavra começa e mais',
     ],
     // COMO SE PAGA — o modelo de receita do pitch (Rafa, 21/10/2026):
     // duas portas de entrada. Os valores do pitch estavam em branco; por
@@ -625,8 +630,8 @@ export const site = {
     // NÃO escreva "funciona offline": o jogo precisa de internet para
     // entrar, salvar as configurações e guardar o progresso.
     itens: [
-      'Ilha da Natureza completa',
-      '3 atividades',
+      'Três ilhas completas',
+      '9 atividades',
       'Painel dos Pais',
       'Sem anúncios',
     ],

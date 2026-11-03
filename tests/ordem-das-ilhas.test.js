@@ -50,10 +50,25 @@ describe('a ordem das ilhas', () => {
     expect(previa).toEqual(carrossel())
   })
 
-  it('a Natureza é a primeira, e é a única pronta', () => {
-    const lista = site.ilhas.lista
-    expect(lista[0].nome).toBe('Natureza')
-    expect(lista.filter((i) => i.disponivel).map((i) => i.nome)).toEqual(['Natureza'])
+  it('a Natureza é a primeira da fila', () => {
+    expect(site.ilhas.lista[0].nome).toBe('Natureza')
+  })
+
+  it('AS ILHAS PRONTAS SÃO AS PRIMEIRAS, SEM BURACO NO MEIO', () => {
+    // A criança abre uma ilha terminando a anterior: é uma fila, não um
+    // menu. Marcar o Fogo como pronto deixando o Gelo trancado seria um
+    // estado impossível no jogo — e a página anunciaria uma ilha que
+    // ninguém consegue alcançar.
+    // Em 3/11 a demo passou a ir da Natureza até o Gelo (três ilhas).
+    const prontas = site.ilhas.lista.map((i) => Boolean(i.disponivel))
+    const primeiraTrancada = prontas.indexOf(false)
+    if (primeiraTrancada !== -1) {
+      expect(
+        prontas.slice(primeiraTrancada).some(Boolean),
+        'há ilha pronta DEPOIS de uma trancada: a fila está furada'
+      ).toBe(false)
+    }
+    expect(prontas[0], 'a primeira ilha tem de estar pronta').toBe(true)
   })
 
   it('cada ilha aparece uma vez só, com arte e clima próprios', () => {
