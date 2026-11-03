@@ -11,9 +11,16 @@
 
 export const site = {
   demo: {
-    // Cole aqui o link do APK que o comando `eas build` devolve.
-    // Enquanto estiver vazio, o botão aparece como "Em breve", desativado.
-    url: '',
+    // O link do APK. Enquanto estiver vazio, o botão aparece como
+    // "Em breve", desativado, e o QR Code não existe.
+    //
+    // POR QUE É O LINK DE /view DO DRIVE, E NÃO UM DOWNLOAD DIRETO:
+    // o arquivo tem 156 MB, e acima de ~100 MB o Google Drive não
+    // consegue verificar vírus e intercepta qualquer download direto com
+    // uma tela de aviso. Ou seja, o atalho "uc?export=download" não
+    // entrega o arquivo — entrega uma página de HTML. O /view leva a
+    // pessoa à tela do Drive, onde ela clica em baixar e funciona sempre.
+    url: 'https://drive.google.com/file/d/1OLH7Yu-J2UJDB9wiz0ZTOJqS24bWr-v9/view',
   },
 
   video: {
