@@ -1,7 +1,9 @@
-/* COMPACTADO EM 3/11, a pedido do dono. Medido antes: o rodapé tomava
-   48% da tela no computador e 65% no celular — dois terços do que a
-   pessoa via ao chegar no fim. Nada de informação saiu; o que encolheu
-   foi espaço em branco, a logo e o corpo das letras. */
+/* COMPACTADO EM 3/11, a pedido do dono, em duas passadas.
+   1ª: tomava 48% da tela no computador e 65% no celular — encolheram o
+       espaço em branco, a logo e o corpo das letras (foi para 37% e 47%).
+   2ª: as cinco faixas empilhadas viraram TRÊS COLUNAS lado a lado. A
+       altura do rodapé era a SOMA das faixas; agora é a da coluna mais
+       alta. Nada de informação saiu nas duas vezes. */
 .rodape {
   background: var(--azul-escuro);
   color: #fff;
@@ -10,11 +12,50 @@
 }
 
 .conteudo { text-align: center; }
-.conteudo img { width: 112px; height: auto; margin-bottom: 6px; }
+.conteudo img { width: 112px; height: auto; }
 .conteudo p { margin: 3px 0; font-size: 15px; color: rgba(255, 255, 255, 0.9); }
 
-/* .85 leva a linha a 4.74:1 sobre o azul escuro; com .7 ficava em 3.75:1 */
-.ano { opacity: 0.85; margin-top: 10px !important; font-size: 14px !important; }
+/* ---------------------------------------------------------------------------
+   A FAIXA DAS TRÊS COLUNAS
+   `space-between` e não três colunas fixas: cada bloco some sozinho quando
+   o campo dele está vazio no painel, e os que sobram se reorganizam em vez
+   de deixar buraco. Com uma coluna só, ela fica na esquerda — por isso o
+   alinhamento ao centro de cada uma é feito dentro dela, e não aqui.
+   `align-items: start` para as três começarem na mesma linha de cima,
+   independente de qual é a mais alta.
+--------------------------------------------------------------------------- */
+.faixa {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px 36px;
+  text-align: left;
+}
+
+/* a coluna da marca: logo em cima do e-mail */
+.marca { flex: 0 1 auto; }
+
+/* A LETRA MIÚDA É A COLUNA DA DIREITA, e tem teto de largura: sem ele o
+   flex a deixaria esticar por toda a sobra e a faixa viraria duas colunas
+   com um bloco enorme. Alinhada à direita para encostar na borda, que foi
+   o pedido. */
+.dados {
+  flex: 1 1 260px;
+  max-width: 380px;
+  text-align: right;
+}
+
+/* .85 leva a linha a 4.74:1 sobre o azul escuro; com .7 ficava em 3.75:1.
+   O filete por cima separa o copyright da faixa das três colunas sem
+   custar altura: ele é a borda do próprio parágrafo. */
+.ano {
+  opacity: 0.85;
+  margin-top: 14px !important;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 14px !important;
+}
 
 /* OS CANAIS DE CONTATO DO RODAPÉ.
    Só existem quando o painel de controle tem e-mail ou WhatsApp; vazio, a
@@ -37,8 +78,7 @@
 /* A letra miúda honesta: menor que o resto, mas ainda legível.
    #d8e6ef sobre o azul escuro fica acima de 7:1. */
 .dados {
-  max-width: var(--medida);
-  margin: 10px auto 0 !important;
+  margin: 0 !important;
   font-size: 14px !important;
   line-height: 1.45;
   color: #d8e6ef !important;
@@ -51,7 +91,15 @@
    de apertar — e o número nunca quebra no meio.
 --------------------------------------------------------------------------- */
 .equipe {
-  margin: 12px 0 2px;
+  margin: 0;
+  /* Lado a lado, as duas pessoas fazem esta coluna ter 513px — e é ela
+     que decide se as três cabem na mesma linha (ver as faixas abaixo).
+     `min-width: 0` sozinho NÃO resolve: com flex-wrap o navegador quebra
+     a linha antes de pensar em encolher, então quem precisa mudar é o
+     empilhamento da lista, e não o mínimo da coluna. */
+  flex: 0 1 auto;
+  min-width: 0;
+  text-align: center;
 }
 
 .tituloEquipe {
@@ -104,12 +152,97 @@
   white-space: nowrap;   /* número partido ao meio é ilegível */
 }
 
-/* No celular os dois empilham, e é lá que o rodapé mais pesava: 65% da
-   tela. O espaço entre as duas pessoas é o que mais rende aqui. */
-@media (max-width: 560px) {
+/* ---------------------------------------------------------------------------
+   AS TRÊS FAIXAS DE LARGURA
+   Quem manda na conta é a coluna do meio: com as duas pessoas lado a lado
+   ela tem 513px, e 208 (marca) + 513 + 380 (letra miúda) + 72 de respiro
+   são 1173px. Abaixo disso alguma coisa tem de ceder, e a ordem em que
+   elas cedem é esta — medido, não estimado.
+--------------------------------------------------------------------------- */
+
+/* 1100px: as três colunas continuam, mas as duas pessoas passam a ficar
+   uma embaixo da outra. A coluna do meio cai para ~270px e o total para
+   ~930px, que ainda cabe. Medido em 1024: 278px → ~200px. */
+@media (max-width: 1100px) {
+  .equipe ul { flex-direction: column; gap: 6px; }
+  /* empilhadas, as duas pessoas cabem numa linha cada: nome e número
+     lado a lado em vez de um embaixo do outro */
+  .equipe a { flex-direction: row; align-items: baseline; gap: 8px; }
+  /* a coluna do meio fica mais LARGA assim (~330px), e em 900px as três
+     deixavam de caber por 10px — a letra miúda caía para uma segunda
+     linha e o rodapé subia de 247px para 278px. O respiro entre colunas
+     e a largura da letra miúda cedem esses 10px. */
+  .faixa { gap: 14px 26px; }
+  .dados { flex: 1 1 220px; }
+}
+
+/* 860px: nem assim cabem três colunas (930 > 728 em 768px). Aqui a faixa
+   empilha e tudo recentraliza — e as duas pessoas voltam para o lado a
+   lado, porque agora elas têm a largura inteira para dividir.
+   SEM ESTA FAIXA o rodapé em 768px ia a 373px, PIOR que os 331px de
+   antes de tudo: três colunas que não cabem viram três linhas. */
+@media (max-width: 860px) {
+  .faixa {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+  }
+
+  /* O FILETE SEPARADOR SAI AQUI. Ele existe para fechar a faixa das três
+     colunas; empilhado, ele vira só mais uma linha horizontal no meio de
+     outras e custa 25px (borda + respiro dos dois lados) para não dizer
+     nada. Medido: com ele 330px, sem ele 305px. */
+  .ano {
+    margin-top: 8px !important;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  /* logo e e-mail na mesma linha */
+  .marca {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+  .canais { margin-top: 0 !important; }
+
+  .dados {
+    flex: 0 1 auto;
+    max-width: var(--medida);
+    text-align: center;
+  }
+
+  /* as duas pessoas dividem a largura em vez de empilhar */
+  .equipe ul { flex-direction: row; gap: 4px 24px; }
+  .equipe li { flex: 1 1 160px; }
+  /* A COLUNA DA EQUIPE OCUPA A LARGURA TODA AQUI.
+     Sem isto ela é `flex: 0 1 auto` e encolhe para o conteúdo (511px em
+     768px de tela): cada pessoa fica com 244px, o nome completo quebra
+     em duas linhas e o bloco vai a 102px de altura. Esticada, cada uma
+     fica com ~350px, o nome cabe numa linha só e o bloco cai para 72px.
+     Foi o mesmo ganho que pôr o número ao lado do nome dava, mas sem o
+     desalinhamento: lá o número encostava na PRIMEIRA linha do nome e a
+     segunda ficava solta embaixo. */
+  .equipe { align-self: stretch; }
+  /* desfaz o nome-ao-lado-do-número da faixa de 1100px: ele é para quando
+     as pessoas estão EMPILHADAS numa coluna estreita. Aqui elas estão lado
+     a lado com largura de sobra, e o número volta para debaixo do nome. */
+  .equipe a { flex-direction: column; align-items: center; gap: 1px; }
+}
+
+/* 600px: no celular o número volta para DEBAIXO do nome (ver a medição
+   na faixa acima) e ainda dá para apertar a logo e o corpo das letras.
+   Em 320px os nomes completos não cabem mais lado a lado e a lista
+   empilha sozinha — é o flex-wrap fazendo o trabalho, não uma regra. */
+@media (max-width: 600px) {
   .rodape { padding: 20px 0 18px; }
-  .conteudo img { width: 96px; }
-  .equipe ul { flex-direction: column; gap: 8px; }
-  .nome { font-size: 13px; }
+  .conteudo img { width: 84px; }
+  .equipe ul { gap: 4px 12px; }
+  .equipe li { flex: 1 1 140px; }
+  .equipe a { flex-direction: column; align-items: center; gap: 1px; }
+  .nome { font-size: 12px; line-height: 1.25; }
+  .numero { font-size: 15px; }
   .dados { font-size: 13px !important; }
 }
