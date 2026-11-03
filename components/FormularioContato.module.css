@@ -11,12 +11,17 @@
   padding: 22px;
   margin: 0 auto 26px;
   max-width: 680px;
-  /* Centralizado por decisão da Rafaela (3/11/2026), junto com toda a prosa
-     da página — vale para o título da caixa e os rótulos dos campos.
-     Os CAMPOS em si não acompanham: input e textarea herdam o text-align, e
-     escrever um texto que se centraliza letra a letra é desconfortável.
-     A trava deles está mais abaixo, junto com .campo. */
-  text-align: center;
+  /* ALINHADO À ESQUERDA (Pietro, 3/11/2026, à tarde).
+     A prosa da página inteira foi centralizada de manhã por decisão da
+     Rafaela, e esta caixa veio junto. À tarde o Pietro pediu os textos
+     daqui de volta à esquerda — e a caixa é o caso em que isso tem razão
+     de ser: formulário se lê como uma coluna de rótulo-e-campo, e o
+     rótulo centralizado descola do campo que ele nomeia, que continua à
+     esquerda porque texto que se recentraliza a cada letra é
+     desconfortável de escrever.
+     SE FOR DESFAZER, combine com os dois: são decisões de donos
+     diferentes no mesmo dia. */
+  text-align: left;
 }
 
 .titulo {
@@ -107,8 +112,8 @@ label.rotulo { cursor: pointer; }
 .rodape {
   display: flex;
   align-items: center;
-  /* a linha é flex: text-align não a alcança, quem centraliza é isto */
-  justify-content: center;
+  /* a linha é flex: text-align não a alcança, quem a alinha é isto */
+  justify-content: flex-start;
   gap: 14px;
   flex-wrap: wrap;
   margin-top: 4px;

@@ -66,7 +66,6 @@ const BLOCOS_DE_PROSA = [
   ['pais', '.paineis', 'os dois painéis de acompanhamento'],
   ['pais', '.extras', 'as fichas pequenas dos pais (desligado)'],
   ['ilhas', '.grade', 'as plaquinhas de atividade da ilha (desligado)'],
-  ['formulario', '.caixa', 'a caixa de mensagem do contato'],
 ]
 
 describe('o texto de prosa da página é centralizado', () => {
@@ -158,6 +157,26 @@ describe('o que text-align sozinho não centraliza', () => {
     ).toMatch(/margin-inline:\s*auto|margin:[^;]*\bauto\b/)
   })
 
+  it('a CAIXA DE MENSAGEM é a exceção: alinhada à esquerda', () => {
+    /* A prosa da página inteira é centralizada (decisão da Rafaela, 3/11 de
+       manhã). A caixa de contato veio junto e foi tirada de lá à tarde, a
+       pedido do Pietro.
+       NÃO É CAPRICHO E NEM CONTRADIÇÃO: formulário não se lê como prosa, se
+       lê como uma coluna de rótulo-e-campo. O campo é obrigado a ficar à
+       esquerda (teste abaixo: texto que se recentraliza a cada letra é
+       desconfortável de escrever), e um rótulo centralizado em cima de um
+       campo à esquerda descola do que ele nomeia.
+       SÃO DECISÕES DE DONOS DIFERENTES NO MESMO DIA: antes de mexer, combine
+       com os dois. */
+    const caixa = corpoDaRegra(CSS.formulario, '.caixa')
+    expect(caixa, 'a caixa voltou a ser centralizada').not.toMatch(
+      /text-align:\s*center/,
+    )
+    expect(caixa, 'a caixa precisa dizer text-align: left').toMatch(
+      /text-align:\s*left/,
+    )
+  })
+
   it('os campos do formulário continuam alinhados à esquerda', () => {
     /* input e textarea herdam o text-align da caixa. Escrever num campo que
        centraliza o texto letra a letra é desconfortável; o rótulo centraliza,
@@ -171,20 +190,20 @@ describe('o que text-align sozinho não centraliza', () => {
     )
   })
 
-  it('o botão de enviar fica no meio da caixa de mensagem', () => {
-    /* Pego na tela, não pelos testes: a linha do botão é `display: flex`
-       (text-align não a alcança) E o parágrafo de desfecho, do lado, tem
-       flex-basis. Vazio — que é o estado normal, antes de enviar — ele
-       continua ocupando o espaço e empurra o botão para a esquerda, com o
-       resto da caixa centralizado. Precisa das duas coisas: centralizar a
-       linha e o desfecho não esticar quando não há mensagem nenhuma. */
+  it('o botão de enviar acompanha os textos, à esquerda', () => {
+    /* A linha do botão é `display: flex`: text-align não a alcança, quem a
+       alinha é o justify-content. Ela acompanha a caixa — com os rótulos à
+       esquerda e o botão no meio, a caixa ficaria com dois alinhamentos.
+       A trava do .desfecho continua valendo e é de OUTRO assunto: com
+       flex-basis, o parágrafo vazio (o estado normal, antes de enviar)
+       reserva a faixa dele e empurra o botão para longe da borda. */
     const rodape = corpoDaRegra(CSS.formulario, '.rodape')
     expect(rodape, 'a linha do botão é flex e precisa de justify-content').toMatch(
-      /justify-content:\s*center/,
+      /justify-content:\s*flex-start/,
     )
     expect(
       corpoDaRegra(CSS.formulario, '.desfecho'),
-      'com flex-basis o desfecho vazio empurra o botão para a esquerda',
+      'com flex-basis o desfecho vazio empurra o botão para o lado',
     ).not.toMatch(/flex:\s*1\s+1\s+\d/)
   })
 
