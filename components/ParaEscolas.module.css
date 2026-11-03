@@ -125,6 +125,18 @@
   text-align: center;
 }
 
+/* UMA PORTA SÓ — virou o caso em 3/11, com a venda só para escolas.
+   Sem isto a placa iria para a coluna da esquerda e deixaria metade da
+   linha vazia. Vira coluna única, limitada à largura de uma placa e
+   centralizada: solta, ela esticaria pela seção inteira e a lista de
+   itens ficaria com linhas longas demais para ler.
+   Só o que é PRÓPRIO deste caso mora aqui; o resto continua no .portas
+   acima, que esta regra apenas complementa. */
+.umaPorta {
+  grid-template-columns: minmax(0, 520px);
+  justify-content: center;
+}
+
 .porta {
   position: relative;
   padding: 22px 24px 24px;

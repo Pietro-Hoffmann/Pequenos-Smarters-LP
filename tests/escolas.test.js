@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import ParaEscolas from '@/components/ParaEscolas'
+import { site } from '@/content/site'
 
 const dados = {
   titulo: 'Para escolas e redes de ensino',
@@ -119,5 +120,44 @@ describe('ParaEscolas', () => {
     expect(
       screen.getByText('Roda nos celulares e tablets Android que a escola já tem')
     ).toBeInTheDocument()
+  })
+})
+
+// ---------------------------------------------------------------------------
+// O MODELO DE NEGÓCIO: SÓ ESCOLAS (3/11)
+// O Plano de Negócios de 2/11 diz "vendido APENAS para escolas públicas e
+// particulares". A porta "Famílias" (assinatura mensal), que vinha do
+// pitch de outubro, saiu — e com ela a menção a assinatura no herói.
+// ---------------------------------------------------------------------------
+describe('o modelo de negócio', () => {
+  it('tem UMA porta: a licença para escolas', () => {
+    expect(site.paraEscolas.modelo.portas).toHaveLength(1)
+    expect(site.paraEscolas.modelo.portas[0].plano).toMatch(/aluno/i)
+  })
+
+  it('mostra o preço de verdade, não "sob consulta"', () => {
+    const porta = site.paraEscolas.modelo.portas[0]
+    expect(porta.preco, 'o preço voltou a ficar em branco').toBeTruthy()
+    expect(porta.preco).toMatch(/R\$/)
+  })
+
+  it('diz o valor MENSAL junto: é ele que mostra que cabe no orçamento', () => {
+    const porta = site.paraEscolas.modelo.portas[0]
+    expect(porta.itens.join(' ')).toMatch(/m[êe]s/i)
+  })
+
+  it('oferece o teste gratuito, que é o que tira o risco de quem decide', () => {
+    expect(site.paraEscolas.modelo.parcerias).toMatch(/30 dias/i)
+  })
+
+  it('A PÁGINA INTEIRA não promete mais assinatura para a família', () => {
+    // esta é a guarda que importa: a contradição apareceria em qualquer
+    // canto do painel, não só na seção das escolas. Já aconteceu de um
+    // texto velho sobreviver num lugar que ninguém lembrava de olhar.
+    const tudo = JSON.stringify(site)
+    expect(tudo, 'sobrou promessa de assinatura em algum texto').not.toMatch(
+      /assinatura (mensal|para a fam|da fam)/i
+    )
+    expect(tudo, 'sobrou "a família pode assinar"').not.toMatch(/fam[íi]lia pode assinar/i)
   })
 })

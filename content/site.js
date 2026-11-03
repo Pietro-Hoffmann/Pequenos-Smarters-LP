@@ -174,11 +174,12 @@ export const site = {
     // mesma coisa duas vezes — o que empurrava os botões para fora da tela
     // num notebook comum. Este aqui precisa carregar quatro informações e
     // nada mais: o que é, para que idade, que a DEMO é grátis e como se
-    // chega ao jogo COMPLETO (licença para escolas ou assinatura da família,
-    // as duas portas do pitch). Se for reescrever, não deixe parecer que o
-    // jogo inteiro é gratuito — não é.
+    // chega ao jogo COMPLETO (licença para escolas, por aluno — desde
+    // 3/11 é a única porta; a assinatura para família saiu com o plano de
+    // negócios novo). Se for reescrever, não deixe parecer que o jogo
+    // inteiro é gratuito — não é.
     subtitulo:
-      'Um jogo de alfabetização para crianças de 6 a 8 anos. A demonstração com as três primeiras ilhas é gratuita; o jogo completo vem por licença para escolas ou por assinatura para a família.',
+      'Um jogo de alfabetização para crianças de 6 a 8 anos. A demonstração com as três primeiras ilhas é gratuita; o jogo completo é licenciado para escolas, por aluno.',
     // Etiqueta pequena acima da logo. Vazia = não aparece nada.
     // Se um dia quiser de volta, escreva aqui dentro das aspas.
     selo: '',
@@ -556,61 +557,49 @@ export const site = {
       'Roda nos celulares e tablets Android que a escola já tem: instala o aplicativo e usa a internet da escola, sem servidor local, sem laboratório e sem equipamento novo',
       'Alfabetização de 6 a 8 anos em nove atividades, da Ilha da Natureza até a do Gelo: caçar as vogais, identificar as consoantes, descobrir com qual letra a palavra começa e mais',
     ],
-    // COMO SE PAGA — o modelo de receita do pitch (Rafa, 21/10/2026):
-    // duas portas de entrada. Os valores do pitch estavam em branco; por
-    // isso cada porta tem `preco` vazio e uma linha `precoVazio` que
-    // aparece no lugar. PREENCHEU O PREÇO, ELE APARECE SOZINHO.
-    // Exemplo: preco: 'R$ 00,00 por aluno/ano'  ·  preco: 'R$ 00,00/mês'.
-    // Apague o bloco `modelo` inteiro (ou deixe `portas: []`) e a seção
-    // volta a não falar de dinheiro.
+    // COMO SE PAGA — do Plano de Negócios de 2/11/2026.
+    // MUDOU EM 3/11: o plano passou a dizer "vendido APENAS para escolas
+    // públicas e particulares". A porta "Famílias" (assinatura mensal),
+    // que vinha do pitch de outubro, SAIU — e com ela a menção a
+    // assinatura no herói, que virou contradição.
+    // Para voltar a ter duas portas, basta acrescentar outro objeto em
+    // `portas`; o bloco se reorganiza sozinho.
     modelo: {
       sobrancelha: 'Modelo de negócio',
       titulo: 'Como funciona o licenciamento',
       texto:
-        'Duas portas de entrada: a escola licencia por aluno, e a família pode assinar por conta própria.',
-      // OS NÚMEROS DO MERCADO (páginas 2 e 4 do pitch) — DESLIGADOS pelo
-      // Pietro em 21/10 ("meio inúteis aqui"). Lista vazia = a faixa some.
-      // Para trazer de volta, preencha assim (e a `fonte` logo abaixo):
-      //   { valor: '8,7 mi', rotulo: 'crianças de 6 a 8 anos, do 1º ao 3º ano' },
-      //   { valor: '103 mil', rotulo: 'escolas com anos iniciais — 68% delas municipais' },
-      //   { valor: '40,8%', rotulo: 'das crianças da rede pública terminaram o 2º ano sem estar alfabetizadas' },
+        'A escola licencia por aluno do 1º ao 3º ano e recebe o jogo instalado nos aparelhos que já tem, com formação para as professoras e acompanhamento durante o ano.',
+      // OS NÚMEROS DO MERCADO continuam DESLIGADOS — decisão do Pietro em
+      // 21/10, mantida em 3/11 mesmo com os dados novos do plano (34% das
+      // crianças sem alfabetizar em 2025, 52% no RS, meta de 80% até 2030
+      // pela Lei 15.247/2025). Lista vazia = a faixa some.
       numeros: [],
       fonte: '',
       portas: [
         {
-          etiqueta: 'Foco principal',
-          // destaque: true = a placa ganha a moldura dourada e fica maior.
+          etiqueta: 'Para escolas e redes',
           destaque: true,
-          // o mascote que espia no canto da placa ('' = nenhum)
           mascote: '/images/lina.png',
-          nome: 'Escolas e prefeituras',
-          plano: 'Licença anual por aluno',
-          preco: '',
+          nome: 'Licença anual',
+          plano: 'Por aluno do 1º ao 3º ano',
+          // O MENSAL VEM JUNTO DE PROPÓSITO: é o número que faz uma
+          // secretaria ver que cabe no orçamento.
+          preco: 'R$ 30 por aluno, por ano',
           precoVazio: 'Valor sob consulta',
           itens: [
-            'Login por turma e Painel do Professor',
-            'Relatório de alfabetização da turma',
-            'Todas as ilhas e atividades para cada aluno',
-          ],
-        },
-        {
-          etiqueta: 'Porta de entrada',
-          destaque: false,
-          mascote: '/images/pipo.png',
-          nome: 'Famílias',
-          plano: 'Assinatura mensal',
-          preco: '',
-          precoVazio: 'Valor em breve',
-          itens: [
-            'Ilha da Natureza grátis para experimentar',
-            'A assinatura libera todas as ilhas',
-            'Painel dos Pais completo',
+            'R$ 2,50 por aluno ao mês',
+            'Instalação nos tablets e celulares Android que a escola já tem',
+            'Cadastro das turmas e dos alunos junto com as professoras',
+            'Formação de cerca de 1 hora com as professoras',
+            'Painel com as estrelas, as fases e os acertos de cada aluno',
+            'Suporte por WhatsApp e e-mail durante o ano',
           ],
         },
       ],
-      // Linha de fecho. Vazia ('') = some.
+      // O TESTE GRATUITO É O QUE TIRA O RISCO DE QUEM DECIDE, e é o
+      // primeiro passo da venda no plano de negócios. Vazia ('') = some.
       parcerias:
-        'Além das licenças: parcerias com instituições de ensino e editais de educação (ODS 4 e 17).',
+        'Antes de assinar, a escola testa 30 dias de graça — com os alunos, nos aparelhos dela.',
     },
     cta: 'Falar sobre licenciamento',
     // O QUE APARECE NO LUGAR DO BOTÃO ENQUANTO NÃO HÁ CONTATO NENHUM.

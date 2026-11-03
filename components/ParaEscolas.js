@@ -64,7 +64,16 @@ export default function ParaEscolas({ dados, temContato = false }) {
               </ul>
             )}
 
-            <ul className={estilos.portas} data-revelar-grupo>
+            {/* Quando sobra UMA porta — virou o caso em 3/11, com a venda
+                só para escolas — a grade de duas colunas deixaria a placa
+                encostada à esquerda, com um buraco do lado. A classe
+                avisa o CSS para centralizar e segurar a largura. */}
+            <ul
+              className={`${estilos.portas} ${
+                dados.modelo.portas.length === 1 ? estilos.umaPorta : ''
+              }`}
+              data-revelar-grupo
+            >
               {dados.modelo.portas.map((porta) => (
                 <li
                   key={porta.nome}
