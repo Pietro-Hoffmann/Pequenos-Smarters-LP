@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react'
 import BaixarDemo from '@/components/BaixarDemo'
 
 const dados = {
-  titulo: 'Baixe a demo gratuita',
+  titulo: 'Baixe a demonstração gratuita',
   itens: [
     'Ilha da Natureza completa',
     '3 atividades',
@@ -13,7 +13,7 @@ const dados = {
   ],
   rodape: 'Gostou? Dentro do jogo tem um botão para solicitar a licença completa.',
   emBreve: 'Em breve',
-  textoBotao: 'Baixar a demo',
+  textoBotao: 'Baixar a demonstração',
   dados:
     'Para jogar é preciso criar uma conta: o responsável informa os dados dele e o nome e a idade da criança.',
 }
@@ -29,7 +29,7 @@ describe('BaixarDemo', () => {
 
   it('com link, vira âncora para o APK', () => {
     const { container } = render(<BaixarDemo dados={dados} url="https://expo.dev/artifacts/abc.apk" />)
-    const link = screen.getByRole('link', { name: 'Baixar a demo' })
+    const link = screen.getByRole('link', { name: 'Baixar a demonstração' })
     expect(link).toHaveAttribute('href', 'https://expo.dev/artifacts/abc.apk')
     expect(screen.queryByText('Em breve')).toBeNull()
     // O QR CODE SAIU em 3/11, a pedido do dono, e a dependência que o

@@ -41,7 +41,7 @@ const dados = {
     { href: '#jogo', texto: 'O jogo' },
   ],
   contato: 'Contato',
-  botao: 'Baixar a demo',
+  botao: 'Baixar a demonstração',
 }
 
 describe('a camada de efeito das ilhas', () => {

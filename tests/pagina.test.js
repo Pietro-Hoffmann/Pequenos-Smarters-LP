@@ -36,13 +36,13 @@ vi.mock('@/content/site', () => ({
         { href: '#escolas', texto: 'Para escolas' },
       ],
       contato: 'Contato',
-      botao: 'Baixar a demo',
+      botao: 'Baixar a demonstração',
     },
     hero: {
       titulo: 'Seu filho aprende a ler brincando',
       subtitulo: 'Um jogo de alfabetização.',
       selo: 'Projeto de TCC · 2026',
-      botaoPrincipal: 'Baixar a demo',
+      botaoPrincipal: 'Baixar a demonstração',
       botaoSecundario: 'Ver o gameplay',
     },
     beneficiosTitulo: 'Por que o Pequenos Smarters',
@@ -61,7 +61,7 @@ vi.mock('@/content/site', () => ({
       rotuloProxima: 'Ver a próxima ilha',
       rotuloMiniaturas: 'As seis ilhas do jogo',
       rodape: 'Cada atividade vale até 3 estrelas.',
-      futura: { texto: 'Esta ilha ainda está sendo construída.', botao: 'Baixar a demo' },
+      futura: { texto: 'Esta ilha ainda está sendo construída.', botao: 'Baixar a demonstração' },
       lista: [
         {
           nome: 'Natureza',
@@ -99,11 +99,11 @@ vi.mock('@/content/site', () => ({
       ctaEmBreve: 'Canal para escolas em breve',
     },
     baixar: {
-      titulo: 'Baixe a demo gratuita',
+      titulo: 'Baixe a demonstração gratuita',
       itens: ['Ilha da Natureza completa'],
       rodape: 'Gostou?',
       emBreve: 'Em breve',
-      textoBotao: 'Baixar a demo (Android)',
+      textoBotao: 'Baixar a demonstração (Android)',
       plataforma: 'A demo é um aplicativo Android (APK). No iPhone não é possível instalar.',
       qrLegenda: 'Aponte a câmera para baixar',
     },
@@ -119,7 +119,7 @@ const { default: Pagina } = await import('@/app/page')
 describe('página completa, com o painel de controle preenchido', () => {
   it('o link do APK chega no botão de download, ativo e com o href certo', () => {
     render(<Pagina />)
-    const botao = screen.getByRole('link', { name: 'Baixar a demo (Android)' })
+    const botao = screen.getByRole('link', { name: 'Baixar a demonstração (Android)' })
     expect(botao).toHaveAttribute('href', APK)
     // nada de botão desativado quando o link existe
     expect(screen.queryByRole('button', { name: 'Em breve' })).toBeNull()
@@ -207,7 +207,7 @@ describe('página completa, com o painel de controle preenchido', () => {
 
     expect(fortes.map((t) => t.tagName)).toEqual(['H1', 'H2'])
     expect(fortes[0].textContent).toBe('Seu filho aprende a ler brincando')
-    expect(fortes[1].textContent).toBe('Baixe a demo gratuita')
+    expect(fortes[1].textContent).toBe('Baixe a demonstração gratuita')
     // e o da abertura é mesmo o H1 do herói
     expect(container.querySelector('#topo h1')).toBe(fortes[0])
     // ...enquanto o do clímax mora no bloco de download

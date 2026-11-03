@@ -33,10 +33,10 @@ export const metadata = {
   ),
   title: 'Pequenos Smarters — jogo de alfabetização para crianças de 6 a 8 anos',
   description:
-    'Baixe a demo gratuita e jogue a Ilha da Natureza inteira. O jogo completo é licenciado para escolas e redes de ensino.',
+    'Baixe a demonstração gratuita e jogue três ilhas inteiras, da Natureza ao Gelo. O jogo completo é licenciado para escolas e redes de ensino.',
   openGraph: {
     title: 'Pequenos Smarters',
-    description: 'Seu filho aprende a ler brincando. Demo gratuita disponível.',
+    description: 'Seu filho aprende a ler brincando. Demonstração gratuita disponível.',
     images: ['/images/logo_com_personagem.png'],
     type: 'website',
   },

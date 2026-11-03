@@ -158,7 +158,7 @@ export const site = {
     ],
     // Este link só aparece quando há e-mail ou WhatsApp preenchido acima.
     contato: 'Contato',
-    botao: 'Baixar a demo',
+    botao: 'Baixar a demonstração',
     // O botão verde do cabeçalho. Ele só aparece se o WhatsApp estiver
     // preenchido lá embaixo em `contato` — apagou o número, some o botão.
     botaoContato: 'Falar no WhatsApp',
@@ -178,11 +178,11 @@ export const site = {
     // as duas portas do pitch). Se for reescrever, não deixe parecer que o
     // jogo inteiro é gratuito — não é.
     subtitulo:
-      'Um jogo de alfabetização para crianças de 6 a 8 anos. A demo com as três primeiras ilhas é gratuita; o jogo completo vem por licença para escolas ou por assinatura para a família.',
+      'Um jogo de alfabetização para crianças de 6 a 8 anos. A demonstração com as três primeiras ilhas é gratuita; o jogo completo vem por licença para escolas ou por assinatura para a família.',
     // Etiqueta pequena acima da logo. Vazia = não aparece nada.
     // Se um dia quiser de volta, escreva aqui dentro das aspas.
     selo: '',
-    botaoPrincipal: 'Baixar a demo',
+    botaoPrincipal: 'Baixar a demonstração',
     botaoSecundario: 'Ver o gameplay',
   },
 
@@ -261,7 +261,7 @@ export const site = {
       // É o mesmo convite do resto da página, e leva para o mesmo lugar: o
       // bloco de download. Enquanto o link do APK não existir, lá está o
       // "Em breve" desativado — que é o estado honesto, não um defeito.
-      botao: 'Baixar a demo',
+      botao: 'Baixar a demonstração',
     },
     rotuloDisponivel: 'Disponível',
     rotuloEmBreve: 'Em breve',
@@ -624,7 +624,7 @@ export const site = {
 
   baixar: {
     sobrancelha: 'Grátis',
-    titulo: 'Baixe a demo gratuita',
+    titulo: 'Baixe a demonstração gratuita',
     // AS PLAQUINHAS DO CARD.
     // As três primeiras dizem o que vem na demo; as duas últimas respondem a
     // pergunta que trava o pai na hora de instalar um APK à mão (o Android
@@ -650,10 +650,10 @@ export const site = {
     rodape: 'Quer o jogo completo na sua escola ou em casa?',
     rodapeLink: 'Fale com a gente',
     emBreve: 'Em breve',
-    textoBotao: 'Baixar a demo (Android)',
+    textoBotao: 'Baixar a demonstração (Android)',
     // Aviso de plataforma: a demo é um APK e não instala em iPhone.
     // Aparece sempre, com ou sem o link preenchido.
-    plataforma: 'A demo é um aplicativo Android (APK). No iPhone não é possível instalar.',
+    plataforma: 'A demonstração é um aplicativo Android (APK). No iPhone não é possível instalar.',
     // A LINHA DOS DADOS, em português de pai, não de advogado: o jogo pede
     // cadastro, guarda o progresso em servidor e precisa de internet.
     // ESVAZIADA EM 3/11 a pedido do dono — o card estava com texto demais

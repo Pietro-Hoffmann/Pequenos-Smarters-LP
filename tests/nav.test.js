@@ -17,7 +17,7 @@ const dados = {
     { href: '#escolas', texto: 'Para escolas' },
   ],
   contato: 'Contato',
-  botao: 'Baixar a demo',
+  botao: 'Baixar a demonstração',
   botaoContato: 'Falar no WhatsApp',
   botaoContatoCurto: 'WhatsApp',
 }
@@ -50,7 +50,7 @@ describe('Nav', () => {
 
   it('o botão do topo vem do painel de controle e aponta para o download', () => {
     render(<Nav dados={dados} temContato={false} />)
-    expect(screen.getByRole('link', { name: 'Baixar a demo' })).toHaveAttribute('href', '#baixar')
+    expect(screen.getByRole('link', { name: 'Baixar a demonstração' })).toHaveAttribute('href', '#baixar')
   })
 })
 
@@ -93,12 +93,12 @@ describe('o botão de WhatsApp do cabeçalho', () => {
 
   it('sem o bloco de contato, o cabeçalho não quebra', () => {
     render(<Nav dados={dados} />)
-    expect(screen.getByRole('link', { name: 'Baixar a demo' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Baixar a demonstração' })).toBeInTheDocument()
   })
 
   it('o botão de baixar continua sendo a ação principal', () => {
     render(<Nav dados={dados} contato={contato} temContato />)
-    expect(screen.getByRole('link', { name: 'Baixar a demo' }).className).toMatch(/botaoPrincipal/)
+    expect(screen.getByRole('link', { name: 'Baixar a demonstração' }).className).toMatch(/botaoPrincipal/)
     expect(botao().className).not.toMatch(/botaoPrincipal/)
   })
 })

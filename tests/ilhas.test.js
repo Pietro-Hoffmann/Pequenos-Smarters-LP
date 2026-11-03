@@ -16,7 +16,7 @@ const dados = {
   rodape: 'Cada atividade vale até 3 estrelas.',
   futura: {
     texto: 'Esta ilha ainda está sendo construída.',
-    botao: 'Baixar a demo',
+    botao: 'Baixar a demonstração',
   },
   lista: [
     {
@@ -266,7 +266,7 @@ describe('Ilhas (carrossel)', () => {
     expect(faixa).toBeInTheDocument()
     expect(faixa.textContent).toContain('Esta ilha ainda está sendo construída.')
     // o convite é o mesmo do resto da página e leva para o download
-    expect(screen.getByRole('link', { name: 'Baixar a demo' })).toHaveAttribute('href', '#baixar')
+    expect(screen.getByRole('link', { name: 'Baixar a demonstração' })).toHaveAttribute('href', '#baixar')
   })
 
   it('na ilha pronta aparecem as plaquinhas, e não a faixa das ilhas futuras', () => {

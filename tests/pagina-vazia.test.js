@@ -36,13 +36,13 @@ vi.mock('@/content/site', () => ({
         { href: '#escolas', texto: 'Para escolas' },
       ],
       contato: 'Contato',
-      botao: 'Baixar a demo',
+      botao: 'Baixar a demonstração',
     },
     hero: {
       titulo: 'Seu filho aprende a ler brincando',
       subtitulo: 'Um jogo de alfabetização para crianças de 6 a 8 anos.',
       selo: '',
-      botaoPrincipal: 'Baixar a demo',
+      botaoPrincipal: 'Baixar a demonstração',
       botaoSecundario: 'Ver o gameplay',
     },
     beneficiosTitulo: 'Por que o Pequenos Smarters',
@@ -58,7 +58,7 @@ vi.mock('@/content/site', () => ({
       rotuloProxima: 'Ver a próxima ilha',
       rotuloMiniaturas: 'As seis ilhas do jogo',
       rodape: 'Cada atividade vale até 3 estrelas.',
-      futura: { texto: 'Esta ilha ainda está sendo construída.', botao: 'Baixar a demo' },
+      futura: { texto: 'Esta ilha ainda está sendo construída.', botao: 'Baixar a demonstração' },
       lista: [
         {
           nome: 'Natureza',
@@ -87,11 +87,11 @@ vi.mock('@/content/site', () => ({
       ctaEmBreve: 'Canal para escolas em breve',
     },
     baixar: {
-      titulo: 'Baixe a demo gratuita',
+      titulo: 'Baixe a demonstração gratuita',
       itens: ['Ilha da Natureza completa', 'Sem anúncios', 'Sem compras dentro do app'],
       rodape: 'Gostou?',
       emBreve: 'Em breve',
-      textoBotao: 'Baixar a demo (Android)',
+      textoBotao: 'Baixar a demonstração (Android)',
       plataforma: 'A demo é um aplicativo Android (APK). No iPhone não é possível instalar.',
       dados: 'Para jogar é preciso criar uma conta: o responsável informa os dados dele e o nome e a idade da criança.',
       qrLegenda: 'Aponte a câmera para baixar',
