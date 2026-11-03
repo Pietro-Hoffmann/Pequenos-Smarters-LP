@@ -3,7 +3,7 @@ import estilos from './BaixarDemo.module.css'
 
 // O download não é mais uma faixa amarela de ponta a ponta: virou uma placa
 // amarela grande, pregada no céu.
-export default function BaixarDemo({ dados, url }) {
+export default function BaixarDemo({ dados, url, temContato = false }) {
   return (
     <section className={`secao ${estilos.secao}`} id="baixar">
       <div className="container">
@@ -42,7 +42,22 @@ export default function BaixarDemo({ dados, url }) {
             )}
           </div>
 
-          <p className={estilos.rodape}>{dados.rodape}</p>
+          {/* O CONVITE PARA FALAR SOBRE O JOGO COMPLETO.
+              Até 3/11 esta linha dizia "dentro do jogo tem um botão para
+              solicitar a licença completa" — e esse botão não existe mais.
+              Era uma afirmação falsa mandando a escola procurar o que não
+              há. Agora ela leva para a seção de contato.
+              Sem canal de contato preenchido no painel, fica só o texto:
+              link para uma seção que não existe seria outro beco. */}
+          <p className={estilos.rodape}>
+            {dados.rodape}
+            {temContato && dados.rodapeLink && (
+              <>
+                {' '}
+                <a href="#contato">{dados.rodapeLink}</a>
+              </>
+            )}
+          </p>
         </div>
       </div>
     </section>

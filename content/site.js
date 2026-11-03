@@ -634,18 +634,28 @@ export const site = {
       'Painel dos Pais',
       'Sem anúncios',
     ],
-    rodape: 'Gostou? Dentro do jogo tem um botão para solicitar a licença completa.',
+    // O CONVITE DO FIM DO CARD.
+    // Até 3/11 dizia "Dentro do jogo tem um botão para solicitar a licença
+    // completa". Esse botão NÃO EXISTE MAIS, e a frase mandava a escola
+    // procurar o que não há. Agora o convite leva para o "Fale com a
+    // gente". O `rodapeLink` só vira link se houver contato preenchido lá
+    // em cima; sem isso, fica só a pergunta.
+    rodape: 'Quer o jogo completo na sua escola ou em casa?',
+    rodapeLink: 'Fale com a gente',
     emBreve: 'Em breve',
     textoBotao: 'Baixar a demo (Android)',
     // Aviso de plataforma: a demo é um APK e não instala em iPhone.
     // Aparece sempre, com ou sem o link preenchido.
     plataforma: 'A demo é um aplicativo Android (APK). No iPhone não é possível instalar.',
-    // A LINHA DOS DADOS, em português de pai, não de advogado. Ela está no
-    // card porque é ali que a pessoa decide instalar. Mantenha honesta: o
-    // jogo pede cadastro, guarda o progresso em servidor e precisa de
-    // internet. Vazia ('') = a linha some.
-    dados:
-      'Para jogar é preciso criar uma conta: o responsável informa os dados dele e o nome e a idade da criança. O progresso fica guardado no servidor do jogo, por isso o tablet precisa estar na internet.',
+    // A LINHA DOS DADOS, em português de pai, não de advogado: o jogo pede
+    // cadastro, guarda o progresso em servidor e precisa de internet.
+    // ESVAZIADA EM 3/11 a pedido do dono — o card estava com texto demais
+    // antes do botão. A informação NÃO se perdeu: ela continua no rodapé
+    // da página, em versão curta (ver `rodape.dados` mais abaixo), e a
+    // versão longa, para a avaliação de LGPD da rede, está na seção das
+    // escolas. Escrever um texto aqui dentro das aspas traz a linha de
+    // volta para o card.
+    dados: '',
   },
 
   // O RODAPÉ.

@@ -72,3 +72,43 @@ describe('BaixarDemo', () => {
     expect(container.textContent).not.toContain('responsável informa')
   })
 })
+
+// ---------------------------------------------------------------------------
+// O FIM DO CARD DE DOWNLOAD (3/11)
+// Duas mudanças pedidas pelo dono, e a segunda corrigia uma AFIRMAÇÃO FALSA:
+// a página dizia "dentro do jogo tem um botão para solicitar a licença
+// completa", e esse botão não existe mais. Quem quer o jogo completo
+// precisa falar com a equipe, e a página tem de dizer isso e levar lá.
+// ---------------------------------------------------------------------------
+describe('o convite para falar sobre o jogo completo', () => {
+  const comConvite = {
+    ...dados,
+    dados: '',
+    rodape: 'Quer o jogo completo na sua escola ou em casa?',
+    rodapeLink: 'Fale com a gente',
+  }
+
+  it('leva para a seção de contato, em vez de mandar procurar dentro do jogo', () => {
+    render(<BaixarDemo dados={comConvite} url="" temContato />)
+    const link = screen.getByRole('link', { name: 'Fale com a gente' })
+    expect(link).toHaveAttribute('href', '#contato')
+  })
+
+  it('NÃO promete mais um botão de licença dentro do jogo', () => {
+    // ele não existe: dizer que existe manda a escola procurar o que não há
+    const { container } = render(<BaixarDemo dados={comConvite} url="" temContato />)
+    expect(container.textContent).not.toMatch(/dentro do jogo/i)
+  })
+
+  it('sem canal de contato, o convite vira texto sem link morto', () => {
+    render(<BaixarDemo dados={comConvite} url="" temContato={false} />)
+    expect(screen.queryByRole('link', { name: 'Fale com a gente' })).toBeNull()
+    expect(screen.getByText(/Quer o jogo completo/)).toBeInTheDocument()
+  })
+
+  it('o parágrafo de cadastro e internet pode sair pelo painel', () => {
+    // a mesma informação continua no rodapé da página, em versão curta
+    const { container } = render(<BaixarDemo dados={comConvite} url="" temContato />)
+    expect(container.textContent).not.toMatch(/precisa estar na internet/i)
+  })
+})

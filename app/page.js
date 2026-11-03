@@ -40,7 +40,7 @@ export default function Pagina() {
         <Personagens dados={site.personagens} />
         <ParaOsPais dados={site.paraOsPais} />
         <ParaEscolas dados={site.paraEscolas} temContato={comContato} />
-        <BaixarDemo dados={site.baixar} url={site.demo.url} />
+        <BaixarDemo dados={site.baixar} url={site.demo.url} temContato={comContato} />
         <Contato contato={site.contato} />
       </main>
       {/* O rodapé recebe o contato para montar o canal com o MESMO
