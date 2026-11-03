@@ -1,16 +1,20 @@
+/* COMPACTADO EM 3/11, a pedido do dono. Medido antes: o rodapé tomava
+   48% da tela no computador e 65% no celular — dois terços do que a
+   pessoa via ao chegar no fim. Nada de informação saiu; o que encolheu
+   foi espaço em branco, a logo e o corpo das letras. */
 .rodape {
   background: var(--azul-escuro);
   color: #fff;
-  padding: 40px 0;
+  padding: 26px 0 22px;
   border-top: 4px solid var(--contorno);
 }
 
 .conteudo { text-align: center; }
-.conteudo img { width: 160px; height: auto; margin-bottom: 12px; }
-.conteudo p { margin: 4px 0; font-size: 16px; color: rgba(255, 255, 255, 0.9); }
+.conteudo img { width: 112px; height: auto; margin-bottom: 6px; }
+.conteudo p { margin: 3px 0; font-size: 15px; color: rgba(255, 255, 255, 0.9); }
 
 /* .85 leva a linha a 4.74:1 sobre o azul escuro; com .7 ficava em 3.75:1 */
-.ano { opacity: 0.85; margin-top: 12px !important; }
+.ano { opacity: 0.85; margin-top: 10px !important; font-size: 14px !important; }
 
 /* OS CANAIS DE CONTATO DO RODAPÉ.
    Só existem quando o painel de controle tem e-mail ou WhatsApp; vazio, a
@@ -21,7 +25,7 @@
   gap: 20px;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 10px !important;
+  margin-top: 6px !important;
 }
 
 .canais a {
@@ -34,9 +38,9 @@
    #d8e6ef sobre o azul escuro fica acima de 7:1. */
 .dados {
   max-width: var(--medida);
-  margin: 12px auto 0 !important;
-  font-size: 15px !important;
-  line-height: 1.5;
+  margin: 10px auto 0 !important;
+  font-size: 14px !important;
+  line-height: 1.45;
   color: #d8e6ef !important;
 }
 
@@ -47,12 +51,12 @@
    de apertar — e o número nunca quebra no meio.
 --------------------------------------------------------------------------- */
 .equipe {
-  margin: 18px 0 4px;
+  margin: 12px 0 2px;
 }
 
 .tituloEquipe {
-  margin: 0 0 10px;
-  font-size: 15px;
+  margin: 0 0 6px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -63,7 +67,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px 28px;
+  gap: 6px 26px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -72,10 +76,10 @@
 .equipe a {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
   text-decoration: none;
   color: inherit;
-  padding: 6px 4px;          /* área de toque confortável no dedo */
+  padding: 5px 4px;          /* área de toque confortável no dedo */
 }
 
 .equipe a:hover .numero,
@@ -90,17 +94,22 @@
 }
 
 .nome {
-  font-size: 15px;
+  font-size: 14px;
   opacity: 0.8;
 }
 
 .numero {
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 700;
   white-space: nowrap;   /* número partido ao meio é ilegível */
 }
 
+/* No celular os dois empilham, e é lá que o rodapé mais pesava: 65% da
+   tela. O espaço entre as duas pessoas é o que mais rende aqui. */
 @media (max-width: 560px) {
-  .equipe ul { flex-direction: column; gap: 14px; }
-  .nome { font-size: 14px; }
+  .rodape { padding: 20px 0 18px; }
+  .conteudo img { width: 96px; }
+  .equipe ul { flex-direction: column; gap: 8px; }
+  .nome { font-size: 13px; }
+  .dados { font-size: 13px !important; }
 }

@@ -6,6 +6,10 @@ import estilos from './Contato.module.css'
 export default function Contato({ contato }) {
   const email = montarMailto(contato?.email, contato?.assunto ?? '')
   const whatsapp = montarWhatsapp(contato?.whatsapp, contato?.mensagem ?? '')
+  // Os cartões podem ser desligados no painel sem apagar os canais: o
+  // e-mail continua valendo para o rodapé e para o assunto da mensagem,
+  // e é ele que mantém esta seção existindo.
+  const mostrarCartoes = contato?.mostrarCartoes !== false
 
   if (!email && !whatsapp) return null
 
@@ -24,6 +28,7 @@ export default function Contato({ contato }) {
           <FormularioContato dados={contato.formulario} assunto={contato.assunto} />
         </div>
 
+        {mostrarCartoes && (
         <div className={estilos.grade} data-revelar-grupo>
           {email && (
             <a className={`cartao ${estilos.cartao}`} href={email} data-revelar>
@@ -41,6 +46,7 @@ export default function Contato({ contato }) {
             </a>
           )}
         </div>
+        )}
       </div>
     </section>
   )

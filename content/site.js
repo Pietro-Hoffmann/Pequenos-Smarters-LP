@@ -67,6 +67,13 @@ export const site = {
     tituloWhatsapp: 'Chamar no WhatsApp',
     detalheWhatsapp: 'Resposta em horário comercial',
 
+    // OS CARTÕES DE CANAL (e-mail e WhatsApp) ESTÃO DESLIGADOS desde 3/11.
+    // Com a caixa de mensagem logo acima, o cartão de e-mail virava um
+    // segundo caminho para a mesma coisa — e o endereço ainda aparecia de
+    // novo no rodapé, três vezes na mesma rolagem.
+    // true = os cartões voltam, para os canais que estiverem preenchidos.
+    mostrarCartoes: false,
+
     // -----------------------------------------------------------------
     // A CAIXA DE MENSAGEM
     // Enquanto a `chave` estiver vazia, a caixa NÃO APARECE na página e
