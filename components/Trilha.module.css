@@ -69,13 +69,29 @@
   .faixa { transition: none; }
 }
 
-/* No celular o dedo não tem "passar o mouse": a faixa fica sempre aberta,
-   senão o volume vira um controle inalcançável. */
+/* NO CELULAR O DEDO NÃO TEM "PASSAR O MOUSE": a faixa fica sempre aberta,
+   senão o volume vira um controle inalcançável. O preço disso é largura, e
+   em 2/11 o dono apontou que estava demais — medido: o controle ocupava
+   39,5% da largura num aparelho de 390px e 48% num de 320px, contra 4,3%
+   no computador, onde a faixa fica recolhida.
+   O QUE ENCOLHEU FOI A FAIXA, A MARGEM E A BORDA. O botão continua em
+   44x44: ele é o alvo de toque, e essa é a medida recomendada para dedo.
+   Diminuir o botão deixaria o controle menor à custa de quem tem menos
+   precisão no toque, que é exatamente a troca que não vale a pena. */
 @media (hover: none) {
-  .faixa { width: 96px; opacity: 1; margin: 0 8px 0 4px; }
+  .faixa { width: 60px; opacity: 1; margin: 0 5px 0 2px; }
+  .caixa { padding: 4px; border-width: 2px; }
 }
 
 @media (max-width: 480px) {
   .caixa { right: 12px; bottom: 12px; }
-  .faixa { width: 80px; }
+  .faixa { width: 48px; }
+}
+
+/* Em tela bem estreita a faixa aperta mais um pouco. O mínimo útil de uma
+   barra de volume no dedo é por volta de 40px: abaixo disso o passo de 5%
+   fica menor que a largura do polegar e o controle deixa de ser ajustável. */
+@media (max-width: 360px) {
+  .caixa { right: 10px; bottom: 10px; }
+  .faixa { width: 40px; }
 }

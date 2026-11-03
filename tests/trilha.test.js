@@ -1,6 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { render, screen, fireEvent, act } from '@testing-library/react'
 import Trilha from '@/components/Trilha'
+import fs from 'node:fs'
+import path from 'node:path'
 
 // ---------------------------------------------------------------------------
 // A TRILHA DO JOGO NO SITE
@@ -185,5 +187,45 @@ describe('Trilha', () => {
     const { container } = render(<Trilha dados={dados} />)
     expect(container.querySelector('audio')).not.toBeNull()
     expect(botao()).toBeInTheDocument()
+  })
+})
+
+// ---------------------------------------------------------------------------
+// O TAMANHO DO CONTROLE NO CELULAR
+// Em 2/11 o dono apontou que ele estava grande demais no celular — medido,
+// ocupava 39,5% da largura num aparelho de 390px. O que encolheu foi a
+// FAIXA de volume; o botão ficou onde estava, porque ele é o alvo de toque.
+// Este teste existe para a próxima redução não cair no botão.
+// ---------------------------------------------------------------------------
+describe('o tamanho do controle da trilha', () => {
+  const CSS = fs.readFileSync(
+    path.join(process.cwd(), 'components/Trilha.module.css'),
+    'utf8'
+  )
+
+  it('o botão NUNCA desce de 44px: é o alvo de toque', () => {
+    const medidas = [...CSS.matchAll(/\.botao[^{]*\{[^}]*?(?:width|height):\s*([\d.]+)px/g)].map(
+      (m) => Number(m[1])
+    )
+    expect(medidas.length, 'o .botao perdeu as medidas explícitas').toBeGreaterThan(0)
+    for (const px of medidas) {
+      expect(px, 'encolher o botão tira acessibilidade de quem tem menos precisão').toBeGreaterThanOrEqual(44)
+    }
+  })
+
+  it('a faixa de volume continua existindo no celular, só menor', () => {
+    // ela não pode ser escondida: sem "passar o mouse" no dedo, uma faixa
+    // recolhida vira um controle inalcançável
+    const semMouse = CSS.slice(CSS.indexOf('@media (hover: none)'))
+    expect(semMouse.length, 'sumiu a regra de quem não tem mouse').toBeGreaterThan(0)
+    expect(semMouse.slice(0, 200)).toMatch(/opacity:\s*1/)
+
+    const larguras = [...CSS.matchAll(/\.faixa\s*\{[^}]*width:\s*([\d.]+)px/g)]
+      .map((m) => Number(m[1]))
+      .filter((n) => n > 0)
+    expect(larguras.length).toBeGreaterThan(0)
+    for (const px of larguras) {
+      expect(px, 'faixa estreita demais deixa de ser ajustável no dedo').toBeGreaterThanOrEqual(40)
+    }
   })
 })
