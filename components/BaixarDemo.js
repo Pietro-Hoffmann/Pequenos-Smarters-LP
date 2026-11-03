@@ -1,4 +1,3 @@
-import { QRCodeSVG } from 'qrcode.react'
 import Sobrancelha from './Sobrancelha'
 import estilos from './BaixarDemo.module.css'
 
@@ -42,13 +41,6 @@ export default function BaixarDemo({ dados, url }) {
               </button>
             )}
           </div>
-
-          {url && (
-            <div className={estilos.qr}>
-              <QRCodeSVG value={url} size={132} bgColor="#ffffff" fgColor="#11212d" level="M" />
-              <span>{dados.qrLegenda}</span>
-            </div>
-          )}
 
           <p className={estilos.rodape}>{dados.rodape}</p>
         </div>

@@ -12,7 +12,6 @@
 export const site = {
   demo: {
     // O link do APK. Enquanto estiver vazio, o botão aparece como
-    // "Em breve", desativado, e o QR Code não existe.
     //
     // POR QUE É O LINK DE /view DO DRIVE, E NÃO UM DOWNLOAD DIRETO:
     // o arquivo tem 156 MB, e acima de ~100 MB o Google Drive não
@@ -647,8 +646,6 @@ export const site = {
     // internet. Vazia ('') = a linha some.
     dados:
       'Para jogar é preciso criar uma conta: o responsável informa os dados dele e o nome e a idade da criança. O progresso fica guardado no servidor do jogo, por isso o tablet precisa estar na internet.',
-    // Legenda embaixo do QR Code (o QR só aparece quando demo.url está preenchido).
-    qrLegenda: 'Aponte a câmera para baixar',
   },
 
   // O RODAPÉ.

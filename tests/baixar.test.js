@@ -19,7 +19,7 @@ const dados = {
 }
 
 describe('BaixarDemo', () => {
-  it('sem link, mostra "Em breve" desativado, sem âncora e sem QR Code', () => {
+  it('sem link, mostra "Em breve" desativado e sem âncora', () => {
     const { container } = render(<BaixarDemo dados={dados} url="" />)
     const botao = screen.getByRole('button', { name: 'Em breve' })
     expect(botao).toBeDisabled()
@@ -27,12 +27,15 @@ describe('BaixarDemo', () => {
     expect(container.querySelector('svg')).toBeNull()
   })
 
-  it('com link, vira âncora para o APK e mostra o QR Code', () => {
+  it('com link, vira âncora para o APK', () => {
     const { container } = render(<BaixarDemo dados={dados} url="https://expo.dev/artifacts/abc.apk" />)
     const link = screen.getByRole('link', { name: 'Baixar a demo' })
     expect(link).toHaveAttribute('href', 'https://expo.dev/artifacts/abc.apk')
     expect(screen.queryByText('Em breve')).toBeNull()
-    expect(container.querySelector('svg')).not.toBeNull()
+    // O QR CODE SAIU em 3/11, a pedido do dono, e a dependência que o
+    // desenhava saiu junto. Este teste guarda isso: um svg reaparecendo
+    // aqui significa que alguém trouxe o QR de volta sem querer.
+    expect(container.querySelector('svg'), 'o QR Code voltou').toBeNull()
   })
 
   it('lista o que vem na demo', () => {
